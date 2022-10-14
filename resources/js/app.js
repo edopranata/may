@@ -7,8 +7,8 @@ import { InertiaProgress } from '@inertiajs/progress'
 import { resolvePageComponent } from 'laravel-vite-plugin/inertia-helpers'
 import { ZiggyVue } from '../../vendor/tightenco/ziggy/dist/vue.m'
 import Notifications from '@kyvg/vue3-notification'
-import AuthenticatedLayout from '../js/Layouts/Authenticated.vue';
-import Guest from '../js/Layouts/Guest.vue';
+import AuthenticatedLayout from '@/Layouts/Authenticated.vue';
+import Guest from '@/Layouts/Guest.vue';
 
 const appName = window.document.getElementsByTagName('title')[0]?.innerText || 'Laravel'
 

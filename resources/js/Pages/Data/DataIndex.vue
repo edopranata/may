@@ -1,7 +1,7 @@
 <template>
     <Head title="Master data" />
 
-    <Breeadcrumb :links="breadcrumbs"/>
+    <Breadcrumb :links="breadcrumbs"/>
     <PageTitle :classes="'bg-base-content'" class="">Master Data</PageTitle>
 
     <section class="px-4 grid grid-cols-4 gap-4">
@@ -14,7 +14,7 @@
 </template>
 
 <script setup>
-import Breeadcrumb from "@/Shared/Breeadcrumb.vue"
+import Breadcrumb from "@/Shared/Breadcrumb.vue"
 import PageMenu from "@/Components/PageMenu.vue"
 import PageTitle from "@/Components/PageTitle.vue"
 

@@ -77,7 +77,7 @@
         </label>
     </label>
 
-    <Breeadcrumb :links="breadcrumbs"/>
+    <Breadcrumb :links="breadcrumbs"/>
     <PageTitle :classes="'bg-base-content'" class="">Data Supir</PageTitle>
 
     <section class="px-4 grid gap-4">
@@ -115,7 +115,7 @@
 </template>
 
 <script setup>
-import Breeadcrumb from "@/Shared/Breeadcrumb.vue";
+import Breadcrumb from "@/Shared/Breadcrumb.vue";
 import BaseIcon from "@/Components/BaseIcon.vue";
 import Pagination from "@/Components/Pagination.vue";
 import PageTitle from "@/Components/PageTitle.vue";
