@@ -25,14 +25,13 @@ createInertiaApp({
             }else{
                 module.default.layout = module.default.layout || AuthenticatedLayout;
             }
-
         });
         return page;
     },
     setup({ el, app, props, plugin }) {
         return createApp({ render: () => h(app, props) })
             .use(plugin)
-            .use(ZiggyVue, Ziggy)
+            .use(ZiggyVue)
             .use(Notifications)
             .mount(el);
     },

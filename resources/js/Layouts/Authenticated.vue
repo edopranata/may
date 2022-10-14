@@ -10,7 +10,6 @@ const alert = computed(() => usePage().props.value.flash.alert);
 watch(alert, (value, oldValue, onCleanup) => {
 
     if(value){
-        console.log(route().current())
         notify({
             duration: 10000,
             title: value.title,

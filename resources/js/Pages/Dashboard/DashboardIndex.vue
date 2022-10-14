@@ -1,11 +1,7 @@
 <template>
     <Head title="Dashboard" />
 
-    <div class="breadcrumbs mb-4 border-b p-4">
-        <ul>
-            <li>Dashboard</li>
-        </ul>
-    </div>
+    <breeadcrumb :links="breadcrumbs"/>
 
     <section class="px-4 flex flex-wrap gap-4">
 
@@ -15,4 +11,12 @@
 
 <script setup>
 import { Head } from '@inertiajs/inertia-vue3';
+import Breeadcrumb from "@/Shared/Breeadcrumb.vue";
+
+const breadcrumbs = [
+    {
+        "url": null,
+        "label": "Dashboard"
+    }
+]
 </script>
