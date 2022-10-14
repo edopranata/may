@@ -8,13 +8,13 @@
                 </div>
             </li>
             <!-- Sidebar content here -->
-            <li :class="route().current('dashboard.*') ? 'bordered' : 'pl-1'">
-                <Link :href="route('dashboard.index')">
+            <li>
+                <Link :class="routePath.current.startsWith('/dashboard') ? 'border-l-4 border-primary' : 'pl-5'" :href="route('dashboard.index')">
                     <BaseIcon size="20" :path="mdiHome"/> Dashboard
                 </Link>
             </li>
-            <li :class="route().current('data.*') ? 'bordered' : 'pl-1'">
-                <Link :href="route('data.index')">
+            <li>
+                <Link :class="routePath.current.startsWith('/data') ? 'border-l-4 border-primary' : 'pl-5'" :href="route('data.index')">
                     <BaseIcon size="20" :path="mdiBallot"/> Data
                 </Link>
             </li>
@@ -24,7 +24,22 @@
 </template>
 
 <script setup>
-import { Link } from "@inertiajs/inertia-vue3";
+import {Link, usePage} from "@inertiajs/inertia-vue3";
 import BaseIcon from "@/Components/BaseIcon.vue";
 import { mdiHome, mdiBallot } from "@mdi/js";
+import {computed, onMounted, reactive, watch} from "vue";
+
+const currentRoute = computed(() => usePage().url.value);
+const routePath = reactive({
+    current: ''
+})
+watch(currentRoute, (value, oldValue, onCleanup) => {
+    if(value){
+        routePath.current = value
+    }
+})
+
+onMounted( () => {
+    routePath.current = usePage().url.value
+})
 </script>
