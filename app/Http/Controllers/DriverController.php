@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Driver;
+use App\Models\Price;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
@@ -12,14 +13,15 @@ class DriverController extends Controller
     public function index()
     {
         return inertia('Data/Driver/DriverIndex', [
-            'drivers'    => Driver::query()->orderByDesc('created_at')->paginate(5)
+            'drivers'    => Driver::query()->with('price')->orderByDesc('created_at')->paginate(5),
+            'price'      => 0
         ]);
     }
 
     public function edit(Driver $driver, Request $request)
     {
         if($request->ajax()){
-            return $driver;
+            return $driver->load('price');
         }
         abort(404);
     }
@@ -33,8 +35,11 @@ class DriverController extends Controller
 
         DB::beginTransaction();
         try {
-            Driver::query()
+            $driver = Driver::query()
                 ->create($request->only(['name', 'address', 'phone']));
+
+            $driver->price()->create(['value' => $request->price]);
+
             DB::commit();
             return redirect()->back()->with('alert', [
                 'type'    => 'success',
@@ -61,6 +66,7 @@ class DriverController extends Controller
         DB::beginTransaction();
         try {
             $driver->update($request->only(['name', 'address', 'phone']));
+            $driver->price()->updateOrCreate(['value' => $request->price]);
             DB::commit();
             return redirect()->back()->with('alert', [
                 'type'    => 'info',

@@ -8,15 +8,24 @@
             <h3 class="font-bold text-lg">Tambah data petani</h3>
             <form @submit.prevent="save">
 
-                <div class="grid md:grid-cols-3 gap-4">
-                    <div class="form-control w-full my-4 col-span-2">
+                <div class="grid gap-4">
+                    <div class="form-control w-full my-4">
                         <label class="label">Nama Supir</label>
                         <input :readonly="form_save.processing" v-model="form_save.name" type="text" placeholder="Nama Supir" class="input input-bordered w-full" />
                         <label class="label" v-if="form_save.errors.name">
                             <span class="label-text-alt text-error">{{ form_save.errors.name }}</span>
                         </label>
                     </div>
+                </div>
+                <div class="grid md:grid-cols-3 gap-4">
                     <div class="form-control w-full my-4">
+                        <label class="label">Biaya (Gaji / Kg)</label>
+                        <input :readonly="form_save.processing" v-model="form_save.price" type="text" placeholder="Biaya (Gaji / Kg)" class="input input-bordered w-full" />
+                        <label class="label" v-if="form_save.errors.price">
+                            <span class="label-text-alt text-error">{{ form_save.errors.price }}</span>
+                        </label>
+                    </div>
+                    <div class="form-control w-full my-4 col-span-2">
                         <label class="label">No Telepon</label>
                         <input :readonly="form_save.processing" v-model="form_save.phone" type="text" placeholder="No Telepon" class="input input-bordered w-full" />
                         <label class="label" v-if="form_save.errors.phone">
@@ -45,15 +54,24 @@
         <label class="modal-box relative" for="">
             <h3 class="font-bold text-lg">Ubah Data Supir {{ form_edit.name }}</h3>
             <form @submit.prevent="update">
-                <div class="grid md:grid-cols-3 gap-4">
-                    <div class="form-control w-full my-4 col-span-2">
+                <div class="grid gap-4">
+                    <div class="form-control w-full my-4">
                         <label class="label">Nama Supir</label>
                         <input :readonly="form_edit.processing" v-model="form_edit.name" type="text" placeholder="Nama Supir" class="input input-bordered w-full" />
                         <label class="label" v-if="form_edit.errors.name">
                             <span class="label-text-alt text-error">{{ form_edit.errors.name }}</span>
                         </label>
                     </div>
+                </div>
+                <div class="grid md:grid-cols-3 gap-4">
                     <div class="form-control w-full my-4">
+                        <label class="label">Biaya (Gaji / Kg)</label>
+                        <input :readonly="form_edit.processing" v-model="form_edit.price" type="text" placeholder="Biaya (Gaji / Kg)" class="input input-bordered w-full" />
+                        <label class="label" v-if="form_edit.errors.price">
+                            <span class="label-text-alt text-error">{{ form_edit.errors.price }}</span>
+                        </label>
+                    </div>
+                    <div class="form-control w-full my-4 col-span-2">
                         <label class="label">No Telepon</label>
                         <input :readonly="form_edit.processing" v-model="form_edit.phone" type="text" placeholder="No Telepon" class="input input-bordered w-full" />
                         <label class="label" v-if="form_edit.errors.phone">
@@ -73,7 +91,6 @@
                     <button :disabled="form_edit.processing" @click.prevent="destroy" type="button" class="btn btn-error" :class="form_edit.processing ? 'loading' : ''">Delete</button>
                 </div>
             </form>
-
         </label>
     </label>
 
@@ -92,6 +109,7 @@
                     <th class="py-3 px-6">Nama Supir</th>
                     <th class="py-3 px-6">No Telepon</th>
                     <th class="py-3 px-6">Alamat</th>
+                    <th class="py-3 px-6">Gaji / KG</th>
                     <th class="py-3 px-6"></th>
                 </tr>
                 </thead>
@@ -101,6 +119,7 @@
                     <td class="group-hover:bg-base-300 py-4 px-6">{{ item.name }}</td>
                     <td class="group-hover:bg-base-300 py-4 px-6">{{ item.phone }}</td>
                     <td class="group-hover:bg-base-300 py-4 px-6" style="word-wrap: break-word"><p class="max-w-xs">{{ item.address }}</p> </td>
+                    <td class="group-hover:bg-base-300 py-4 px-6">{{ item.price ? item.price.value : 0 }}</td>
                     <td class="group-hover:bg-base-300 py-4 px-6"><BaseIcon :path="mdiArrowRight" /></td>
                 </tr>
                 <tr v-else>
@@ -141,17 +160,23 @@ const driver_id = ref(null)
 const form_save = useForm({
     name: '',
     phone: '',
+    price: props.price,
     address: '',
 })
 const form_edit = useForm({
     name: '',
     phone: '',
+    price: props.price,
     address: '',
 })
 const props = defineProps({
     drivers: {
         type: Object,
     },
+    price: {
+        type: Number,
+        default: 0
+    }
 })
 
 const save = () => {
@@ -171,6 +196,7 @@ const edit = (id) => {
             form_edit.name = data.name
             form_edit.address = data.address
             form_edit.phone = data.phone
+            form_edit.price = data.price ? data.price.value : 0
             modal_edit.value = true
         })
 }
@@ -192,12 +218,14 @@ const set_default_form = () => {
 
     form_edit.defaults({
         name:null,
+        price:null,
         address:null,
         phone:null,
     })
 
     form_save.defaults({
         name:null,
+        price:null,
         address:null,
         phone:null,
     })

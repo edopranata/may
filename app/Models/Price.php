@@ -5,14 +5,15 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Car extends Model
+class Price extends Model
 {
     use HasFactory;
 
     protected $guarded = ['id'];
+    public $timestamps = false;
 
-    public function price()
+    public function modelable()
     {
-        return $this->morphOne(Price::class, 'modelable');
+        return $this->morphTo();
     }
 }

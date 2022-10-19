@@ -1,11 +1,11 @@
 <template>
-    <Head title="Konfigurasi" />
+    <Head title="Pengaturan" />
 
     <Breadcrumb :links="breadcrumbs"/>
-    <PageTitle :classes="'bg-base-content'" class="">Konfigurasi</PageTitle>
+    <PageTitle :classes="'bg-base-content'" class="">Pengaturan</PageTitle>
 
     <section class="px-4 grid grid-cols-4 gap-4">
-        <PageMenu class="bg-primary text-primary-content hover:shadow-xl hover:bg-primary/90" title="Konfigurasi" :link="route('data.farmer.index')">Konfigurasi</PageMenu>
+        <PageMenu class="bg-primary text-primary-content hover:shadow-xl hover:bg-primary/90" title="Konfigurasi" :link="route('config.price.index')">Default harga</PageMenu>
     </section>
 
 </template>
@@ -19,7 +19,7 @@ import { Head } from '@inertiajs/inertia-vue3'
 const breadcrumbs = [
     {
         "url": null,
-        "label": "Konfigurasi"
+        "label": "Pengaturan"
     }
 ]
 </script>

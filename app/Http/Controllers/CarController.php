@@ -11,14 +11,15 @@ class CarController extends Controller
     public function index()
     {
         return inertia('Data/Car/CarIndex', [
-            'cars'    => Car::query()->orderByDesc('created_at')->paginate(5)
+            'cars'    => Car::query()->with('price')->orderByDesc('created_at')->paginate(5),
+            'price'   => 0
         ]);
     }
 
     public function edit(Car $car, Request $request)
     {
         if($request->ajax()){
-            return $car;
+            return $car->load('price');
         }
         abort(404);
     }
@@ -32,8 +33,10 @@ class CarController extends Controller
 
         DB::beginTransaction();
         try {
-            Car::query()
+            $car = Car::query()
                 ->create($request->only(['name', 'description', 'year', 'no_pol']));
+
+            $car->price()->create(['value' => $request->price]);
             DB::commit();
             return redirect()->back()->with('alert', [
                 'type'    => 'success',
@@ -60,6 +63,7 @@ class CarController extends Controller
         DB::beginTransaction();
         try {
             $car->update($request->only(['name', 'description', 'year', 'no_pol']));
+            $car->price()->updateOrCreate(['value' => $request->price]);
             DB::commit();
             return redirect()->back()->with('alert', [
                 'type'    => 'info',

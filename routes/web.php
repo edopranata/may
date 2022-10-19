@@ -40,6 +40,7 @@ Route::middleware(['auth'])->group(function (){
 
         Route::group(['prefix' => 'config', 'as' => 'config.'], function (){
             Route::get('/', [\App\Http\Controllers\RouteController::class, 'config'])->name('index');
+            Route::resource('price', \App\Http\Controllers\ConfigurationController::class)->only(['index', 'store']);
         });
 
         Route::group(['prefix' => 'report', 'as' => 'report.'], function (){

@@ -10,4 +10,9 @@ class Driver extends Model
     use HasFactory;
 
     protected $guarded = ['id'];
+
+    public function price()
+    {
+        return $this->morphOne(Price::class, 'modelable');
+    }
 }

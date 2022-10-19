@@ -11,14 +11,15 @@ class LoaderController extends Controller
     public function index()
     {
         return inertia('Data/Loader/LoaderIndex', [
-            'loaders'    => Loader::query()->orderByDesc('created_at')->paginate(5)
+            'loaders'    => Loader::query()->with('price')->orderByDesc('created_at')->paginate(5),
+            'price'   => 0
         ]);
     }
 
     public function edit(Loader $loader, Request $request)
     {
         if($request->ajax()){
-            return $loader;
+            return $loader->load('price');
         }
         abort(404);
     }
@@ -32,8 +33,10 @@ class LoaderController extends Controller
 
         DB::beginTransaction();
         try {
-            Loader::query()
+            $loader = Loader::query()
                 ->create($request->only(['name', 'address', 'phone']));
+
+            $loader->price()->create(['value' => $request->price]);
             DB::commit();
             return redirect()->back()->with('alert', [
                 'type'    => 'success',
@@ -60,6 +63,7 @@ class LoaderController extends Controller
         DB::beginTransaction();
         try {
             $loader->update($request->only(['name', 'address', 'phone']));
+            $loader->price()->updateOrCreate(['value' => $request->price]);
             DB::commit();
             return redirect()->back()->with('alert', [
                 'type'    => 'info',
