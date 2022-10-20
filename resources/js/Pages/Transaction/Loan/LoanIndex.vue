@@ -14,8 +14,8 @@
                     <!-- head -->
                     <thead class="text-sm uppercase bg-primary/20">
                       <tr>
-                        <th class="py-3 px-6">Name</th>
-                        <th class="py-3 px-6">Favorite Color</th>
+                        <th class="py-3 px-6">Nama</th>
+                        <th class="py-3 px-6">Pinjaman</th>
                       </tr>
                     </thead>
                     <tbody>
@@ -30,8 +30,8 @@
                     </tbody>
                   </table>
                 </span>
-                <button class="btn btn-xl btn-primary btn-block pt-10 pb-14">Pengajuan Pinjaman</button>
-                <button class="btn btn-xl btn-secondary btn-block pt-10 pb-14">Pembayaran Pinjaman</button>
+                <button class="btn btn-xl btn-success btn-block pt-10 pb-14">Pengajuan Pinjaman</button>
+                <button class="btn btn-xl btn-warning btn-block pt-10 pb-14">Pembayaran Pinjaman</button>
             </span>
 
         </label>
@@ -76,7 +76,6 @@ import Breadcrumb from "@/Shared/Breadcrumb.vue"
 import PageTitle from "@/Components/PageTitle.vue"
 import BaseIcon from "@/Components/BaseIcon.vue"
 import Pagination from "@/Components/Pagination.vue"
-import PageMenu from "@/Components/PageMenu.vue"
 
 import { mdiArrowRight } from "@mdi/js";
 import { Head, Link } from "@inertiajs/inertia-vue3"
@@ -109,13 +108,14 @@ const breadcrumbs = [
 
 const openModal = function (index){
     let data = props.farmers.data[index]
+
     farmer.id = data.id
     farmer.name = data.name
     farmer.phone = data.phone
     farmer.address = data.address
     farmer.distance = data.distance
     farmer.loan = data.loans_sum_ending_balance
+
     modal.value = true
-    console.log(farmer)
 }
 </script>
