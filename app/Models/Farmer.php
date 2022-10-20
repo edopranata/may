@@ -10,4 +10,9 @@ class Farmer extends Model
     use HasFactory;
 
     protected $guarded = ['id'];
+
+    public function loans()
+    {
+        return $this->morphMany(Loan::class, 'modelable');
+    }
 }

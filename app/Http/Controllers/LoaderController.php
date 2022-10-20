@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Configuration;
 use App\Models\Loader;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -11,8 +12,8 @@ class LoaderController extends Controller
     public function index()
     {
         return inertia('Data/Loader/LoaderIndex', [
-            'loaders'    => Loader::query()->with('price')->orderByDesc('created_at')->paginate(5),
-            'price'   => 0
+            'loaders' => Loader::query()->with('price')->orderByDesc('created_at')->paginate(5),
+            'price'   => Configuration::query()->where('name', 'loader')->first()->value
         ]);
     }
 

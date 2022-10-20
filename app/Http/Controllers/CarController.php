@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Car;
+use App\Models\Configuration;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
@@ -12,7 +13,7 @@ class CarController extends Controller
     {
         return inertia('Data/Car/CarIndex', [
             'cars'    => Car::query()->with('price')->orderByDesc('created_at')->paginate(5),
-            'price'   => 0
+            'price'   => Configuration::query()->where('name', 'car')->first()->value
         ]);
     }
 

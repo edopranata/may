@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Configuration;
 use App\Models\Driver;
 use App\Models\Price;
 use Illuminate\Http\Request;
@@ -14,7 +15,7 @@ class DriverController extends Controller
     {
         return inertia('Data/Driver/DriverIndex', [
             'drivers'    => Driver::query()->with('price')->orderByDesc('created_at')->paginate(5),
-            'price'      => 0
+            'price'      => Configuration::query()->where('name', 'driver')->first()->value
         ]);
     }
 

@@ -5,7 +5,7 @@
     <PageTitle :classes="'bg-base-content'" class="">Transaksi</PageTitle>
 
     <section class="px-4 grid grid-cols-4 gap-4">
-        <PageMenu class="bg-primary text-primary-content hover:shadow-xl hover:bg-primary/90" title="Tranksaksi" :link="route('data.farmer.index')">Transaksi</PageMenu>
+        <PageMenu class="bg-primary text-primary-content hover:shadow-xl hover:bg-primary/90" title="Pinjaman" :link="route('transaction.loan.index')">Pinjaman Petani</PageMenu>
     </section>
 
 </template>

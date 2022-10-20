@@ -36,6 +36,7 @@ Route::middleware(['auth'])->group(function (){
 
         Route::group(['prefix' => 'transaction', 'as' => 'transaction.'], function (){
             Route::get('/', [\App\Http\Controllers\RouteController::class, 'transaction'])->name('index');
+            Route::resource('loan', \App\Http\Controllers\LoanController::class)->only(['index', 'store']);
         });
 
         Route::group(['prefix' => 'config', 'as' => 'config.'], function (){
@@ -46,6 +47,7 @@ Route::middleware(['auth'])->group(function (){
         Route::group(['prefix' => 'report', 'as' => 'report.'], function (){
             Route::get('/', [\App\Http\Controllers\RouteController::class, 'report'])->name('index');
         });
+
     });
 
     // Authenticate Route
