@@ -11,7 +11,7 @@ class FarmerLoanController extends Controller
 
     public function index()
     {
-        return inertia('Transaction/Loan/LoanIndex', [
+        return inertia('Transaction/Loan/FarmerLoanIndex', [
             'farmers' => Farmer::query()->with('loan')->orderByDesc('created_at')->paginate(5),
         ]);
     }

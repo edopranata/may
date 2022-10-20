@@ -2,7 +2,7 @@
     <Link as="div" :href="props.link" class="stats rounded-none hover:cursor-pointer transition-all	">
         <div class="stat">
             <div class="stat-title" v-text="props.title"></div>
-            <div class="stat-value">
+            <div class="stat-value md:text-2xl">
                 <slot />
             </div>
             <div class="stat-actions flex justify-end">

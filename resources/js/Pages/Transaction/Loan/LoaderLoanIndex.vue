@@ -1,8 +1,8 @@
 <template>
-    <Head title="Pinjaman" />
+    <Head title="Pinjaman Tukang Muat" />
 
     <Breadcrumb :links="breadcrumbs"/>
-    <PageTitle :classes="'bg-base-content'">Pinjaman</PageTitle>
+    <PageTitle :classes="'bg-base-content'">Pinjaman Tukang Muat</PageTitle>
 
     <input type="checkbox" id="modal-option" v-model="modal" class="modal-toggle" />
     <label for="modal-option" class="modal cursor-pointer modal-lg">
@@ -22,16 +22,16 @@
                       <!-- row 1 -->
                       <tr>
                         <td class="py-3 px-6">
-                            <div class="font-bold">{{ farmer.name }}</div>
-                            <div class="text-sm opacity-50">{{ farmer.phone }}</div>
+                            <div class="font-bold">{{ loader.name }}</div>
+                            <div class="text-sm opacity-50">{{ loader.phone }}</div>
                         </td>
-                        <td class="py-3 px-6">{{ Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR' }).format(farmer.loan)  }}</td>
+                        <td class="py-3 px-6">{{ Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR' }).format(loader.loan)  }}</td>
                       </tr>
                     </tbody>
                   </table>
                 </span>
-                <Link as="button" :href="farmer.id ? route('transaction.loan.farmer.show', farmer.id) : ''" class="btn btn-xl btn-success btn-block pt-10 pb-14">Pengajuan Pinjaman</Link>
-                <Link as="button" :disabled="farmer.loan < 1" :href="farmer.id ? route('transaction.loan.farmer.edit', farmer.id) : ''" class="btn btn-xl btn-warning btn-block pt-10 pb-14">Pembayaran Pinjaman</Link>
+                <Link as="button" :href="loader.id ? route('transaction.loan.loader.show', loader.id) : ''" class="btn btn-xl btn-success btn-block pt-10 pb-14">Pengajuan Pinjaman</Link>
+                <Link as="button" :disabled="loader.loan < 1" :href="loader.id ? route('transaction.loan.loader.edit', loader.id) : ''" class="btn btn-xl btn-warning btn-block pt-10 pb-14">Pembayaran Pinjaman</Link>
             </span>
 
         </label>
@@ -43,21 +43,19 @@
                 <thead class="text-sm uppercase bg-primary/20">
                 <tr>
                     <th class="py-3 px-6">#</th>
-                    <th class="py-3 px-6">Nama Petani</th>
+                    <th class="py-3 px-6">Nama Tukang Muat</th>
                     <th class="py-3 px-6">Alamat</th>
                     <th class="py-3 px-6">No Telepon</th>
-                    <th class="py-3 px-6">Jarak</th>
                     <th class="py-3 px-6">Pinjaman</th>
                     <th class="py-3 px-6"></th>
                 </tr>
                 </thead>
                 <tbody>
-                <tr v-if="props.farmers.data.length" class="hover:cursor-pointer group border-b" v-for="(item, index) in props.farmers.data" @click="openModal(index)">
-                    <th class="group-hover:bg-base-300 py-4 px-6">{{ props.farmers.from + index  }}</th>
+                <tr v-if="props.loaders.data.length" class="hover:cursor-pointer group border-b" v-for="(item, index) in props.loaders.data" @click="openModal(index)">
+                    <th class="group-hover:bg-base-300 py-4 px-6">{{ props.loaders.from + index  }}</th>
                     <td class="group-hover:bg-base-300 py-4 px-6">{{ item.name }}</td>
                     <td class="group-hover:bg-base-300 py-4 px-6" style="word-wrap: break-word"><p class="max-w-xs">{{ item.address }}</p> </td>
                     <td class="group-hover:bg-base-300 py-4 px-6">{{ item.phone }}</td>
-                    <td class="group-hover:bg-base-300 py-4 px-6">{{ item.distance }} Km</td>
                     <td class="group-hover:bg-base-300 py-4 px-6">{{ Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR' }).format(item.loan ? item.loan.balance : 0)}}</td>
                     <td class="group-hover:bg-base-300 py-4 px-6"><BaseIcon :path="mdiArrowRight" /></td>
                 </tr>
@@ -66,7 +64,7 @@
                 </tr>
                 </tbody>
             </table>
-            <Pagination v-if="props.farmers.data.length" :links="props.farmers.links" />
+            <Pagination v-if="props.loaders.data.length" :links="props.loaders.links" />
         </div>
     </section>
 </template>
@@ -84,15 +82,14 @@ import {reactive, ref} from "vue"
 const modal = ref(false)
 
 const props = defineProps({
-    farmers: Object
+    loaders: Object
 })
 
-const farmer = reactive({
+const loader = reactive({
     id: 0,
     name: '',
     phone: '',
     address: '',
-    distance: '',
     loan: '',
 })
 const breadcrumbs = [
@@ -102,19 +99,19 @@ const breadcrumbs = [
     },
     {
         "url": null,
-        "label": "Pinjaman"
+        "label": "Pinjaman Tukang Muat"
     }
 ]
 
 const openModal = function (index){
-    let data = props.farmers.data[index]
+    let data = props.loaders.data[index]
 
-    farmer.id = data.id
-    farmer.name = data.name
-    farmer.phone = data.phone
-    farmer.address = data.address
-    farmer.distance = data.distance
-    farmer.loan = data.loan ? data.loan.balance : 0
+    loader.id = data.id
+    loader.name = data.name
+    loader.phone = data.phone
+    loader.address = data.address
+    loader.distance = data.distance
+    loader.loan = data.loan ? data.loan.balance : 0
 
     modal.value = true
 }

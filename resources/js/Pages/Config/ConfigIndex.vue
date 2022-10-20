@@ -4,7 +4,7 @@
     <Breadcrumb :links="breadcrumbs"/>
     <PageTitle :classes="'bg-base-content'" class="">Pengaturan</PageTitle>
 
-    <section class="px-4 grid grid-cols-4 gap-4">
+    <section class="px-4 grid xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 gap-4">
         <PageMenu class="bg-primary text-primary-content hover:shadow-xl hover:bg-primary/90" title="Konfigurasi" :link="route('config.price.index')">Default harga</PageMenu>
     </section>
 
