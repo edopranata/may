@@ -19,14 +19,6 @@ class DriverController extends Controller
         ]);
     }
 
-    public function edit(Driver $driver, Request $request)
-    {
-        if($request->ajax()){
-            return $driver->load('price');
-        }
-        abort(404);
-    }
-
     public function store(Request $request)
     {
         $request->validate([

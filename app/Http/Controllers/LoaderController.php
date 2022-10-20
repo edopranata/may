@@ -17,13 +17,6 @@ class LoaderController extends Controller
         ]);
     }
 
-    public function edit(Loader $loader, Request $request)
-    {
-        if($request->ajax()){
-            return $loader->load('price');
-        }
-        abort(404);
-    }
 
     public function store(Request $request)
     {

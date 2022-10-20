@@ -16,14 +16,6 @@ class FarmerController extends Controller
         ]);
     }
 
-    public function edit(Farmer $farmer, Request $request)
-    {
-        if($request->ajax()){
-            return $farmer;
-        }
-        abort(404);
-    }
-
     public function store(Request $request)
     {
         $request->validate([

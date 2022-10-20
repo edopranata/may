@@ -17,14 +17,6 @@ class CarController extends Controller
         ]);
     }
 
-    public function edit(Car $car, Request $request)
-    {
-        if($request->ajax()){
-            return $car->load('price');
-        }
-        abort(404);
-    }
-
     public function store(Request $request)
     {
         $request->validate([

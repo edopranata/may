@@ -111,7 +111,7 @@
                 </tr>
                 </thead>
                 <tbody>
-                <tr v-if="props.loaders.data.length" class="hover:cursor-pointer group border-b" v-for="(item, index) in props.loaders.data" @click="edit(item.id)">
+                <tr v-if="props.loaders.data.length" class="hover:cursor-pointer group border-b" v-for="(item, index) in props.loaders.data" @click="edit(index)">
                     <th class="group-hover:bg-base-300 py-4 px-6">{{ props.loaders.from + index  }}</th>
                     <td class="group-hover:bg-base-300 py-4 px-6">{{ item.name }}</td>
                     <td class="group-hover:bg-base-300 py-4 px-6">{{ item.phone }}</td>
@@ -184,18 +184,20 @@ const save = () => {
     });
 }
 
-const edit = (id) => {
+const edit = (index) => {
     set_default_form()
-    loader_id.value = id
-    axios.get(route('data.loader.edit', id))
-        .then( (res) => res.data)
-        .then( (data) => {
-            form_edit.name = data.name
-            form_edit.address = data.address
-            form_edit.phone = data.phone
-            form_edit.price = data.price ? data.price.value : 0
-            modal_edit.value = true
-        })
+
+    let data = props.loaders.data[index]
+
+    loader_id.value = data.id
+
+    form_edit.name = data.name
+    form_edit.address = data.address
+    form_edit.phone = data.phone
+    form_edit.price = data.price ? data.price.value : 0
+
+    modal_edit.value = true
+
 }
 
 const update = () => {

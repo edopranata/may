@@ -109,7 +109,7 @@
                 </tr>
                 </thead>
                 <tbody>
-                <tr v-if="props.farmers.data.length" class="hover:cursor-pointer group border-b" v-for="(item, index) in props.farmers.data" @click="edit(item.id)">
+                <tr v-if="props.farmers.data.length" class="hover:cursor-pointer group border-b" v-for="(item, index) in props.farmers.data" @click="edit(index)">
                     <th class="group-hover:bg-base-300 py-4 px-6">{{ props.farmers.from + index  }}</th>
                     <td class="group-hover:bg-base-300 py-4 px-6">{{ item.name }}</td>
                     <td class="group-hover:bg-base-300 py-4 px-6" style="word-wrap: break-word"><p class="max-w-xs">{{ item.address }}</p> </td>
@@ -178,18 +178,18 @@ const save = () => {
     });
 }
 
-const edit = (id) => {
+const edit = (index) => {
     set_default_form()
-    farmer_id.value = id
-    axios.get(route('data.farmer.edit', id))
-        .then( (res) => res.data)
-        .then( (data) => {
-            form_edit.name = data.name
-            form_edit.address = data.address
-            form_edit.phone = data.phone
-            form_edit.distance = data.distance
-            modal_edit.value = true
-        })
+
+    let data = props.farmers.data[index]
+
+    farmer_id.value = data.id
+
+    form_edit.name = data.name
+    form_edit.address = data.address
+    form_edit.phone = data.phone
+    form_edit.distance = data.distance
+    modal_edit.value = true
 }
 
 const update = () => {
