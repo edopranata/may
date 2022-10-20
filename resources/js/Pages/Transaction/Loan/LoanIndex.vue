@@ -2,7 +2,7 @@
     <Head title="Pinjaman" />
 
     <Breadcrumb :links="breadcrumbs"/>
-    <PageTitle :classes="'bg-base-content'" class="">Pinjaman</PageTitle>
+    <PageTitle :classes="'bg-base-content'">Pinjaman</PageTitle>
 
     <input type="checkbox" id="modal-option" v-model="modal" class="modal-toggle" />
     <label for="modal-option" class="modal cursor-pointer modal-lg">
@@ -25,13 +25,13 @@
                             <div class="font-bold">{{ farmer.name }}</div>
                             <div class="text-sm opacity-50">{{ farmer.phone }}</div>
                         </td>
-                        <td class="py-3 px-6">{{ Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR' }).format(farmer.loan ?? 0)  }}</td>
+                        <td class="py-3 px-6">{{ Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR' }).format(farmer.loan)  }}</td>
                       </tr>
                     </tbody>
                   </table>
                 </span>
-                <button class="btn btn-xl btn-success btn-block pt-10 pb-14">Pengajuan Pinjaman</button>
-                <button class="btn btn-xl btn-warning btn-block pt-10 pb-14">Pembayaran Pinjaman</button>
+                <Link as="button" :href="farmer.id ? route('transaction.loan.farmer.show', farmer.id) : ''" class="btn btn-xl btn-success btn-block pt-10 pb-14">Pengajuan Pinjaman</Link>
+                <Link as="button" :disabled="farmer.loan < 1" :href="farmer.id ? route('transaction.loan.farmer.edit', farmer.id) : ''" class="btn btn-xl btn-warning btn-block pt-10 pb-14">Pembayaran Pinjaman</Link>
             </span>
 
         </label>
@@ -58,7 +58,7 @@
                     <td class="group-hover:bg-base-300 py-4 px-6" style="word-wrap: break-word"><p class="max-w-xs">{{ item.address }}</p> </td>
                     <td class="group-hover:bg-base-300 py-4 px-6">{{ item.phone }}</td>
                     <td class="group-hover:bg-base-300 py-4 px-6">{{ item.distance }} Km</td>
-                    <td class="group-hover:bg-base-300 py-4 px-6">{{ Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR' }).format(item.loans_sum_ending_balance ?? 0)}}</td>
+                    <td class="group-hover:bg-base-300 py-4 px-6">{{ Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR' }).format(item.loan ? item.loan.balance : 0)}}</td>
                     <td class="group-hover:bg-base-300 py-4 px-6"><BaseIcon :path="mdiArrowRight" /></td>
                 </tr>
                 <tr v-else>
@@ -88,7 +88,7 @@ const props = defineProps({
 })
 
 const farmer = reactive({
-    id: '',
+    id: 0,
     name: '',
     phone: '',
     address: '',
@@ -114,7 +114,7 @@ const openModal = function (index){
     farmer.phone = data.phone
     farmer.address = data.address
     farmer.distance = data.distance
-    farmer.loan = data.loans_sum_ending_balance
+    farmer.loan = data.loan ? data.loan.balance : 0
 
     modal.value = true
 }

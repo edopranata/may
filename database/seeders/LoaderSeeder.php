@@ -18,6 +18,8 @@ class LoaderSeeder extends Seeder
     {
         Loader::factory()->times(10)->create([
             'user_id'   => User::query()->first()->id
-        ]);
+        ])->each(function ($loader){
+            $loader->loan()->create();
+        });;
     }
 }

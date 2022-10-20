@@ -11,8 +11,8 @@ class Farmer extends Model
 
     protected $guarded = ['id'];
 
-    public function loans()
+    public function loan()
     {
-        return $this->morphMany(Loan::class, 'modelable');
+        return $this->morphOne(Loan::class, 'modelable');
     }
 }

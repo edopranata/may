@@ -18,6 +18,8 @@ class DriverSeeder extends Seeder
     {
         Driver::factory()->times(10)->create([
             'user_id'   => User::query()->first()->id
-        ]);
+        ])->each(function ($driver){
+            $driver->loan()->create();
+        });;
     }
 }

@@ -18,10 +18,7 @@ return new class extends Migration
             $table->string('modelable_id');
             $table->string('modelable_type');
 
-            $table->dateTime('loan_date');
-            $table->double('beginning_balance');
-            $table->double('ending_balance');
-            $table->text('description')->nullable();
+            $table->double('balance')->default(0);
             $table->timestamps();
         });
     }

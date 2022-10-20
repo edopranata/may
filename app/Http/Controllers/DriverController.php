@@ -33,6 +33,8 @@ class DriverController extends Controller
 
             $driver->price()->create(['value' => $request->price]);
 
+            $driver->loan()->create();
+
             DB::commit();
             return redirect()->back()->with('alert', [
                 'type'    => 'success',

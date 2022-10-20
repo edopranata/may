@@ -31,6 +31,9 @@ class LoaderController extends Controller
                 ->create($request->only(['name', 'address', 'phone']));
 
             $loader->price()->create(['value' => $request->price]);
+
+            $loader->loan()->create();
+
             DB::commit();
             return redirect()->back()->with('alert', [
                 'type'    => 'success',

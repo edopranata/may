@@ -18,6 +18,8 @@ class FarmerSeeder extends Seeder
     {
         Farmer::factory()->times(10)->create([
             'user_id'   => User::query()->first()->id
-        ]);
+        ])->each(function ($farmer){
+            $farmer->loan()->create();
+        });
     }
 }

@@ -25,8 +25,10 @@ class FarmerController extends Controller
 
         DB::beginTransaction();
         try {
-            Farmer::query()
+            $farmer = Farmer::query()
                 ->create($request->only(['name', 'address', 'phone', 'distance']));
+
+            $farmer->loan()->create();
             DB::commit();
             return redirect()->back()->with('alert', [
                 'type'    => 'success',

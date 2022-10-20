@@ -36,7 +36,16 @@ Route::middleware(['auth'])->group(function (){
 
         Route::group(['prefix' => 'transaction', 'as' => 'transaction.'], function (){
             Route::get('/', [\App\Http\Controllers\RouteController::class, 'transaction'])->name('index');
-            Route::resource('loan', \App\Http\Controllers\LoanController::class)->only(['index', 'store']);
+            Route::group(['prefix' => 'loan', 'as' => 'loan.'], function (){
+                Route::get('/', function (){
+                    to_route('transaction.loan.farmer.index');
+                });
+                Route::resource('farmer', \App\Http\Controllers\FarmerLoanController::class)->only(['index', 'store', 'show', 'edit', 'update']);
+                Route::resource('driver', \App\Http\Controllers\DriverLoanController::class)->only(['index', 'store', 'show', 'edit', 'update']);
+                Route::resource('loader', \App\Http\Controllers\LoaderLoanController::class)->only(['index', 'store', 'show', 'edit', 'update']);
+
+
+            });
         });
 
         Route::group(['prefix' => 'config', 'as' => 'config.'], function (){
