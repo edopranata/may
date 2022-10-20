@@ -28,10 +28,10 @@ Route::middleware(['auth'])->group(function (){
         });
         Route::group(['prefix' => 'data', 'as' => 'data.'], function (){
             Route::get('/', [\App\Http\Controllers\RouteController::class,'data'])->name('index');
-            Route::resource('farmer', \App\Http\Controllers\FarmerController::class)->only(['index', 'edit', 'store', 'update', 'destroy']);
-            Route::resource('car', \App\Http\Controllers\CarController::class)->only(['index', 'edit', 'store', 'update', 'destroy']);
-            Route::resource('driver', \App\Http\Controllers\DriverController::class)->only(['index', 'edit', 'store', 'update', 'destroy']);
-            Route::resource('loader', \App\Http\Controllers\LoaderController::class)->only(['index', 'edit', 'store', 'update', 'destroy']);
+            Route::resource('farmer', \App\Http\Controllers\FarmerController::class)->only(['index', 'store', 'update', 'destroy']);
+            Route::resource('car', \App\Http\Controllers\CarController::class)->only(['index', 'store', 'update', 'destroy']);
+            Route::resource('driver', \App\Http\Controllers\DriverController::class)->only(['index', 'store', 'update', 'destroy']);
+            Route::resource('loader', \App\Http\Controllers\LoaderController::class)->only(['index', 'store', 'update', 'destroy']);
         });
 
         Route::group(['prefix' => 'transaction', 'as' => 'transaction.'], function (){

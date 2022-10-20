@@ -4,17 +4,101 @@
     <Breadcrumb :links="breadcrumbs"/>
     <PageTitle :classes="'bg-base-content'" class="">Pinjaman</PageTitle>
 
+    <input type="checkbox" id="modal-option" v-model="modal" class="modal-toggle" />
+    <label for="modal-option" class="modal cursor-pointer modal-lg">
+
+        <label class="modal-box relative" for="">
+            <span class="px-4 grid grid-cols-2 gap-4">
+                <span class="overflow-x-auto col-span-2">
+                  <table class="w-full text-left text-base">
+                    <!-- head -->
+                    <thead class="text-sm uppercase bg-primary/20">
+                      <tr>
+                        <th class="py-3 px-6">Name</th>
+                        <th class="py-3 px-6">Favorite Color</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <!-- row 1 -->
+                      <tr>
+                        <td class="py-3 px-6">
+                            <div class="font-bold">{{ farmer.name }}</div>
+                            <div class="text-sm opacity-50">{{ farmer.phone }}</div>
+                        </td>
+                        <td class="py-3 px-6">{{ Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR' }).format(farmer.loan ?? 0)  }}</td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </span>
+                <button class="btn btn-xl btn-primary btn-block pt-10 pb-14">Pengajuan Pinjaman</button>
+                <button class="btn btn-xl btn-secondary btn-block pt-10 pb-14">Pembayaran Pinjaman</button>
+            </span>
+
+        </label>
+    </label>
+
+    <section class="px-4 grid gap-4">
+        <div>
+            <table class="w-full text-left text-base">
+                <thead class="text-sm uppercase bg-primary/20">
+                <tr>
+                    <th class="py-3 px-6">#</th>
+                    <th class="py-3 px-6">Nama Petani</th>
+                    <th class="py-3 px-6">Alamat</th>
+                    <th class="py-3 px-6">No Telepon</th>
+                    <th class="py-3 px-6">Jarak</th>
+                    <th class="py-3 px-6">Pinjaman</th>
+                    <th class="py-3 px-6"></th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr v-if="props.farmers.data.length" class="hover:cursor-pointer group border-b" v-for="(item, index) in props.farmers.data" @click="openModal(index)">
+                    <th class="group-hover:bg-base-300 py-4 px-6">{{ props.farmers.from + index  }}</th>
+                    <td class="group-hover:bg-base-300 py-4 px-6">{{ item.name }}</td>
+                    <td class="group-hover:bg-base-300 py-4 px-6" style="word-wrap: break-word"><p class="max-w-xs">{{ item.address }}</p> </td>
+                    <td class="group-hover:bg-base-300 py-4 px-6">{{ item.phone }}</td>
+                    <td class="group-hover:bg-base-300 py-4 px-6">{{ item.distance }} Km</td>
+                    <td class="group-hover:bg-base-300 py-4 px-6">{{ Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR' }).format(item.loans_sum_ending_balance ?? 0)}}</td>
+                    <td class="group-hover:bg-base-300 py-4 px-6"><BaseIcon :path="mdiArrowRight" /></td>
+                </tr>
+                <tr v-else>
+                    <td colspan="5" class="text-center border-b-2">No Data</td>
+                </tr>
+                </tbody>
+            </table>
+            <Pagination v-if="props.farmers.data.length" :links="props.farmers.links" />
+        </div>
+    </section>
 </template>
 
 <script setup>
 import Breadcrumb from "@/Shared/Breadcrumb.vue"
 import PageTitle from "@/Components/PageTitle.vue"
+import BaseIcon from "@/Components/BaseIcon.vue"
+import Pagination from "@/Components/Pagination.vue"
+import PageMenu from "@/Components/PageMenu.vue"
 
-import { Head } from '@inertiajs/inertia-vue3'
+import { mdiArrowRight } from "@mdi/js";
+import { Head, Link } from "@inertiajs/inertia-vue3"
+import {reactive, ref} from "vue"
 
+const modal = ref(false)
+
+const props = defineProps({
+    farmers: Object
+})
+
+const farmer = reactive({
+    id: '',
+    name: '',
+    phone: '',
+    address: '',
+    distance: '',
+    loan: '',
+})
 const breadcrumbs = [
     {
-        "url": route('transaction.loan.index'),
+        "url": route('transaction.index'),
         "label": "Transaksi"
     },
     {
@@ -22,4 +106,16 @@ const breadcrumbs = [
         "label": "Pinjaman"
     }
 ]
+
+const openModal = function (index){
+    let data = props.farmers.data[index]
+    farmer.id = data.id
+    farmer.name = data.name
+    farmer.phone = data.phone
+    farmer.address = data.address
+    farmer.distance = data.distance
+    farmer.loan = data.loans_sum_ending_balance
+    modal.value = true
+    console.log(farmer)
+}
 </script>
