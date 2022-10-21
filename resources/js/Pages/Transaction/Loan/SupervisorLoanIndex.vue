@@ -1,8 +1,8 @@
 <template>
-    <Head title="Pinjaman Tukang Muat" />
+    <Head title="Pinjaman Mandor" />
 
     <Breadcrumb :links="breadcrumbs"/>
-    <PageTitle :classes="'bg-base-content'">Pinjaman Tukang Muat</PageTitle>
+    <PageTitle :classes="'bg-base-content'">Pinjaman Mandor</PageTitle>
 
     <input type="checkbox" id="modal-option" v-model="modal" class="modal-toggle" />
     <label for="modal-option" class="modal cursor-pointer modal-lg">
@@ -22,16 +22,16 @@
                       <!-- row 1 -->
                       <tr>
                         <td class="py-3 px-6">
-                            <div class="font-bold">{{ loader.name }}</div>
-                            <div class="text-sm opacity-50">{{ loader.phone }}</div>
+                            <div class="font-bold">{{ supervisor.name }}</div>
+                            <div class="text-sm opacity-50">{{ supervisor.phone }}</div>
                         </td>
-                        <td class="py-3 px-6">{{ Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR' }).format(loader.loan)  }}</td>
+                        <td class="py-3 px-6">{{ Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR' }).format(supervisor.loan)  }}</td>
                       </tr>
                     </tbody>
                   </table>
                 </span>
-                <Link as="button" :href="loader.id ? route('transaction.loan.loader.show', loader.id) : ''" class="btn btn-xl btn-success btn-block pt-10 pb-14">Pengajuan Pinjaman</Link>
-                <Link as="button" :disabled="loader.loan < 1" :href="loader.id ? route('transaction.loan.loader.edit', loader.id) : ''" class="btn btn-xl btn-warning btn-block pt-10 pb-14">Pembayaran Pinjaman</Link>
+                <Link as="button" :href="supervisor.id ? route('transaction.loan.supervisor.show', supervisor.id) : ''" class="btn btn-xl btn-success btn-block pt-10 pb-14">Pengajuan Pinjaman</Link>
+                <Link as="button" :disabled="supervisor.loan < 1" :href="supervisor.id ? route('transaction.loan.supervisor.edit', supervisor.id) : ''" class="btn btn-xl btn-warning btn-block pt-10 pb-14">Pembayaran Pinjaman</Link>
             </span>
 
         </label>
@@ -47,7 +47,7 @@
                 <thead class="text-sm uppercase bg-primary/20">
                 <tr>
                     <th class="py-3 px-6">#</th>
-                    <th class="py-3 px-6">Nama Tukang Muat</th>
+                    <th class="py-3 px-6">Nama Mandor</th>
                     <th class="py-3 px-6">Alamat</th>
                     <th class="py-3 px-6">No Telepon</th>
                     <th class="py-3 px-6">Pinjaman</th>
@@ -55,8 +55,8 @@
                 </tr>
                 </thead>
                 <tbody>
-                <tr v-if="props.loaders.data.length" class="hover:cursor-pointer group border-b" v-for="(item, index) in props.loaders.data" @click="openModal(index)">
-                    <th class="group-hover:bg-base-300 py-4 px-6">{{ props.loaders.from + index  }}</th>
+                <tr v-if="props.supervisors.data.length" class="hover:cursor-pointer group border-b" v-for="(item, index) in props.supervisors.data" @click="openModal(index)">
+                    <th class="group-hover:bg-base-300 py-4 px-6">{{ props.supervisors.from + index  }}</th>
                     <td class="group-hover:bg-base-300 py-4 px-6">{{ item.name }}</td>
                     <td class="group-hover:bg-base-300 py-4 px-6" style="word-wrap: break-word"><p class="max-w-xs">{{ item.address }}</p> </td>
                     <td class="group-hover:bg-base-300 py-4 px-6">{{ item.phone }}</td>
@@ -68,7 +68,7 @@
                 </tr>
                 </tbody>
             </table>
-            <Pagination v-if="props.loaders.data.length" :links="props.loaders.links" />
+            <Pagination v-if="props.supervisors.data.length" :links="props.supervisors.links" />
         </div>
     </section>
 </template>
@@ -89,7 +89,7 @@ const modal = ref(false)
 
 const props = defineProps({
     search: String,
-    loaders: Object
+    supervisors: Object
 })
 
 const form_search = useForm({
@@ -100,7 +100,7 @@ watch(
     form_search,
     debounce((value) => {
         Inertia.get(
-            route('transaction.loan.loader.index'),
+            route('transaction.loan.supervisor.index'),
             { search: value.search },
             {
                 preserveState: true,
@@ -110,7 +110,7 @@ watch(
     }, 500)
 );
 
-const loader = reactive({
+const supervisor = reactive({
     id: 0,
     name: '',
     phone: '',
@@ -124,19 +124,18 @@ const breadcrumbs = [
     },
     {
         "url": null,
-        "label": "Pinjaman Tukang Muat"
+        "label": "Pinjaman Mandor"
     }
 ]
 
 const openModal = function (index){
-    let data = props.loaders.data[index]
+    let data = props.supervisors.data[index]
 
-    loader.id = data.id
-    loader.name = data.name
-    loader.phone = data.phone
-    loader.address = data.address
-    loader.distance = data.distance
-    loader.loan = data.loan ? data.loan.balance : 0
+    supervisor.id = data.id
+    supervisor.name = data.name
+    supervisor.phone = data.phone
+    supervisor.address = data.address
+    supervisor.loan = data.loan ? data.loan.balance : 0
 
     modal.value = true
 }

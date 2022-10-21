@@ -32,6 +32,7 @@ Route::middleware(['auth'])->group(function (){
             Route::resource('car', \App\Http\Controllers\CarController::class)->only(['index', 'store', 'update', 'destroy']);
             Route::resource('driver', \App\Http\Controllers\DriverController::class)->only(['index', 'store', 'update', 'destroy']);
             Route::resource('loader', \App\Http\Controllers\LoaderController::class)->only(['index', 'store', 'update', 'destroy']);
+            Route::resource('supervisor', \App\Http\Controllers\SupervisorController::class)->only(['index', 'store', 'update', 'destroy']);
         });
 
         Route::group(['prefix' => 'transaction', 'as' => 'transaction.'], function (){
@@ -43,6 +44,7 @@ Route::middleware(['auth'])->group(function (){
                 Route::resource('farmer', \App\Http\Controllers\FarmerLoanController::class)->only(['index', 'store', 'show', 'edit', 'update']);
                 Route::resource('driver', \App\Http\Controllers\DriverLoanController::class)->only(['index', 'store', 'show', 'edit', 'update']);
                 Route::resource('loader', \App\Http\Controllers\LoaderLoanController::class)->only(['index', 'store', 'show', 'edit', 'update']);
+                Route::resource('supervisor', \App\Http\Controllers\SupervisorLoanController::class)->only(['index', 'store', 'show', 'edit', 'update']);
 
 
             });

@@ -1,32 +1,32 @@
 <template>
-    <Head title="Angsuran Pinjaman Tukang Muat" />
+    <Head title="Angsuran Pinjaman Mandor" />
 
     <Breadcrumb :links="breadcrumbs"/>
-    <PageTitle :classes="'bg-base-content'">Angsuran Pinjaman Tukang Muat</PageTitle>
+    <PageTitle :classes="'bg-base-content'">Angsuran Pinjaman Mandor</PageTitle>
 
 
     <section class="px-4 grid md:grid-cols-2 gap-4">
         <div class="card w-full rounded-none border-2 border-warning shadow-xl">
             <div class="card-body">
-                <h2 class="text-xl">Informasi Tukang Muat</h2>
+                <h2 class="text-xl">Informasi Mandor</h2>
                 <div class="divider my-2"></div>
                 <table class="w-full text-left text-base">
                     <tbody>
                     <tr class="group border-b">
-                        <th class="group-hover:bg-base-200 py-4 px-6">Nama Tukang Muat</th>
-                        <td class="group-hover:bg-base-200 py-4 px-6">{{ props.loader.name }}</td>
+                        <th class="group-hover:bg-base-200 py-4 px-6">Nama Mandor</th>
+                        <td class="group-hover:bg-base-200 py-4 px-6">{{ props.supervisor.name }}</td>
                     </tr>
                     <tr class="group border-b">
                         <th class="group-hover:bg-base-200 py-4 px-6">Alamat</th>
-                        <td class="group-hover:bg-base-200 py-4 px-6">{{ props.loader.address }}</td>
+                        <td class="group-hover:bg-base-200 py-4 px-6">{{ props.supervisor.address }}</td>
                     </tr>
                     <tr class="group border-b">
                         <th class="group-hover:bg-base-200 py-4 px-6">No Handphone</th>
-                        <td class="group-hover:bg-base-200 py-4 px-6">{{ props.loader.phone }}</td>
+                        <td class="group-hover:bg-base-200 py-4 px-6">{{ props.supervisor.phone }}</td>
                     </tr>
                     <tr class="group border-b">
                         <th class="group-hover:bg-base-200 py-4 px-6">Sisa Pinjaman</th>
-                        <td class="group-hover:bg-base-200 py-4 px-6">{{ Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR' }).format(props.loader.loan ? props.loader.loan.balance : 0)}}</td>
+                        <td class="group-hover:bg-base-200 py-4 px-6">{{ Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR' }).format(props.supervisor.loan ? props.supervisor.loan.balance : 0)}}</td>
                     </tr>
                     </tbody>
                 </table>
@@ -82,12 +82,12 @@ import {Head, Link, useForm} from "@inertiajs/inertia-vue3"
 import VueNumberFormat from 'vue-number-format'
 
 const props = defineProps({
-    loader: Object
+    supervisor: Object
 })
 
 const form = useForm({
-    type: 'loader',
-    id: props.loader.id,
+    type: 'supervisor',
+    id: props.supervisor.id,
     date: '',
     amount: '',
     description: ''
@@ -98,17 +98,17 @@ const breadcrumbs = [
         "label": "Transaksi"
     },
     {
-        "url": route('transaction.loan.loader.index'),
+        "url": route('transaction.loan.supervisor.index'),
         "label": "Pinjaman"
     },
     {
         "url": null,
-        "label": "Angsuran pinjaman : " + props.loader.name
+        "label": "Angsuran pinjaman : " + props.supervisor.name
     }
 ]
 
 const save = () => {
-    form.patch(route('transaction.loan.loader.update', props.loader.id), {
+    form.patch(route('transaction.loan.supervisor.update', props.supervisor.id), {
         onSuccess: () => {
             set_default_form()
         },

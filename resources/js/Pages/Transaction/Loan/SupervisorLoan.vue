@@ -1,45 +1,45 @@
 <template>
-    <Head title="Angsuran Pinjaman Tukang Muat" />
+    <Head title="Pinjaman Mandor" />
 
     <Breadcrumb :links="breadcrumbs"/>
-    <PageTitle :classes="'bg-base-content'">Angsuran Pinjaman Tukang Muat</PageTitle>
+    <PageTitle :classes="'bg-base-content'">Pinjaman Mandor</PageTitle>
 
 
     <section class="px-4 grid md:grid-cols-2 gap-4">
-        <div class="card w-full rounded-none border-2 border-warning shadow-xl">
+        <div class="card w-full rounded-none border-2 border-success shadow-xl">
             <div class="card-body">
-                <h2 class="text-xl">Informasi Tukang Muat</h2>
+                <h2 class="text-xl">Informasi Mandor</h2>
                 <div class="divider my-2"></div>
                 <table class="w-full text-left text-base">
                     <tbody>
                     <tr class="group border-b">
-                        <th class="group-hover:bg-base-200 py-4 px-6">Nama Tukang Muat</th>
-                        <td class="group-hover:bg-base-200 py-4 px-6">{{ props.loader.name }}</td>
+                        <th class="group-hover:bg-base-200 py-4 px-6">Nama Mandor</th>
+                        <td class="group-hover:bg-base-200 py-4 px-6">{{ props.supervisor.name }}</td>
                     </tr>
                     <tr class="group border-b">
                         <th class="group-hover:bg-base-200 py-4 px-6">Alamat</th>
-                        <td class="group-hover:bg-base-200 py-4 px-6">{{ props.loader.address }}</td>
+                        <td class="group-hover:bg-base-200 py-4 px-6">{{ props.supervisor.address }}</td>
                     </tr>
                     <tr class="group border-b">
                         <th class="group-hover:bg-base-200 py-4 px-6">No Handphone</th>
-                        <td class="group-hover:bg-base-200 py-4 px-6">{{ props.loader.phone }}</td>
+                        <td class="group-hover:bg-base-200 py-4 px-6">{{ props.supervisor.phone }}</td>
                     </tr>
                     <tr class="group border-b">
-                        <th class="group-hover:bg-base-200 py-4 px-6">Sisa Pinjaman</th>
-                        <td class="group-hover:bg-base-200 py-4 px-6">{{ Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR' }).format(props.loader.loan ? props.loader.loan.balance : 0)}}</td>
+                        <th class="group-hover:bg-base-200 py-4 px-6">Pinjaman</th>
+                        <td class="group-hover:bg-base-200 py-4 px-6">{{ Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR' }).format(props.supervisor.loan ? props.supervisor.loan.balance : 0)}}</td>
                     </tr>
                     </tbody>
                 </table>
             </div>
         </div>
-        <div class="card w-full rounded-none border-2 border-warning shadow-xl">
+        <div class="card w-full rounded-none border-2 border-success shadow-xl">
             <div class="card-body">
                 <form @submit.prevent="save">
                     <div class="form-control w-ful">
                         <label class="label">
-                            <span class="label-text">Tanggal Angsuran</span>
+                            <span class="label-text">Tanggal Pinjaman</span>
                         </label>
-                        <input :readonly="form.processing" v-model="form.date" type="date" placeholder="Tanggal Angsuran" class="input input-warning input-bordered w-full" />
+                        <input :readonly="form.processing" v-model="form.date" type="date" placeholder="Tanggal Pinjaman" class="input input-success input-bordered w-full" />
                         <label class="label" v-if="form.errors.date">
                             <span class="label-text-alt text-error">{{ form.errors.date }}</span>
                         </label>
@@ -47,9 +47,9 @@
 
                     <div class="form-control w-ful">
                         <label class="label">
-                            <span class="label-text">Jumlah Agsuran</span>
+                            <span class="label-text">Jumlah Pinjaman</span>
                         </label>
-                        <VueNumberFormat :options="{ precision: 0, prefix: 'Rp ', isInteger: true }" :readonly="form.processing" v-model:value="form.amount" placeholder="Jumlah Angsuran" class="input input-warning input-bordered w-full" />
+                        <VueNumberFormat :options="{ precision: 0, prefix: 'Rp ', isInteger: true }" :readonly="form.processing" v-model:value="form.amount" placeholder="Jumlah Pinjaman" class="input input-success input-bordered w-full" />
                         <label class="label" v-if="form.errors.amount">
                             <span class="label-text-alt text-error">{{ form.errors.amount }}</span>
                         </label>
@@ -59,7 +59,7 @@
                         <label class="label">
                             <span class="label-text">Keterangan</span>
                         </label>
-                        <textarea :readonly="form.processing" v-model="form.description" type="text" placeholder="Keterangan" class="textarea textarea-warning textarea-bordered w-full"></textarea>
+                        <textarea :readonly="form.processing" v-model="form.description" type="text" placeholder="Keterangan" class="textarea textarea-success textarea-bordered w-full"></textarea>
                         <label class="label" v-if="form.errors.description">
                             <span class="label-text-alt text-error">{{ form.errors.description }}</span>
                         </label>
@@ -82,12 +82,12 @@ import {Head, Link, useForm} from "@inertiajs/inertia-vue3"
 import VueNumberFormat from 'vue-number-format'
 
 const props = defineProps({
-    loader: Object
+    supervisor: Object
 })
 
 const form = useForm({
-    type: 'loader',
-    id: props.loader.id,
+    type: 'supervisor',
+    id: props.supervisor.id,
     date: '',
     amount: '',
     description: ''
@@ -98,17 +98,17 @@ const breadcrumbs = [
         "label": "Transaksi"
     },
     {
-        "url": route('transaction.loan.loader.index'),
+        "url": route('transaction.loan.supervisor.index'),
         "label": "Pinjaman"
     },
     {
         "url": null,
-        "label": "Angsuran pinjaman : " + props.loader.name
+        "label": "Mandor : " + props.supervisor.name
     }
 ]
 
 const save = () => {
-    form.patch(route('transaction.loan.loader.update', props.loader.id), {
+    form.post(route('transaction.loan.supervisor.store'), {
         onSuccess: () => {
             set_default_form()
         },
