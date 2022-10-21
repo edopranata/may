@@ -36,8 +36,13 @@
 
         </label>
     </label>
-
+    <section class="px-4 grid xl:grid-cols-4 md:grid-cols-3 gap-4 mb-4">
+        <div class="form-control">
+            <input v-model="form_search.search" type="text" placeholder="Search…" class="input input-bordered" />
+        </div>
+    </section>
     <section class="px-4 grid gap-4">
+
         <div>
             <table class="w-full text-left text-base">
                 <thead class="text-sm uppercase bg-primary/20">
@@ -76,14 +81,35 @@ import BaseIcon from "@/Components/BaseIcon.vue"
 import Pagination from "@/Components/Pagination.vue"
 
 import { mdiArrowRight } from "@mdi/js";
-import { Head, Link } from "@inertiajs/inertia-vue3"
-import {reactive, ref} from "vue"
+import {Head, Link, useForm} from "@inertiajs/inertia-vue3"
+import {reactive, ref, watch} from "vue"
+import {debounce} from "lodash";
+import {Inertia} from "@inertiajs/inertia";
 
 const modal = ref(false)
 
 const props = defineProps({
+    search: String,
     drivers: Object
 })
+
+const form_search = useForm({
+    search: props.search
+})
+
+watch(
+    form_search,
+    debounce((value) => {
+        Inertia.get(
+            route('transaction.loan.driver.index'),
+            { search: value.search },
+            {
+                preserveState: true,
+                replace: true,
+            }
+        );
+    }, 500)
+);
 
 const driver = reactive({
     id: 0,

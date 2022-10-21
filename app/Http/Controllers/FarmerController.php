@@ -3,16 +3,23 @@
 namespace App\Http\Controllers;
 
 use App\Models\Farmer;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
 class FarmerController extends Controller
 {
 
-    public function index()
+    public function index(Request $request)
     {
         return inertia('Data/Farmer/FarmerIndex', [
-            'farmers'    => Farmer::query()->orderByDesc('created_at')->paginate(5)
+            'farmers'   => Farmer::query()->when($request->search, function (Builder $builder, $value){
+                $builder
+                    ->where('name', 'like', '%'.$value.'%')
+                    ->orWhere('address', 'like', '%'.$value.'%')
+                    ->orWhere('phone', 'like', '%'.$value.'%');
+
+            })->paginate(5)->withQueryString(),
         ]);
     }
 

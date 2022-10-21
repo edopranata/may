@@ -4,18 +4,24 @@ namespace App\Http\Controllers;
 
 use App\Models\Configuration;
 use App\Models\Driver;
-use App\Models\Price;
+use Illuminate\Contracts\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
 class DriverController extends Controller
 {
 
-    public function index()
+    public function index(Request $request)
     {
         return inertia('Data/Driver/DriverIndex', [
-            'drivers'    => Driver::query()->with('price')->orderByDesc('created_at')->paginate(5),
-            'price'      => Configuration::query()->where('name', 'driver')->first()->value
+            'drivers'    => Driver::query()->when($request->search, function (Builder $builder, $value){
+                $builder
+                    ->where('name', 'like', '%'.$value.'%')
+                    ->orWhere('address', 'like', '%'.$value.'%')
+                    ->orWhere('phone', 'like', '%'.$value.'%');
+
+            })->with('loan')->paginate(5)->withQueryString(),
+            'price'      => Configuration::query()->where('name', 'driver')->first()->value,
         ]);
     }
 

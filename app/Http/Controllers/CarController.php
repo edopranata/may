@@ -4,15 +4,22 @@ namespace App\Http\Controllers;
 
 use App\Models\Car;
 use App\Models\Configuration;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
 class CarController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
         return inertia('Data/Car/CarIndex', [
-            'cars'    => Car::query()->with('price')->orderByDesc('created_at')->paginate(5),
+            'cars'    => Car::query()->when($request->search, function (Builder $builder, $value){
+                $builder
+                    ->where('name', 'like', '%'.$value.'%')
+                    ->orWhere('no_pol', 'like', '%'.$value.'%')
+                    ->orWhere('description', 'like', '%'.$value.'%');
+
+            })->with('price')->orderByDesc('created_at')->paginate(5)->withQueryString(),
             'price'   => Configuration::query()->where('name', 'car')->first()->value
         ]);
     }

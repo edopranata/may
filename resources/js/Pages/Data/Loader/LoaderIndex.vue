@@ -96,7 +96,10 @@
 
     <section class="px-4 grid gap-4">
         <div>
-            <div class="flex justify-end items-center mb-4">
+            <div class="flex justify-between items-center mb-4">
+                <div class="form-control">
+                    <input v-model="form_search.search" type="text" placeholder="Search…" class="input input-bordered" />
+                </div>
                 <label @click="set_default_form" for="modal-create" class="btn modal-button">Tambah Tukang Muat Baru</label>
             </div>
             <table class="w-full text-left text-base">
@@ -138,7 +141,9 @@ import PageTitle from "@/Components/PageTitle.vue";
 
 import { Head, useForm } from '@inertiajs/inertia-vue3';
 import { mdiArrowRight } from "@mdi/js/commonjs/mdi";
-import { ref } from 'vue'
+import {ref, watch} from 'vue'
+import {debounce} from "lodash";
+import {Inertia} from "@inertiajs/inertia";
 
 const breadcrumbs = [
     {
@@ -167,6 +172,7 @@ const form_edit = useForm({
     address: '',
 })
 const props = defineProps({
+    search: String,
     loaders: {
         type: Object,
     },
@@ -175,6 +181,24 @@ const props = defineProps({
         default: 0
     }
 })
+
+const form_search = useForm({
+    search: props.search
+})
+
+watch(
+    form_search,
+    debounce((value) => {
+        Inertia.get(
+            route('data.driver.index'),
+            { search: value.search },
+            {
+                preserveState: true,
+                replace: true,
+            }
+        );
+    }, 500)
+);
 
 const save = () => {
     form_save.post(route('data.loader.store'), {

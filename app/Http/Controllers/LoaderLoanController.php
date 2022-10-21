@@ -3,15 +3,21 @@
 namespace App\Http\Controllers;
 
 use App\Models\Loader;
+use Illuminate\Contracts\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
 class LoaderLoanController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
         return inertia('Transaction/Loan/LoaderLoanIndex', [
-            'loaders' => Loader::query()->with('loan')->orderByDesc('created_at')->paginate(5),
+            'loaders' => Loader::query()->when($request->search, function (Builder $builder, $value){
+                $builder
+                    ->where('name', 'like', '%'.$value.'%')
+                    ->orWhere('address', 'like', '%'.$value.'%')
+                    ->orWhere('phone', 'like', '%'.$value.'%');
+            })->with('loan')->orderByDesc('created_at')->paginate(5),
         ]);
     }
 

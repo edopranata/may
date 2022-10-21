@@ -4,15 +4,22 @@ namespace App\Http\Controllers;
 
 use App\Models\Configuration;
 use App\Models\Loader;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
 class LoaderController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
         return inertia('Data/Loader/LoaderIndex', [
-            'loaders' => Loader::query()->with('price')->orderByDesc('created_at')->paginate(5),
+            'loaders' => Loader::query()->when($request->search, function (Builder $builder, $value){
+                $builder
+                    ->where('name', 'like', '%'.$value.'%')
+                    ->orWhere('address', 'like', '%'.$value.'%')
+                    ->orWhere('phone', 'like', '%'.$value.'%');
+
+            })->with('price')->orderByDesc('created_at')->paginate(5)->withQueryString(),
             'price'   => Configuration::query()->where('name', 'loader')->first()->value
         ]);
     }
