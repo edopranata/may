@@ -137,7 +137,7 @@
                     <td class="group-hover:bg-base-300 py-4 px-6 max-w-xs">{{ item.description }}</td>
                     <td class="group-hover:bg-base-300 py-4 px-6 ">{{ item.no_pol }}</td>
                     <td class="group-hover:bg-base-300 py-4 px-6">{{ item.year }}</td>
-                    <td class="group-hover:bg-base-300 py-4 px-6">{{ item.price ? item.price.value : 0 }}</td>
+                    <td class="group-hover:bg-base-300 py-4 px-6">{{ Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR', minimumFractionDigits: 0 }).format(item.price ? item.price.value : 0)  }}</td>
                     <td class="group-hover:bg-base-300 py-4 px-6"><BaseIcon :path="mdiArrowRight" /></td>
                 </tr>
                 <tr v-else>

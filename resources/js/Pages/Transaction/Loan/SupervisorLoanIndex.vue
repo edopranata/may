@@ -25,7 +25,7 @@
                             <div class="font-bold">{{ supervisor.name }}</div>
                             <div class="text-sm opacity-50">{{ supervisor.phone }}</div>
                         </td>
-                        <td class="py-3 px-6">{{ Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR' }).format(supervisor.loan)  }}</td>
+                        <td class="py-3 px-6">{{ Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR', minimumFractionDigits: 0  }).format(supervisor.loan)  }}</td>
                       </tr>
                     </tbody>
                   </table>

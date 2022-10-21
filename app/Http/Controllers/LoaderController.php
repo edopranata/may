@@ -67,7 +67,10 @@ class LoaderController extends Controller
         DB::beginTransaction();
         try {
             $loader->update($request->only(['name', 'address', 'phone']));
-            $loader->price()->updateOrCreate(['value' => $request->price]);
+            $loader->price()->updateOrCreate(
+                ['modelable_id' => $loader->id],
+                ['value' => $request->price]
+            );
             DB::commit();
             return redirect()->back()->with('alert', [
                 'type'    => 'info',

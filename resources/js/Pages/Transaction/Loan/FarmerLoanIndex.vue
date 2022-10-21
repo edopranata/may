@@ -62,7 +62,7 @@
                     <td class="group-hover:bg-base-300 py-4 px-6" style="word-wrap: break-word"><p class="max-w-xs">{{ item.address }}</p> </td>
                     <td class="group-hover:bg-base-300 py-4 px-6">{{ item.phone }}</td>
                     <td class="group-hover:bg-base-300 py-4 px-6">{{ item.distance }} Km</td>
-                    <td class="group-hover:bg-base-300 py-4 px-6">{{ Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR' }).format(item.loan ? item.loan.balance : 0)}}</td>
+                    <td class="group-hover:bg-base-300 py-4 px-6">{{ Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR', minimumFractionDigits: 0  }).format(item.loan ? item.loan.balance : 0)}}</td>
                     <td class="group-hover:bg-base-300 py-4 px-6"><BaseIcon :path="mdiArrowRight" /></td>
                 </tr>
                 <tr v-else>

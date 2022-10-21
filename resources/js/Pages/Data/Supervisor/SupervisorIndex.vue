@@ -7,12 +7,19 @@
         <label class="modal-box relative" for="">
             <h3 class="font-bold text-lg">Tambah data petani</h3>
             <form @submit.prevent="save">
-                <div class="grid md:grid-cols-3 gap-4">
-                    <div class="form-control w-full my-4 col-span-2">
-                        <label class="label">Nama Mandor</label>
-                        <input :readonly="form_save.processing" v-model="form_save.name" type="text" placeholder="Nama Mandor" class="input input-bordered w-full" />
-                        <label class="label" v-if="form_save.errors.name">
-                            <span class="label-text-alt text-error">{{ form_save.errors.name }}</span>
+                <div class="form-control w-full my-4">
+                    <label class="label">Nama Mandor</label>
+                    <input :readonly="form_save.processing" v-model="form_save.name" type="text" placeholder="Nama Mandor" class="input input-bordered w-full" />
+                    <label class="label" v-if="form_save.errors.name">
+                        <span class="label-text-alt text-error">{{ form_save.errors.name }}</span>
+                    </label>
+                </div>
+                <div class="grid md:grid-cols-2 gap-4">
+                    <div class="form-control w-full my-4">
+                        <label class="label">Gaji (Bulan)</label>
+                        <VueNumberFormat :readonly="form_save.processing" :options="{ precision: 0, prefix: 'Rp ', isInteger: true }" v-model:value="form_save.price" placeholder="Gaji (Bulan)" class="input input-bordered w-full" />
+                        <label class="label" v-if="form_save.errors.price">
+                            <span class="label-text-alt text-error">{{ form_save.errors.price }}</span>
                         </label>
                     </div>
                     <div class="form-control w-full my-4">
@@ -43,12 +50,19 @@
         <label class="modal-box relative" for="">
             <h3 class="font-bold text-lg">Ubah Data Mandor {{ form_edit.name }}</h3>
             <form @submit.prevent="update">
-                <div class="grid md:grid-cols-3 gap-4">
-                    <div class="form-control w-full my-4 col-span-2">
-                        <label class="label">Nama Mandor</label>
-                        <input :readonly="form_edit.processing" v-model="form_edit.name" type="text" placeholder="Nama Mandor" class="input input-bordered w-full" />
-                        <label class="label" v-if="form_edit.errors.name">
-                            <span class="label-text-alt text-error">{{ form_edit.errors.name }}</span>
+                <div class="form-control w-full my-4">
+                    <label class="label">Nama Mandor</label>
+                    <input :readonly="form_edit.processing" v-model="form_edit.name" type="text" placeholder="Nama Mandor" class="input input-bordered w-full" />
+                    <label class="label" v-if="form_edit.errors.name">
+                        <span class="label-text-alt text-error">{{ form_edit.errors.name }}</span>
+                    </label>
+                </div>
+                <div class="grid md:grid-cols-2 gap-4">
+                    <div class="form-control w-full my-4">
+                        <label class="label">Gaji (Bulan)</label>
+                        <VueNumberFormat :readonly="form_edit.processing" :options="{ precision: 0, prefix: 'Rp ', isInteger: true }" v-model:value="form_edit.price" placeholder="Gaji (Bulan)" class="input input-bordered w-full" />
+                        <label class="label" v-if="form_edit.errors.price">
+                            <span class="label-text-alt text-error">{{ form_edit.errors.price }}</span>
                         </label>
                     </div>
                     <div class="form-control w-full my-4">
@@ -93,6 +107,7 @@
                     <th class="py-3 px-6">Nama Mandor</th>
                     <th class="py-3 px-6">No Telepon</th>
                     <th class="py-3 px-6">Alamat</th>
+                    <th class="py-3 px-6">Gaji</th>
                     <th class="py-3 px-6"></th>
                 </tr>
                 </thead>
@@ -101,7 +116,8 @@
                     <th class="group-hover:bg-base-300 py-4 px-6">{{ props.supervisors.from + index  }}</th>
                     <td class="group-hover:bg-base-300 py-4 px-6">{{ item.name }}</td>
                     <td class="group-hover:bg-base-300 py-4 px-6">{{ item.phone }}</td>
-                    <td class="group-hover:bg-base-300 py-4 px-6" style="word-wrap: break-word"><p class="max-w-xs">{{ item.address }}</p> </td>
+                    <td class="group-hover:bg-base-300 py-4 px-6">{{ item.address }}</td>
+                    <td class="group-hover:bg-base-300 py-4 px-6">{{ Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR', minimumFractionDigits: 0 }).format(item.price ? item.price.value : 0)  }}</td>
                     <td class="group-hover:bg-base-300 py-4 px-6"><BaseIcon :path="mdiArrowRight" /></td>
                 </tr>
                 <tr v-else>
@@ -121,6 +137,7 @@ import BaseIcon from "@/Components/BaseIcon.vue";
 import Pagination from "@/Components/Pagination.vue";
 import PageTitle from "@/Components/PageTitle.vue";
 
+import VueNumberFormat from 'vue-number-format'
 import { Head, useForm } from '@inertiajs/inertia-vue3';
 import { mdiArrowRight } from "@mdi/js/commonjs/mdi";
 import {ref, watch} from 'vue'
@@ -141,6 +158,13 @@ const modal_save = ref(false)
 const modal_edit = ref(false)
 const supervisor_id = ref(null)
 
+const props = defineProps({
+    price: Number,
+    search: String,
+    supervisors: {
+        type: Object,
+    }
+})
 const form_save = useForm({
     name: '',
     price: props.price,
@@ -153,12 +177,7 @@ const form_edit = useForm({
     phone: '',
     address: '',
 })
-const props = defineProps({
-    search: String,
-    supervisors: {
-        type: Object,
-    }
-})
+
 
 const form_search = useForm({
     search: props.search
@@ -168,7 +187,7 @@ watch(
     form_search,
     debounce((value) => {
         Inertia.get(
-            route('data.driver.index'),
+            route('data.supervisor.index'),
             { search: value.search },
             {
                 preserveState: true,
@@ -194,6 +213,7 @@ const edit = (index) => {
     supervisor_id.value = data.id
 
     form_edit.name = data.name
+    form_edit.price = data.price ? data.price.value : 0
     form_edit.address = data.address
     form_edit.phone = data.phone
 

@@ -17,6 +17,11 @@ class Supervisor extends Model
         return $this->morphOne(Loan::class, 'modelable');
     }
 
+    public function price()
+    {
+        return $this->morphOne(Price::class, 'modelable');
+    }
+
     public function toSearchableArray()
     {
         return [

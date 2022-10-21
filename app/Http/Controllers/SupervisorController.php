@@ -13,13 +13,14 @@ class SupervisorController extends Controller
     public function index(Request $request)
     {
         return inertia('Data/Supervisor/SupervisorIndex', [
-            'supervisors' => Supervisor::query()->when($request->search, function (Builder $builder, $value){
+            'supervisors' => Supervisor::query()->with('price')->when($request->search, function (Builder $builder, $value){
                 $builder
                     ->where('name', 'like', '%'.$value.'%')
                     ->orWhere('address', 'like', '%'.$value.'%')
                     ->orWhere('phone', 'like', '%'.$value.'%');
 
             })->orderByDesc('created_at')->paginate(5)->withQueryString(),
+            'price' => 0
         ]);
     }
 
@@ -35,6 +36,8 @@ class SupervisorController extends Controller
         try {
             $supervisor = Supervisor::query()
                 ->create($request->only(['name', 'address', 'phone']));
+
+            $supervisor->price()->create(['value' => $request->price]);
 
             $supervisor->loan()->create();
 
@@ -64,7 +67,10 @@ class SupervisorController extends Controller
         DB::beginTransaction();
         try {
             $supervisor->update($request->only(['name', 'address', 'phone']));
-
+            $supervisor->price()->updateOrCreate(
+                ['modelable_id' => $supervisor->id],
+                ['value' => $request->price]
+            );
             DB::commit();
             return redirect()->back()->with('alert', [
                 'type'    => 'info',

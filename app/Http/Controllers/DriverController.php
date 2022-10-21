@@ -20,7 +20,7 @@ class DriverController extends Controller
                     ->orWhere('address', 'like', '%'.$value.'%')
                     ->orWhere('phone', 'like', '%'.$value.'%');
 
-            })->with('loan')->paginate(5)->withQueryString(),
+            })->with(['loan', 'price'])->paginate(5)->withQueryString(),
             'price'      => Configuration::query()->where('name', 'driver')->first()->value,
         ]);
     }
@@ -64,10 +64,15 @@ class DriverController extends Controller
             'phone'  => ['required', 'string', 'max:255']
         ]);
 
+        $driver->load('price');
+
         DB::beginTransaction();
         try {
             $driver->update($request->only(['name', 'address', 'phone']));
-            $driver->price()->updateOrCreate(['value' => $request->price]);
+            $driver->price()->updateOrCreate(
+                ['modelable_id' => $driver->id],
+                ['value' => $request->price]
+            );
             DB::commit();
             return redirect()->back()->with('alert', [
                 'type'    => 'info',

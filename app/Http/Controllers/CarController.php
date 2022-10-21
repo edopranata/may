@@ -63,7 +63,10 @@ class CarController extends Controller
         DB::beginTransaction();
         try {
             $car->update($request->only(['name', 'description', 'year', 'no_pol']));
-            $car->price()->updateOrCreate(['value' => $request->price]);
+            $car->price()->updateOrCreate(
+                ['modelable_id' => $car->id],
+                ['value' => $request->price]
+            );
             DB::commit();
             return redirect()->back()->with('alert', [
                 'type'    => 'info',
