@@ -45,8 +45,11 @@ Route::middleware(['auth'])->group(function (){
                 Route::resource('driver', \App\Http\Controllers\DriverLoanController::class)->only(['index', 'store', 'show', 'edit', 'update']);
                 Route::resource('loader', \App\Http\Controllers\LoaderLoanController::class)->only(['index', 'store', 'show', 'edit', 'update']);
                 Route::resource('supervisor', \App\Http\Controllers\SupervisorLoanController::class)->only(['index', 'store', 'show', 'edit', 'update']);
+            });
 
-
+            Route::group(['prefix' => 'trade', 'as' => 'trade.'], function (){
+                Route::get('/', [\App\Http\Controllers\TradeController::class, 'index'])->name('index');
+                Route::post('/', [\App\Http\Controllers\TradeController::class, 'store'])->name('store');
             });
         });
 

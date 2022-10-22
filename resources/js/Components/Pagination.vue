@@ -1,5 +1,5 @@
 <template>
-    <div class="mt-4 space-x-1">
+    <div class="mt-4 space-x-1 print:hidden">
         <Component
             :is="link.url ? Link : 'span'"
             v-for="link in links"
