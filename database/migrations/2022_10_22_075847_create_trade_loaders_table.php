@@ -19,6 +19,7 @@ return new class extends Migration
             $table->foreignIdFor(\App\Models\Loader::class)->nullable()->constrained()->cascadeOnUpdate()->nullOnDelete();
             $table->integer('net_weight')->default(0);
             $table->double('price')->default(0);
+            $table->dateTime('status')->nullable();
             $table->timestamps();
         });
     }

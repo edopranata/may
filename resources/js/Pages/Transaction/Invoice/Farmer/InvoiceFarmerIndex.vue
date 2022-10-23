@@ -1,0 +1,140 @@
+<template>
+    <Head title="Invoice Petani" />
+
+    <Breadcrumb :links="breadcrumbs"/>
+    <PageTitle :classes="'bg-base-content'" class="">Invoice Petani</PageTitle>
+
+    <input type="checkbox" id="modal-option" v-model="modal" class="modal-toggle" />
+    <label for="modal-option" class="modal cursor-pointer modal-lg">
+
+        <label class="modal-box w-11/12 max-w-3xl" for="">
+            <span class="px-4 grid grid-cols-2 gap-4">
+                <span class="overflow-x-auto col-span-2">
+                  <table class="w-full text-left text-base print:text-xs">
+                    <!-- head -->
+                    <thead class="text-sm uppercase bg-primary/20">
+                      <tr>
+                        <th class="py-3 px-6">Nama</th>
+                        <th class="py-3 px-6">Pinjaman</th>
+                        <th class="py-3 px-6">Total</th>
+                        <th class="py-3 px-6">Jumlah Transaksi</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <!-- row 1 -->
+                      <tr>
+                        <td class="py-3 px-6">
+                            <div class="font-bold">{{ farmer.name }}</div>
+                            <div class="text-sm opacity-50">{{ farmer.phone }}</div>
+                        </td>
+                        <td class="py-3 px-6">{{ Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR' }).format(farmer.loan)  }}</td>
+                        <td class="py-3 px-6">{{ Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR' }).format(farmer.total)  }}</td>
+                        <td class="py-3 px-6">{{ farmer.counts }} Trx</td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </span>
+                <span class="flex justify-center">
+                    <Link as="button" :href="route('transaction.invoice.farmer.show', farmer.id)" class="btn btn-xl btn-success btn-block pt-10 pb-14">Buat Invoice</Link>
+                </span>
+            </span>
+
+        </label>
+    </label>
+
+    <section class="px-4 grid gap-4">
+        <div>
+            <table class="w-full text-left text-base">
+                <thead class="text-sm uppercase bg-primary/20">
+                <tr>
+                    <th class="py-3 px-6">#</th>
+                    <th class="py-3 px-6">Nama Petani</th>
+                    <th class="py-3 px-6">Alamat</th>
+                    <th class="py-3 px-6">No Telepon</th>
+                    <th class="py-3 px-6">Jarak</th>
+                    <th class="py-3 px-6">Total</th>
+                    <th class="py-3 px-6">Jumlah Trx</th>
+                    <th class="py-3 px-6">Pinjaman</th>
+                    <th class="py-3 px-6"></th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr v-if="props.farmers.data.length" class="hover:cursor-pointer group border-b" v-for="(item, index) in props.farmers.data" @click="openModal(index)">
+                    <th class="group-hover:bg-base-300 py-4 px-6">{{ props.farmers.from + index  }}</th>
+                    <td class="group-hover:bg-base-300 py-4 px-6">{{ item.name }}</td>
+                    <td class="group-hover:bg-base-300 py-4 px-6" style="word-wrap: break-word"><p class="max-w-xs">{{ item.address }}</p> </td>
+                    <td class="group-hover:bg-base-300 py-4 px-6">{{ item.phone }}</td>
+                    <td class="group-hover:bg-base-300 py-4 px-6">{{ item.distance }} Km</td>
+                    <td class="group-hover:bg-base-300 py-4 px-6">{{ Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR', minimumFractionDigits: 0  }).format(item.trades_total)}}</td>
+                    <td class="group-hover:bg-base-300 py-4 px-6">{{ item.trades_count }}</td>
+                    <td class="group-hover:bg-base-300 py-4 px-6">{{ Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR', minimumFractionDigits: 0  }).format(item.loan_total)}}</td>
+                    <td class="group-hover:bg-base-300 py-4 px-6"><BaseIcon :path="mdiArrowRight" /></td>
+                </tr>
+                <tr v-else>
+                    <td colspan="5" class="text-center border-b-2">No Data</td>
+                </tr>
+                </tbody>
+            </table>
+            <Pagination v-if="props.farmers.data.length" :links="props.farmers.links" />
+        </div>
+    </section>
+</template>
+
+<script setup>
+
+import Breadcrumb from "@/Shared/Breadcrumb.vue"
+import PageTitle from "@/Components/PageTitle.vue"
+import BaseIcon from "@/Components/BaseIcon.vue"
+import Pagination from "@/Components/Pagination.vue"
+
+import { mdiArrowRight } from "@mdi/js";
+import {Head, Link} from '@inertiajs/inertia-vue3'
+import {reactive, ref} from "vue";
+
+const modal = ref(false)
+const breadcrumbs = [
+    {
+        "url": route('transaction.index'),
+        "label": "Transaksi"
+    },
+    {
+        "url": route('transaction.invoice.index'),
+        "label": "Invoice / Gaji"
+    },
+    {
+        "url": null,
+        "label": "Invoice Petani"
+    }
+]
+
+const props = defineProps({
+    farmers: Object
+})
+
+const farmer = reactive({
+    id: 0,
+    name: '',
+    phone: '',
+    address: '',
+    distance: '',
+    loan: '',
+    counts: '',
+    total: ''
+})
+
+const openModal = function (index){
+    let data = props.farmers.data[index]
+
+    farmer.id = data.id
+    farmer.name = data.name
+    farmer.phone = data.phone
+    farmer.address = data.address
+    farmer.distance = data.distance
+    farmer.loan = data.loan_total
+    farmer.total = data.trades_total
+    farmer.counts = data.trades_count
+
+    modal.value = true
+}
+
+</script>

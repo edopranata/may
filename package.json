@@ -10,6 +10,7 @@
         "@inertiajs/progress": "^0.2.7",
         "@kyvg/vue3-notification": "^2.4.1",
         "@tailwindcss/forms": "^0.5.2",
+        "@tailwindcss/typography": "^0.5.7",
         "@vitejs/plugin-vue": "^3.0.0",
         "autoprefixer": "^10.4.2",
         "axios": "^0.27",

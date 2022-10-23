@@ -51,6 +51,11 @@ Route::middleware(['auth'])->group(function (){
                 Route::get('/', [\App\Http\Controllers\TradeController::class, 'index'])->name('index');
                 Route::post('/', [\App\Http\Controllers\TradeController::class, 'store'])->name('store');
             });
+            Route::group(['prefix' => 'invoice', 'as' => 'invoice.'], function (){
+                Route::get('/', [\App\Http\Controllers\InvoiceController::class, 'index'])->name('index');
+                Route::resource('farmer', \App\Http\Controllers\InvoiceFarmerController::class)->only(['index', 'store', 'show', 'edit', 'update']);
+
+            });
         });
 
         Route::group(['prefix' => 'config', 'as' => 'config.'], function (){

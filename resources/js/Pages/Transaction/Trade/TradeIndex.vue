@@ -4,15 +4,13 @@
     <Breadcrumb :links="breadcrumbs"/>
     <PageTitle :classes="'bg-base-content'" class="">Transaksi Jual Beli Sawit</PageTitle>
 
-
-
     <input type="checkbox" v-model="modal_save" id="modal-save" class="modal-toggle" />
     <label for="modal-save" class="modal cursor-pointer">
         <label class="modal-box relative" for="">
             <h3 class="text-lg font-bold text-center">Anda yakin data sudah benar?</h3>
             <div class="mt-8 flex justify-center">
-                <button class="btn" @click.preven="save">Simpan</button>
-                <button class="btn btn-warning ml-4" @click.preven="modal_save=false">Batalkan</button>
+                <button :disabled="form.processing" class="btn" @click.prevent="save">Simpan</button>
+                <label :class="form.processing ? 'btn-disabled' : ''" for="modal-save" class="btn btn-warning ml-4" @click.prevent="modal_save=false">Batalkan</label>
             </div>
         </label>
     </label>
@@ -56,7 +54,7 @@
                             <label class="label">
                                 <span class="label-text">Tanggal Transaksi</span>
                             </label>
-                            <input :readonly="form.processing" v-model="form.date" type="date" placeholder="Tanggal Pinjaman" class="input input-info input-bordered w-full" />
+                            <input :readonly="form.processing" @focus="form.clearErrors('date')" v-model="form.date" type="date" placeholder="Tanggal Pinjaman" class="input input-info input-bordered w-full" />
                             <label class="label" v-if="form.errors.date">
                                 <span class="label-text-alt text-error">{{ form.errors.date }}</span>
                             </label>
@@ -65,7 +63,7 @@
                             <label class="label">
                                 <span class="label-text">Pembelian dari petani</span>
                             </label>
-                            <select :disabled="form.processing" v-model="form.farmer_id" class="select select-info select-bordered">
+                            <select @focus="form.clearErrors('farmer_id')" :disabled="form.processing" v-model="form.farmer_id" class="select select-info select-bordered">
                                 <option value="0">Pilih Petani</option>
                                 <option v-for="(item, index) in props.farmers" :value="item.id" :key="item.id">{{ item.text }}</option>
                             </select>
@@ -77,7 +75,7 @@
                             <label class="label">
                                 <span class="label-text">Supir</span>
                             </label>
-                            <select :disabled="form.processing" v-model="form.driver_id" class="select select-info select-bordered">
+                            <select @focus="form.clearErrors('driver_id')" :disabled="form.processing" v-model="form.driver_id" class="select select-info select-bordered">
                                 <option value="0">Pilih Supir</option>
                                 <option v-for="(item, index) in props.drivers" :value="item.id" :key="item.id">{{ item.text }}</option>
                             </select>
@@ -89,14 +87,17 @@
                             <label class="label">
                                 <span class="label-text">&nbsp;</span>
                             </label>
-                            <button :disabled="form.processing" @click.prevent="modal_loader = true" class="btn">Tukang Muat</button>
+                            <button @focus="form.clearErrors('loaders')" :disabled="form.processing" @click.prevent="modal_loader = true" class="btn">Tukang Muat {{ form.loaders.length > 0 ? (form.loaders.length) +' orang' : '' }}</button>
+                            <label class="label" v-if="form.errors.loaders">
+                                <span class="label-text-alt text-error">{{ form.errors.loaders }}</span>
+                            </label>
                         </div>
                         <div class="divider mb-0 md:col-span-2">Timbangan & Harga</div>
                         <div class="form-control w-full">
                             <label class="label">
                                 <span class="label-text">Timbangan Kebun</span>
                             </label>
-                            <VueNumberFormat :options="{ precision: 0, prefix: '', suffix: ' Kg', acceptNegative: false }" :readonly="form.processing" v-model:value="form.gross_weight" class="input input-info input-bordered w-full" />
+                            <VueNumberFormat @focus="form.clearErrors('gross_weight')" :options="{ precision: 0, prefix: '', suffix: ' Kg', acceptNegative: false }" :readonly="form.processing" v-model:value="form.gross_weight" class="input input-info input-bordered w-full" />
                             <label class="label" v-if="form.errors.gross_weight">
                                 <span class="label-text-alt text-error">{{ form.errors.gross_weight }}</span>
                             </label>
@@ -105,7 +106,7 @@
                             <label class="label">
                                 <span class="label-text">Harga Beli Dari Petani</span>
                             </label>
-                            <VueNumberFormat :options="{ precision: 0, prefix: 'Rp. ', acceptNegative: false }" :readonly="form.processing" v-model:value="form.buying_price" class="input input-info input-bordered w-full" />
+                            <VueNumberFormat @focus="form.clearErrors('buying_price')" :options="{ precision: 0, prefix: 'Rp. ', acceptNegative: false }" :readonly="form.processing" v-model:value="form.buying_price" class="input input-info input-bordered w-full" />
                             <label class="label" v-if="form.errors.buying_price">
                                 <span class="label-text-alt text-error">{{ form.errors.buying_price }}</span>
                             </label>
@@ -115,7 +116,7 @@
                             <label class="label">
                                 <span class="label-text">Timbangan Pabrik</span>
                             </label>
-                            <VueNumberFormat :options="{ precision: 0, prefix: '', suffix: ' Kg', acceptNegative: false }" :readonly="form.processing" v-model:value="form.net_weight" class="input input-info input-bordered w-full" />
+                            <VueNumberFormat @focus="form.clearErrors('net_weight')" :options="{ precision: 0, prefix: '', suffix: ' Kg', acceptNegative: false }" :readonly="form.processing" v-model:value="form.net_weight" class="input input-info input-bordered w-full" />
                             <label class="label" v-if="form.errors.net_weight">
                                 <span class="label-text-alt text-error">{{ form.errors.net_weight }}</span>
                             </label>
@@ -124,7 +125,7 @@
                             <label class="label">
                                 <span class="label-text">Harga Jual Ke Pabrik</span>
                             </label>
-                            <VueNumberFormat :options="{ precision: 0, prefix: 'Rp. ', acceptNegative: false }" :readonly="form.processing" v-model:value="form.selling_price" class="input input-info input-bordered w-full" />
+                            <VueNumberFormat @focus="form.clearErrors('selling_price')" :options="{ precision: 0, prefix: 'Rp. ', acceptNegative: false }" :readonly="form.processing" v-model:value="form.selling_price" class="input input-info input-bordered w-full" />
                             <label class="label" v-if="form.errors.selling_price">
                                 <span class="label-text-alt text-error">{{ form.errors.selling_price }}</span>
                             </label>
@@ -133,7 +134,7 @@
                             <label class="label">
                                 <span class="label-text">Keterangan (optional)</span>
                             </label>
-                            <input :readonly="form.processing" v-model="form.description" type="text" placeholder="Keterangan (optional)" class="input input-info input-bordered w-full" />
+                            <input @focus="form.clearErrors('description')" :readonly="form.processing" v-model="form.description" type="text" placeholder="Keterangan (optional)" class="input input-info input-bordered w-full" />
                             <label class="label" v-if="form.errors.description">
                                 <span class="label-text-alt text-error">{{ form.errors.description }}</span>
                             </label>
@@ -166,7 +167,7 @@
                                 </tr>
                                 <tr class="border-b">
                                     <th class="pl-5 py-2 align-top max-w-xs">Timbangan Kebun</th>
-                                    <td class="pl-5 py-2 align-top">{{ data.gros }}</td>
+                                    <td class="pl-5 py-2 align-top">{{ data.gross }}</td>
                                 </tr>
                                 <tr class="border-b">
                                     <th class="pl-5 py-2 align-top">Timbangan Pabrik</th>
@@ -223,45 +224,46 @@ const data = reactive({
     date: '',
     gross:'',
     net: '',
+    farmer_name: '',
     driver_name: '',
     deviation: '',
     loaders: props.loaders,
 })
 const form = useForm({
-    date: '',
+    date: null,
     farmer_id: 0,
-    buying_price: 0,
-    gross_weight: 0,
-    selling_price: 0,
-    net_weight: 0,
-    description: '',
+    buying_price: null,
+    gross_weight: null,
+    selling_price: null,
+    net_weight: null,
+    description: null,
 
     driver_id: 0,
     loaders: [],
 })
 
 watch(() => _.cloneDeep(form), (current, old) => {
-    console.info(current)
     data.date = current.date
     if(current.farmer_id){
         data.farmer_name = props.farmers.filter(farmer => farmer.id === current.farmer_id)[0].text
     }
-    if(current.buying_price && current.gross_weight){
+    if(current.buying_price && current.net_weight){
 
-        data.gros = Intl.NumberFormat('id-ID', { style: 'unit', unit: 'kilogram'}).format(current.gross_weight) + ' x ' + Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR', minimumFractionDigits: 0 }).format(current.buying_price) + ' = ' + Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR', minimumFractionDigits: 0 }).format(current.buying_price * current.gross_weight)
+        data.gross = Intl.NumberFormat('id-ID', { style: 'unit', unit: 'kilogram'}).format(current.net_weight) + ' x ' + Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR', minimumFractionDigits: 0 }).format(current.buying_price) + ' = ' + Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR', minimumFractionDigits: 0 }).format(current.buying_price * current.net_weight)
     }
     if(current.selling_price && current.net_weight){
         data.net = Intl.NumberFormat('id-ID', { style: 'unit', unit: 'kilogram'}).format(current.net_weight) + ' x ' + Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR', minimumFractionDigits: 0 }).format(current.selling_price) + ' = ' + Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR', minimumFractionDigits: 0 }).format(current.selling_price * current.net_weight)
     }
-    if(data.gros && data.net){
+    if(data.gross && data.net){
         data.deviation = Intl.NumberFormat('id-ID', { style: 'unit', unit: 'kilogram'}).format(current.net_weight - current.gross_weight )
     }
     if(current.driver_id){
         data.driver_name = props.drivers.filter(driver => driver.id === current.driver_id)[0].text
     }
     if(current.loaders.length > 0){
-        console.log(current.loaders)
+
     }
+
 })
 
 const addLoader = function (index){
@@ -275,9 +277,39 @@ const removeLoader = function (index){
 
 const save = () => {
     form.post(route('transaction.trade.store'), {
+        onFinish: () => {
+            modal_save.value = false
+        },
         onSuccess: () => {
-            this.modal_save=false
+            set_default_form()
         },
     });
+}
+
+const set_default_form = () => {
+
+    form.clearErrors();
+    form.defaults({
+        date: '',
+        farmer_id: 0,
+        buying_price: 0,
+        gross_weight: 0,
+        selling_price: 0,
+        net_weight: 0,
+        description: '',
+
+        driver_id: 0,
+        loaders: [],
+    })
+
+    form.reset()
+
+    data.loaders = props.loaders
+    data.gross = null
+    data.net = null
+    data.farmer_name = null
+    data.driver_name = null
+    data.deviation = null
+
 }
 </script>

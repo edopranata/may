@@ -13,7 +13,9 @@
 
     <PageTitle :classes="'bg-base-content'" class="mt-10">Transaksi RAMP</PageTitle>
     <section class="px-4 grid xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 gap-4">
-        <PageMenu class="bg-success text-success-content hover:shadow-xl hover:bg-success/80" title="Pinjaman" :link="route('transaction.trade.index')">Jual Beli Sawit</PageMenu>
+        <PageMenu class="bg-success text-success-content hover:shadow-xl hover:bg-success/80" title="Transaksi RAMP" :link="route('transaction.trade.index')">Jual Beli Sawit</PageMenu>
+        <PageMenu class="bg-success text-success-content hover:shadow-xl hover:bg-success/80" title="Invoice" :link="route('transaction.invoice.index')">Buat Invoice</PageMenu>
+
     </section>
 </template>
 

@@ -17,6 +17,11 @@ class Farmer extends Model
         return $this->morphOne(Loan::class, 'modelable');
     }
 
+    public function trades()
+    {
+        return $this->hasMany(Trade::class);
+    }
+
     public function toSearchableArray()
     {
         return [

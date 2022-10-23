@@ -20,6 +20,9 @@ class DriverSeeder extends Seeder
             'user_id'   => User::query()->first()->id
         ])->each(function ($driver){
             $driver->loan()->create();
+            $driver->price()->create([
+                'value' => random_int(90, 120)
+            ]);
         });;
     }
 }

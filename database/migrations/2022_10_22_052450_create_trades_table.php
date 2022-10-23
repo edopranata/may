@@ -25,9 +25,12 @@ return new class extends Migration
             $table->integer('gross_weight');
             $table->double('selling_price');
             $table->integer('net_weight');
-            $table->string('description');
+            $table->string('description')->nullable();
+            $table->double('total_buy');
+            $table->double('total_sell');
             $table->double('driver_fee');
-            $table->string('status')->nullable();
+            $table->dateTime('driver_status')->nullable();
+            $table->dateTime('farmer_status')->nullable();
             $table->timestamps();
         });
     }

@@ -19,8 +19,7 @@ class CarController extends Controller
                     ->orWhere('no_pol', 'like', '%'.$value.'%')
                     ->orWhere('description', 'like', '%'.$value.'%');
 
-            })->with('price')->orderByDesc('created_at')->paginate(5)->withQueryString(),
-            'price'   => Configuration::query()->where('name', 'car')->first()->value
+            })->orderByDesc('created_at')->paginate(5)->withQueryString(),
         ]);
     }
 
@@ -36,7 +35,6 @@ class CarController extends Controller
             $car = Car::query()
                 ->create($request->only(['name', 'description', 'year', 'no_pol']));
 
-            $car->price()->create(['value' => $request->price]);
             DB::commit();
             return redirect()->back()->with('alert', [
                 'type'    => 'success',
@@ -63,10 +61,7 @@ class CarController extends Controller
         DB::beginTransaction();
         try {
             $car->update($request->only(['name', 'description', 'year', 'no_pol']));
-            $car->price()->updateOrCreate(
-                ['modelable_id' => $car->id],
-                ['value' => $request->price]
-            );
+
             DB::commit();
             return redirect()->back()->with('alert', [
                 'type'    => 'info',

@@ -20,6 +20,9 @@ class LoaderSeeder extends Seeder
             'user_id'   => User::query()->first()->id
         ])->each(function ($loader){
             $loader->loan()->create();
+            $loader->price()->create([
+                'value' => random_int(90, 120)
+            ]);
         });;
     }
 }
