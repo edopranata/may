@@ -13,12 +13,10 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('configurations', function (Blueprint $table) {
+        Schema::create('invoice_trades', function (Blueprint $table) {
             $table->id();
-            $table->string('name');
-            $table->integer('value')->nullable();
-            $table->string('text')->nullable();
-            $table->timestamps();
+            $table->foreignIdFor(\App\Models\Invoice::class)->nullable()->constrained()->cascadeOnUpdate()->nullOnDelete();
+            $table->foreignIdFor(\App\Models\Trade::class)->nullable()->constrained()->cascadeOnUpdate()->nullOnDelete();
         });
     }
 
@@ -29,6 +27,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('configurations');
+        Schema::dropIfExists('invoice_trades');
     }
 };

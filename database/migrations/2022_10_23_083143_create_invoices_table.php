@@ -15,6 +15,15 @@ return new class extends Migration
     {
         Schema::create('invoices', function (Blueprint $table) {
             $table->id();
+            $table->date('invoice_date');
+            $table->string('invoice_number');
+            $table->double('amount');
+            $table->double('loan');
+            $table->double('installment');
+
+            $table->string('modelable_id');
+            $table->string('modelable_type');
+            $table->foreignIdFor(\App\Models\User::class)->nullable()->constrained()->cascadeOnUpdate()->nullOnDelete();
             $table->timestamps();
         });
     }

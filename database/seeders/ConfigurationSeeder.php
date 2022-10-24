@@ -27,6 +27,10 @@ class ConfigurationSeeder extends Seeder
             2 => [
                 'name'      => 'car',
                 'value'     => 100
+            ],
+            3 => [
+                'name'      => 'title',
+                'text'      => "RiauCoder's"
             ]
 
         ];

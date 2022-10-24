@@ -23,7 +23,7 @@
 
             <div class="form-control w-full">
                 <label class="label">Pinjaman</label>
-                <VueNumberFormat :options="{ precision: 0, prefix: 'Rp ', isInteger: true }" :readonly="form.processing" v-model:value="form.loan" class="input input-bordered w-full" />
+                <VueNumberFormat :options="{ precision: 0, prefix: 'Rp ', isInteger: true }" readonly v-model:value="form.loan" class="input input-bordered w-full" />
                 <label class="label" v-if="form.errors.loan">
                     <span class="label-text-alt text-error">{{ form.errors.loan }}</span>
                 </label>
