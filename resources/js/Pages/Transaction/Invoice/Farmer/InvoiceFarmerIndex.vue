@@ -71,7 +71,7 @@
                     <td class="group-hover:bg-base-300 py-4 px-6"><BaseIcon :path="mdiArrowRight" /></td>
                 </tr>
                 <tr v-else>
-                    <td colspan="5" class="text-center border-b-2">No Data</td>
+                    <td colspan="9" class="text-center border-b-2">No Data <Link v-if="props.farmers.current_page > 1" class="link link-primary" :href="route('data.farmer.index')">Goto First Page</Link></td>
                 </tr>
                 </tbody>
             </table>

@@ -121,7 +121,7 @@
                     <td class="group-hover:bg-base-300 py-4 px-6"><BaseIcon :path="mdiArrowRight" /></td>
                 </tr>
                 <tr v-else>
-                    <td colspan="5" class="text-center border-b-2">No Data</td>
+                    <td colspan="6" class="text-center border-b-2">No Data <Link v-if="props.supervisors.current_page > 1" class="link link-primary" :href="route('data.supervisor.index')">Goto First Page</Link></td>
                 </tr>
                 </tbody>
             </table>
@@ -138,7 +138,7 @@ import Pagination from "@/Components/Pagination.vue";
 import PageTitle from "@/Components/PageTitle.vue";
 
 import VueNumberFormat from 'vue-number-format'
-import { Head, useForm } from '@inertiajs/inertia-vue3';
+import { Head, useForm, Link } from '@inertiajs/inertia-vue3';
 import { mdiArrowRight } from "@mdi/js/commonjs/mdi";
 import {ref, watch} from 'vue'
 import {debounce} from "lodash";
