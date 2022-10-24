@@ -22,23 +22,23 @@
                 <h3 class="font-bold text-lg col-span-2">Tukang Muat</h3>
                 <h4 class="font-bold text-md">Tidak dipilih</h4>
                 <h4 class="font-bold text-md">Dipilih</h4>
-                <div class="h-40 overflow-y-auto">
-                    <ul class="menu bg-base-200">
+                <div class="h-40 overflow-y-scroll border-2 bg-base-200">
+                    <ul class="menu">
                         <li
                             v-for="(item, index) in data.loaders"
                             :key="index"
                             @click.prevent="addLoader(index)"
-                        ><a>{{ item.text }}</a></li>
+                        ><a class="flex justify-between"><span>{{ item.text }}</span><BaseIcon :path="mdiArrowRight"/></a></li>
                     </ul>
                 </div>
 
-                <div class="h-40 overflow-y-auto">
-                    <ul class="menu bg-base-200">
+                <div class="h-40 overflow-y-scroll border-2 bg-base-200">
+                    <ul class="menu">
                         <li
                             v-for="(item, index) in form.loaders"
                             :key="index"
                             @click.prevent="removeLoader(index)"
-                        ><a>{{ item.text }}</a></li>
+                        ><a class="flex justify-between"><BaseIcon :path="mdiArrowLeft"/><span>{{ item.text }}</span></a></li>
                     </ul>
                 </div>
             </div>
@@ -87,7 +87,7 @@
                             <label class="label">
                                 <span class="label-text">&nbsp;</span>
                             </label>
-                            <button @focus="form.clearErrors('loaders')" :disabled="form.processing" @click.prevent="modal_loader = true" class="btn">Tukang Muat {{ form.loaders.length > 0 ? (form.loaders.length) +' orang' : '' }}</button>
+                            <button type="button" @focus="form.clearErrors('loaders')" :disabled="form.processing" @click.prevent="modal_loader = true" class="btn">Tukang Muat {{ form.loaders.length > 0 ? (form.loaders.length) +' orang' : '' }}</button>
                             <label class="label" v-if="form.errors.loaders">
                                 <span class="label-text-alt text-error">{{ form.errors.loaders }}</span>
                             </label>
@@ -181,10 +181,10 @@
                         </div>
                     </div>
                 </div>
+                <div class="card-actions justify-end p-8">
+                    <button :disabled="form.processing" @click.prevent="modal_save=true" class="btn btn-primary">Save</button>
+                </div>
             </form>
-            <div class="card-actions justify-end p-8">
-                <button :disabled="form.processing" @click.prevent="modal_save=true" class="btn btn-primary">Save</button>
-            </div>
         </div>
     </section>
 </template>
@@ -193,11 +193,11 @@
 
 import Breadcrumb from "@/Shared/Breadcrumb.vue"
 import PageTitle from "@/Components/PageTitle.vue"
+import BaseIcon from "@/Components/BaseIcon.vue"
 
-
+import { mdiArrowRight, mdiArrowLeft} from "@mdi/js";
 import VueNumberFormat from 'vue-number-format'
 import {Head, useForm} from '@inertiajs/inertia-vue3'
-
 import _ from "lodash";
 import {reactive, watch, ref} from "vue";
 

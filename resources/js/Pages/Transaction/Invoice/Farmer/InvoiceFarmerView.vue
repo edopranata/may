@@ -4,39 +4,58 @@
     <Breadcrumb :links="breadcrumbs"/>
     <PageTitle :classes="'bg-base-content'" class="">Invoice Petani </PageTitle>
 
+    <input type="checkbox" id="modal-option" v-model="modal_save" class="modal-toggle" />
+    <label for="modal-option" class="modal cursor-pointer modal-lg">
+
+        <label class="modal-box w-11/12 max-w-3xl" for="">
+            <div class="flex justify-between">
+                <button type="button" @click="save" class="btn btn-primary"><BaseIcon :path="mdiContentSave"/> Simpan</button>
+                <button type="button" @click="print" class="btn btn-success"><BaseIcon :path="mdiPrinter"/> Simpan dan Print Invoice</button>
+                <button type="button" @click="modal_save=false" class="btn btn-warning"><BaseIcon :path="mdiCancel"/> Batal</button>
+
+            </div>
+
+        </label>
+    </label>
+
     <section class="px-4 flex justify-between space-x-4 items-start">
-        <div class="grid md:grid-cols-2 gap-4 w-[50%] print:hidden">
-            <div class="form-control w-full">
-                <label class="label">No Nota / Invoice</label>
-                <input disabled v-model="form.invoice_number" type="text" placeholder="No Nota / Invoice" class="input input-bordered w-full" />
-                <label class="label" v-if="form.errors.invoice_number">
-                    <span class="label-text-alt text-error">{{ form.errors.invoice_number }}</span>
-                </label>
-            </div>
-            <div class="form-control w-full">
-                <label class="label">Tanggal Nota / Invoice</label>
-                <input :readonly="form.processing" v-model="form.invoice_date" type="date" placeholder="Tanggal Nota / Invoice" class="input input-bordered w-full" />
-                <label class="label" v-if="form.errors.invoice_date">
-                    <span class="label-text-alt text-error">{{ form.errors.invoice_date }}</span>
-                </label>
-            </div>
+        <form @submit.prevent="" class="w-[50%]">
+            <div class="grid md:grid-cols-2 gap-4 print:hidden">
+                <div class="form-control w-full">
+                    <label class="label">No Nota / Invoice</label>
+                    <input disabled v-model="form.invoice_number" type="text" placeholder="No Nota / Invoice" class="input input-bordered w-full" />
+                    <label class="label" v-if="form.errors.invoice_number">
+                        <span class="label-text-alt text-error">{{ form.errors.invoice_number }}</span>
+                    </label>
+                </div>
+                <div class="form-control w-full">
+                    <label class="label">Tanggal Nota / Invoice</label>
+                    <input :readonly="form.processing" v-model="form.invoice_date" type="date" placeholder="Tanggal Nota / Invoice" class="input input-bordered w-full" />
+                    <label class="label" v-if="form.errors.invoice_date">
+                        <span class="label-text-alt text-error">{{ form.errors.invoice_date }}</span>
+                    </label>
+                </div>
 
-            <div class="form-control w-full">
-                <label class="label">Pinjaman</label>
-                <VueNumberFormat :options="{ precision: 0, prefix: 'Rp ', isInteger: true }" :readonly="form.processing" v-model:value="form.loan" class="input input-bordered w-full" />
-                <label class="label" v-if="form.errors.loan">
-                    <span class="label-text-alt text-error">{{ form.errors.loan }}</span>
-                </label>
-            </div>
-            <div class="form-control w-full">
-                <label class="label">Angsuran Pinjaman</label>
-                <VueNumberFormat :options="{ precision: 0, prefix: 'Rp ', isInteger: true }" :readonly="form.processing" v-model:value="form.installment" class="input input-bordered w-full" />
-                <label class="label" v-if="form.errors.installment">
-                    <span class="label-text-alt text-error">{{ form.errors.installment }}</span>
-                </label>
-            </div>
+                <div class="form-control w-full">
+                    <label class="label">Pinjaman</label>
+                    <VueNumberFormat :options="{ precision: 0, prefix: 'Rp ', isInteger: true }" :readonly="form.processing" v-model:value="form.loan" class="input input-bordered w-full" />
+                    <label class="label" v-if="form.errors.loan">
+                        <span class="label-text-alt text-error">{{ form.errors.loan }}</span>
+                    </label>
+                </div>
+                <div class="form-control w-full">
+                    <label class="label">Angsuran Pinjaman</label>
+                    <VueNumberFormat :options="{ precision: 0, prefix: 'Rp ', isInteger: true }" :readonly="form.processing" v-model:value="form.installment" class="input input-bordered w-full" />
+                    <label class="label" v-if="form.errors.installment">
+                        <span class="label-text-alt text-error">{{ form.errors.installment }}</span>
+                    </label>
+                </div>
+                <div class="flex justify-between col-span-2">
+                    <button type="submit" @click="modal_save=true" class="btn btn-primary">Simpan</button>
 
-        </div>
+                </div>
+            </div>
+        </form>
         <div class="grid text-sm grid-cols-1 w-[50%] print:w-[100%]">
             <div class="grid grid-cols-5">
                 <span class="font-bold text-center px-4 py-2 border-l border-y col-span-2">Tanggal / Keterangan</span>
@@ -157,13 +176,14 @@
 </template>
 
 <script setup>
-
 import Breadcrumb from "@/Shared/Breadcrumb.vue"
 import PageTitle from "@/Components/PageTitle.vue"
+import BaseIcon from "@/Components/BaseIcon.vue"
 
+import { mdiPrinter, mdiContentSave, mdiCancel } from "@mdi/js"
 import {Head, useForm} from '@inertiajs/inertia-vue3'
 import VueNumberFormat from "vue-number-format";
-import {onMounted, watch} from "vue";
+import {onMounted, watch, ref} from "vue";
 import _ from "lodash";
 
 const breadcrumbs = [
@@ -185,7 +205,10 @@ const breadcrumbs = [
     }
 ]
 
+const modal_save = ref(false)
+
 const form = useForm({
+    print: false,
     invoice_date: '',
     invoice_number: 'OTOMATIS',
     farmer_id: props.farmer.id,
@@ -199,9 +222,20 @@ const props = defineProps({
     farmer: Object
 })
 
+const submit = () => {
+    form.patch(route('transaction.invoice.farmer.update', props.farmer.id));
+}
+const save = () => {
+    form.print = false
+    submit()
+}
+const print = () => {
+    form.print=true
+    submit()
+}
+
 onMounted( () =>{
     getTotal()
-    window.print()
 })
 
 watch(() => _.cloneDeep(form), (current, old) => {

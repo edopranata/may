@@ -22,6 +22,11 @@ class Farmer extends Model
         return $this->hasMany(Trade::class);
     }
 
+    public function invoices()
+    {
+        return $this->morphMany(Invoice::class, 'modelable');
+    }
+
     public function toSearchableArray()
     {
         return [
