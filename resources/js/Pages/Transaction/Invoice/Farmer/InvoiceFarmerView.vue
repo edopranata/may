@@ -112,66 +112,7 @@
                 <span class="px-4 py-2 border-x text-right" >{{ Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR', minimumFractionDigits: 0 }).format(form.total - form.installment) }}</span>
             </div>
         </div>
-        <div class="text-sm grid grid-cols-1 hidden">
-            <div class="border flex flex-col justify-between">
-                <table class="w-full">
-                    <thead>
-                    <tr class="border-b">
-                        <th class="px-4 py-2 border" width="">Tanggal / Keterangan</th>
-                        <th class="px-4 py-2 border" width="100">Banyaknya</th>
-                        <th class="px-4 py-2 border" width="120">Harga</th>
-                        <th class="px-4 py-2 border" width="120">Total</th>
-                    </tr>
-                    </thead>
-                    <tbody>
-                    <tr>
-                        <td class="px-4 py-2 border-l font-bold">Pembelian Sawit</td>
-                        <td class="px-4 py-2 border-l"></td>
-                        <td class="px-4 py-2 border-l"></td>
-                        <td class="px-4 py-2 border-l"></td>
-                    </tr>
-                    <tr v-for="(item, index) in form.trades" :key="item.id">
-                        <td class="px-4 border-l">{{ item.trade_date }}</td>
-                        <td class="px-4 border-l text-right">{{ Intl.NumberFormat('id-ID', { style: 'unit', unit: 'kilogram'}).format(item.net_weight) }}</td>
-                        <td class="px-4 border-l text-right">{{ Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR', minimumFractionDigits: 0 }).format(item.buying_price) }}</td>
-                        <td class="px-4 border-l text-right">{{ Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR', minimumFractionDigits: 0 }).format(item.net_weight * item.buying_price) }}</td>
-                    </tr>
-                    <tr>
-                        <td class="px-4 pb-4 border-l"></td>
-                        <td class="px-4 pb-4 border-l"></td>
-                        <td class="px-4 pb-4 border-l"></td>
-                        <td class="px-4 pb-4 border-l text-right font-bold">{{ Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR', minimumFractionDigits: 0 }).format(form.total) }}</td>
-                    </tr>
-                    <tr v-if="form.loan">
-                        <td class="px-4 border-l font-bold">Pinjaman</td>
-                        <td class="px-4 border-l"></td>
-                        <td class="px-4 border-l"></td>
-                        <td class="px-4 border-l text-right font-bold">{{ Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR', minimumFractionDigits: 0 }).format(form.loan) }}</td>
-                    </tr>
-                    <tr v-if="form.loan">
-                        <td class="px-4 border-l">Bayar Pinjaman</td>
-                        <td class="px-4 border-l"></td>
-                        <td class="px-4 border-l"></td>
-                        <td class="px-4 border-l text-right">{{ Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR', minimumFractionDigits: 0 }).format(form.installment ? form.installment * -1 : 0) }}</td>
-                    </tr>
-                    <tr v-if="form.loan">
-                        <td class="px-4 border-l font-bold">Sisa Pinjaman</td>
-                        <td class="px-4 border-l"></td>
-                        <td class="px-4 border-l"></td>
-                        <td class="px-4 border-l text-right font-bold">{{ Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR', minimumFractionDigits: 0 }).format(form.loan - form.installment) }}</td>
-                    </tr>
-                    </tbody>
-                </table>
-                <table>
-                    <tbody>
-                    <tr>
-                        <th class="px-4 py-2 border text-right" colspan="3">Total</th>
-                        <th class="px-4 py-2 border text-right" width="120" >{{ Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR', minimumFractionDigits: 0 }).format(form.total - form.installment) }}</th>
-                    </tr>
-                    </tbody>
-                </table>
-            </div>
-        </div>
+
     </section>
 </template>
 

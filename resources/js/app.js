@@ -11,6 +11,7 @@ import { createPinia } from 'pinia'
 
 
 import AuthenticatedLayout from '@/Layouts/Authenticated.vue';
+import AuthenticatedPrint from '@/Layouts/Print.vue';
 import Guest from '@/Layouts/Guest.vue';
 
 
@@ -27,6 +28,8 @@ createInertiaApp({
         page.then((module) => {
             if (name.startsWith('Auth') || name.startsWith('Welcome')) {
                 module.default.layout = module.default.layout || Guest;
+            }else if(name.startsWith('Print')){
+                module.default.layout = module.default.layout || AuthenticatedPrint;
             }else{
                 module.default.layout = module.default.layout || AuthenticatedLayout;
             }

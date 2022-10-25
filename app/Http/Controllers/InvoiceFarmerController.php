@@ -24,7 +24,11 @@ class InvoiceFarmerController extends Controller
                 ->whereHas('trades', function (Builder $builder){
                     $builder->whereNull('farmer_status');
                 })
-                ->withCount('trades')
+                ->withCount([
+                    'trades AS trades_count' => function (Builder $query) {
+                        $query->select(DB::raw("COUNT(total_buy) as total"))->whereNull('farmer_status');
+                    }
+                ])
                 ->withCount([
                     'trades AS trades_total' => function (Builder $query) {
                         $query->select(DB::raw("SUM(total_buy) as total"))->whereNull('farmer_status');
@@ -48,13 +52,9 @@ class InvoiceFarmerController extends Controller
     public function show(Farmer $farmer)
     {
         return inertia('Transaction/Invoice/Farmer/InvoiceFarmerView', [
-            'farmer'    =>  $farmer->load(['loan', 'trades'])
-                ->loadCount('trades')
-                ->loadCount([
-                'trades AS trades_total' => function (Builder $query) {
-                    $query->select(DB::raw("SUM(total_buy) as total"))->whereNull('farmer_status');
-                }
-            ])
+            'farmer'    =>  $farmer->load(['loan', 'trades' => function(Builder $builder){
+                                $builder->whereNull('farmer_status');
+                            }])
         ]);
     }
 
@@ -112,13 +112,22 @@ class InvoiceFarmerController extends Controller
                     ]);
                 }
             }
-
+//            dd($invoice->id);
             DB::commit();
-            return redirect()->back()->with('alert', [
-                'type'    => 'success',
-                'title'   => 'Success',
-                'message' => "Pinjaman petani berhasil disimpan"
-            ]);
+
+            if($request->print){
+                return to_route('print.invoice.farmer.show', $invoice->id)->with('alert', [
+                    'type'    => 'success',
+                    'title'   => 'Success',
+                    'message' => "Pinjaman petani berhasil disimpan"
+                ]);
+            }else{
+                return redirect()->route('transaction.invoice.farmer.index')->with('alert', [
+                    'type'    => 'success',
+                    'title'   => 'Success',
+                    'message' => "Pinjaman petani berhasil disimpan"
+                ]);
+            }
 
         }catch (\Exception $exception){
             DB::rollBack();

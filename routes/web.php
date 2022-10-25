@@ -54,7 +54,6 @@ Route::middleware(['auth'])->group(function (){
             Route::group(['prefix' => 'invoice', 'as' => 'invoice.'], function (){
                 Route::get('/', [\App\Http\Controllers\InvoiceController::class, 'index'])->name('index');
                 Route::resource('farmer', \App\Http\Controllers\InvoiceFarmerController::class)->only(['index', 'store', 'show', 'edit', 'update']);
-
             });
         });
 
@@ -65,6 +64,21 @@ Route::middleware(['auth'])->group(function (){
 
         Route::group(['prefix' => 'report', 'as' => 'report.'], function (){
             Route::get('/', [\App\Http\Controllers\RouteController::class, 'report'])->name('index');
+        });
+
+        Route::group(['prefix' => 'print', 'as' => 'print.'], function (){
+            Route::get('/', function (){
+                return to_route('dashboard');
+            });
+            Route::group(['prefix' => 'invoice', 'as' => 'invoice.'], function (){
+                Route::get('/', function (){
+                    return to_route('dashboard');
+                });
+                Route::resource('farmer', \App\Http\Controllers\PrintInvoiceFarmerController::class)->only(['show']);
+            });
+            Route::group(['prefix' => 'report', 'as' => 'report.'], function (){
+
+            });
         });
 
     });
