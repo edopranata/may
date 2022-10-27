@@ -20,7 +20,7 @@ class DatabaseSeeder extends Seeder
             FarmerSeeder::class,
             CarSeeder::class,
             DriverSeeder::class,
-            LoaderSeeder::class,
+            //LoaderSeeder::class,
             SupervisorSeeder::class,
             ConfigurationSeeder::class,
         ]);

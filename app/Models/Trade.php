@@ -15,18 +15,19 @@ class Trade extends Model
         'created_at' => 'datetime:Y-m-d',
         'updated_at' => 'datetime:Y-m-d',
     ];
-    public function loaders()
-    {
-        return $this->hasMany(TradeLoader::class);
-    }
 
     public function driver()
     {
         return $this->belongsTo(Driver::class);
     }
 
-    public function farmer()
+    public function car()
     {
-        return $this->belongsTo(Farmer::class);
+        return $this->belongsTo(Car::class);
+    }
+
+    public function details()
+    {
+        return $this->hasMany(TradeDetail::class);
     }
 }

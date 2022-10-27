@@ -47,10 +47,12 @@ Route::middleware(['auth'])->group(function (){
                 Route::resource('supervisor', \App\Http\Controllers\SupervisorLoanController::class)->only(['index', 'store', 'show', 'edit', 'update']);
             });
 
-            Route::group(['prefix' => 'trade', 'as' => 'trade.'], function (){
-                Route::get('/', [\App\Http\Controllers\TradeController::class, 'index'])->name('index');
-                Route::post('/', [\App\Http\Controllers\TradeController::class, 'store'])->name('store');
-            });
+            Route::resource('trade', \App\Http\Controllers\TradeController::class)->only(['index', 'store', 'edit', 'update']);
+
+//            Route::group(['prefix' => 'trade', 'as' => 'trade.'], function (){
+//                Route::get('/', [\App\Http\Controllers\TradeController::class, 'index'])->name('index');
+//                Route::post('/', [\App\Http\Controllers\TradeController::class, 'store'])->name('store');
+//            });
             Route::group(['prefix' => 'invoice', 'as' => 'invoice.'], function (){
                 Route::get('/', [\App\Http\Controllers\InvoiceController::class, 'index'])->name('index');
                 Route::resource('farmer', \App\Http\Controllers\InvoiceFarmerController::class)->only(['index', 'store', 'show', 'edit', 'update']);

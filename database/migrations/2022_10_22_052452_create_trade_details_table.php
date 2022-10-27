@@ -13,13 +13,17 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('trade_loaders', function (Blueprint $table) {
+        Schema::create('trade_details', function (Blueprint $table) {
             $table->id();
             $table->foreignIdFor(\App\Models\Trade::class)->nullable()->constrained()->cascadeOnUpdate()->nullOnDelete();
-            $table->foreignIdFor(\App\Models\Loader::class)->nullable()->constrained()->cascadeOnUpdate()->nullOnDelete();
-            $table->integer('net_weight')->default(0);
-            $table->double('price')->default(0);
-            $table->dateTime('status')->nullable();
+            $table->foreignIdFor(\App\Models\Farmer::class)->nullable()->constrained()->cascadeOnUpdate()->nullOnDelete();
+
+            $table->integer('weight');
+            $table->double('price');
+            $table->double('total');
+            $table->dateTime('farmer_status')->nullable();
+
+
             $table->timestamps();
         });
     }
@@ -31,6 +35,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('trade_loaders');
+        Schema::dropIfExists('trade_details');
     }
 };

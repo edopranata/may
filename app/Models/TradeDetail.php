@@ -5,20 +5,14 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class TradeLoader extends Model
+class TradeDetail extends Model
 {
     use HasFactory;
 
-
     protected $guarded = ['id'];
 
-    public function loader()
+    public function farmer()
     {
-        return $this->hasOne(Loader::class);
-    }
-
-    public function trade()
-    {
-        return $this->belongsTo(Trade::class);
+        return $this->belongsTo(Farmer::class);
     }
 }
