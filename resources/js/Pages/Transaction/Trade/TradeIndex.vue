@@ -7,8 +7,8 @@
     <input type="checkbox" id="modal-save" v-model="modal_save" class="modal-toggle" />
     <div class="modal modal-bottom sm:modal-middle">
         <div class="modal-box">
-            <h3 class="font-bold text-lg">Congratulations random Internet user!</h3>
-            <p class="py-4">You've been selected for a chance to get one year of subscription to use Wikipedia for free!</p>
+            <h3 class="font-bold text-lg">Lanjutkan input timbangan kebun?</h3>
+            <p class="py-4">Proses, dan lanjutkan ke halaman input data timbangan kebun petani</p>
             <div class="modal-action">
                 <button ref="btn_save" type="button" class="btn" @click="save">Proses</button>
                 <label for="modal-save" class="btn btn-warning">Batal</label>
@@ -35,7 +35,7 @@
                         </label>
                         <select @focus="form.clearErrors('car_id')" :disabled="form.processing" v-model="form.car_id" class="select select-info select-bordered">
                             <option value="0">Pilih Mobil</option>
-                            <option v-for="(item, index) in props.cars" :value="item.id" :key="item.id">{{ item.text }}</option>
+                            <option v-for="(item, index) in props.cars" :value="item.id" :key="item.id">{{ item.text.toUpperCase() }}</option>
                         </select>
                         <label class="label" v-if="form.errors.car_id">
                             <span class="label-text-alt text-error">{{ form.errors.car_id }}</span>
@@ -47,7 +47,7 @@
                         </label>
                         <select @focus="form.clearErrors('driver_id')" :disabled="form.processing" v-model="form.driver_id" class="select select-info select-bordered">
                             <option value="0">Pilih Supir</option>
-                            <option v-for="(item, index) in props.drivers" :value="item.id" :key="item.id">{{ item.text }}</option>
+                            <option v-for="(item, index) in props.drivers" :value="item.id" :key="item.id">{{ item.text.toUpperCase() }}</option>
                         </select>
                         <label class="label" v-if="form.errors.driver_id">
                             <span class="label-text-alt text-error">{{ form.errors.driver_id }}</span>
@@ -69,18 +69,20 @@
                         <th class="py-3 px-6">Supir</th>
                         <th class="py-3 px-6">Jumlah</th>
                         <th class="py-3 px-6">Tonase</th>
+                        <th class="py-3 px-6">Total</th>
                         <th class="py-3 px-6"></th>
                     </tr>
                     </thead>
                     <tbody>
-                    <tr v-if="props.trades.data.length" class="hover:cursor-pointer group border-b" v-for="(item, index) in props.trades.data">
+                    <Link as="tr" :href="route('transaction.trade.edit', item.id)" v-if="props.trades.data.length" class="hover:cursor-pointer group border-b" v-for="(item, index) in props.trades.data" >
                         <th class="group-hover:bg-base-300 py-4 px-6">{{ props.trades.from + index  }}</th>
                         <td class="group-hover:bg-base-300 py-4 px-6">{{ item.car.no_pol }}</td>
-                        <td class="group-hover:bg-base-300 py-4 px-6 max-w-xs">{{ item.driver.name }}</td>
-                        <td class="group-hover:bg-base-300 py-4 px-6 ">{{ item.trades.length }}</td>
-                        <td class="group-hover:bg-base-300 py-4 px-6">{{ item.trades.length }}</td>
+                        <td class="group-hover:bg-base-300 py-4 px-6">{{ item.driver.name }}</td>
+                        <td class="group-hover:bg-base-300 py-4 px-6">{{ item.details.length }}</td>
+                        <td class="group-hover:bg-base-300 py-4 px-6">{{ Intl.NumberFormat('id-ID', { style: 'unit', unit: 'kilogram'}).format(item.gross_weight) }}</td>
+                        <td class="group-hover:bg-base-300 py-4 px-6">{{ Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR', minimumFractionDigits: 0 }).format(item.gross_total) }}</td>
                         <td class="group-hover:bg-base-300 py-4 px-6"><BaseIcon :path="mdiArrowRight" /></td>
-                    </tr>
+                    </Link>
                     </tbody>
                 </table>
             </div>
@@ -95,7 +97,7 @@ import PageTitle from "@/Components/PageTitle.vue"
 import BaseIcon from "@/Components/BaseIcon.vue"
 
 import { mdiArrowRight } from "@mdi/js"
-import {Head, useForm} from '@inertiajs/inertia-vue3'
+import {Head, useForm, Link} from '@inertiajs/inertia-vue3'
 import {ref, watch} from "vue";
 
 const breadcrumbs = [

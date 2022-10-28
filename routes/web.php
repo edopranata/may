@@ -22,10 +22,11 @@ Route::middleware('guest')->group(function () {
 });
 
 Route::middleware(['auth'])->group(function (){
-    Route::middleware(['verified', 'password.confirm'])->group(function (){
+    Route::middleware(['verified'])->group(function (){
         Route::group(['prefix' => 'dashboard', 'as' => 'dashboard.'], function (){
             Route::get('/', [\App\Http\Controllers\DashboardController::class, 'index'])->name('index');
         });
+
         Route::group(['prefix' => 'data', 'as' => 'data.'], function (){
             Route::get('/', [\App\Http\Controllers\RouteController::class,'data'])->name('index');
             Route::resource('farmer', \App\Http\Controllers\FarmerController::class)->only(['index', 'store', 'update', 'destroy']);
@@ -47,12 +48,8 @@ Route::middleware(['auth'])->group(function (){
                 Route::resource('supervisor', \App\Http\Controllers\SupervisorLoanController::class)->only(['index', 'store', 'show', 'edit', 'update']);
             });
 
-            Route::resource('trade', \App\Http\Controllers\TradeController::class)->only(['index', 'store', 'edit', 'update']);
+            Route::resource('trade', \App\Http\Controllers\TradeController::class)->only(['index', 'store', 'edit', 'update', 'destroy']);
 
-//            Route::group(['prefix' => 'trade', 'as' => 'trade.'], function (){
-//                Route::get('/', [\App\Http\Controllers\TradeController::class, 'index'])->name('index');
-//                Route::post('/', [\App\Http\Controllers\TradeController::class, 'store'])->name('store');
-//            });
             Route::group(['prefix' => 'invoice', 'as' => 'invoice.'], function (){
                 Route::get('/', [\App\Http\Controllers\InvoiceController::class, 'index'])->name('index');
                 Route::resource('farmer', \App\Http\Controllers\InvoiceFarmerController::class)->only(['index', 'store', 'show', 'edit', 'update']);

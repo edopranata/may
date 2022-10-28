@@ -9,9 +9,11 @@ class HomeController extends Controller
 {
     public function index()
     {
-        return inertia('Welcome', [
-            'canLogin' => Route::has('login'),
-            'canRegister' => Route::has('register')
-        ]);
+        return to_route('login');
+
+//        return inertia('Welcome', [
+//            'canLogin' => Route::has('login'),
+//            'canRegister' => Route::has('register')
+//        ]);
     }
 }

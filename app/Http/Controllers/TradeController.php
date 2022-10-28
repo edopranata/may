@@ -7,9 +7,11 @@ use App\Models\Driver;
 use App\Models\Farmer;
 use App\Models\Loader;
 use App\Models\Trade;
+use App\Models\TradeDetail;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Validation\Rule;
 
 class TradeController extends Controller
 {
@@ -17,7 +19,7 @@ class TradeController extends Controller
     public function index()
     {
         return inertia('Transaction/Trade/TradeIndex', [
-            'trades'    => Trade::query()->with(['driver', 'car'])->orderByDesc('created_at')->paginate(),
+            'trades'    => Trade::query()->with(['driver', 'car', 'details'])->orderByDesc('created_at')->paginate(),
             'drivers'   => Driver::query()->get()->map(function ($driver) {
                 return [
                     'id' => $driver->id,
@@ -83,7 +85,11 @@ class TradeController extends Controller
     {
         $request->validate([
             'date'      => ['required', 'date'],
-            'farmer_id' => ['required', 'exists:farmers,id'],
+            'farmer_id' => ['required', 'exists:farmers,id',
+                Rule::unique('trade_details')->where(function ($query) use ($trade) {
+                        return $query->where('trade_id', $trade->id);
+                }),
+            ],
             'weight'    => ['required', 'integer', 'min:1'],
             'price'     => ['required', 'integer', 'min:1'],
         ]);
@@ -101,6 +107,45 @@ class TradeController extends Controller
             $trade->increment('gross_weight', $request->weight);
             $trade->increment('gross_price', $request->price);
             $trade->increment('gross_total', $request->total);
+
+            DB::commit();
+            return redirect()->back()->with('alert', [
+                'type'    => 'success',
+                'title'   => 'Success',
+                'message' => "Data transaksi berhasil disimpan"
+            ]);
+
+        }catch (\Exception $exception){
+            DB::rollBack();
+            return redirect()->back()->with('alert', [
+                'type'    => 'error',
+                'title'   => 'Failed',
+                'message' => "Data transaksi gagal disimpan: " . $exception->getMessage()
+            ]);
+        }
+    }
+
+    public function destroy(TradeDetail $trade, Request $request)
+    {
+
+        if($trade->farmer_status){
+            return redirect()->back()->with('alert', [
+                'type'    => 'error',
+                'title'   => 'Failed',
+                'message' => "Data transaksi gagal dihapus karena invoice telah terbit atau telah dibayarkan"
+            ]);
+        }
+
+        DB::beginTransaction();
+        try {
+            $decrement = Trade::query()
+                ->where('id', $trade->trade_id);
+
+            $decrement->decrement('gross_weight', $trade->weight);
+            $decrement->decrement('gross_price', $trade->price);
+            $decrement->decrement('gross_total', $trade->total);
+
+            $trade->delete();
 
             DB::commit();
             return redirect()->back()->with('alert', [
