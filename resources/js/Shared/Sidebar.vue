@@ -30,7 +30,7 @@
             </li>
             <li>
                 <Link :class="routePath.current.startsWith('/report') ? 'border-l-4 border-primary bg-base-400' : 'pl-5'" :href="route('report.index')">
-                    <BaseIcon size="20" :path="mdiNoteEdit"/> Report
+                    <BaseIcon size="20" :path="mdiPaperRoll"/> Laporan
                 </Link>
             </li>
         </ul>
@@ -41,7 +41,7 @@
 <script setup>
 import {Link, usePage} from "@inertiajs/inertia-vue3";
 import BaseIcon from "@/Components/BaseIcon.vue";
-import { mdiHome, mdiBallot, mdiCog, mdiCash, mdiNoteEdit } from "@mdi/js";
+import { mdiHome, mdiBallot, mdiCog, mdiCash, mdiPaperRoll } from "@mdi/js";
 import {computed, onMounted, reactive, watch} from "vue";
 
 const currentRoute = computed(() => usePage().url.value);

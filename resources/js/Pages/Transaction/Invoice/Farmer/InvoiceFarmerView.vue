@@ -125,7 +125,6 @@ import { mdiPrinter, mdiContentSave, mdiCancel } from "@mdi/js"
 import {Head, useForm} from '@inertiajs/inertia-vue3'
 import VueNumberFormat from "vue-number-format";
 import {onMounted, watch, ref} from "vue";
-import _ from "lodash";
 
 const breadcrumbs = [
     {

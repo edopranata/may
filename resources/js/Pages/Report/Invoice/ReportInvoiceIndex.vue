@@ -1,11 +1,11 @@
 <template>
-    <Head title="Laporan" />
+    <Head title="Cetak Invoice" />
 
     <Breadcrumb :links="breadcrumbs"/>
-    <PageTitle :classes="'bg-base-content'" class="">Laporan</PageTitle>
+    <PageTitle :classes="'bg-base-content'" class="">Cetak Invoice</PageTitle>
 
     <section class="px-4 grid xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 gap-4">
-        <PageMenu class="bg-primary text-primary-content hover:shadow-xl hover:bg-primary/90" title="Laporan" :link="route('report.invoice.index')">Cetak Invoice</PageMenu>
+        <PageMenu class="bg-primary text-primary-content hover:shadow-xl hover:bg-primary/90" title="Cetak Invoice" :link="route('report.invoice.farmer.index')">Invoice Petani</PageMenu>
     </section>
 
 </template>
@@ -18,8 +18,12 @@ import PageTitle from "@/Components/PageTitle.vue"
 import { Head } from '@inertiajs/inertia-vue3'
 const breadcrumbs = [
     {
-        "url": null,
+        "url": route('report.index'),
         "label": "Laporan"
-    }
+    },
+    {
+        "url": null,
+        "label": "Cetak Invoice"
+    },
 ]
 </script>
