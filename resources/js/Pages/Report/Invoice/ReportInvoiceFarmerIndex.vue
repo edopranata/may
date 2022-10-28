@@ -3,15 +3,109 @@
 
     <Breadcrumb :links="breadcrumbs"/>
     <PageTitle :classes="'bg-base-content'" class="">Cetak Ulang Invoice Petani</PageTitle>
-
+    <input type="checkbox" id="modal-option" v-model="modal" class="modal-toggle" />
+    <div class="modal">
+        <div class="modal-box w-11/12 max-w-5xl" for="">
+            <table class="w-full text-left text-base text-xs">
+                <!-- head -->
+                <thead class="text-sm uppercase bg-primary/20">
+                <tr>
+                    <th class="py-3 px-6">Invoice Number</th>
+                    <th class="py-3 px-6">Nama Petani</th>
+                    <th class="py-3 px-6 text-right">Total</th>
+                    <th class="py-3 px-6 text-right">Pinjaman</th>
+                    <th class="py-3 px-6 text-right">Bayar Pinjaman</th>
+                    <th class="py-3 px-6 text-right">Diterima</th>
+                </tr>
+                </thead>
+                <tbody>
+                <!-- row 1 -->
+                <tr>
+                    <td class="group-hover:bg-base-300 py-4 px-6">
+                        <div>
+                            <div class="font-bold">{{ invoice.invoice_number }}</div>
+                            <div class="text-sm opacity-50">{{invoice.invoice_date }}</div>
+                        </div>
+                    </td>
+                    <td class="group-hover:bg-base-300 py-4 px-6">
+                        <div>
+                            <div class="font-bold">{{ invoice.name }}</div>
+                            <div class="text-sm opacity-50">{{ invoice.phone }}</div>
+                        </div>
+                    </td>
+                    <td class="group-hover:bg-base-300 py-4 px-6 text-right">{{ Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR', minimumFractionDigits: 0  }).format(invoice.total_buy)}}</td>
+                    <td class="group-hover:bg-base-300 py-4 px-6 text-right">{{ Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR', minimumFractionDigits: 0  }).format(invoice.loan)}}</td>
+                    <td class="group-hover:bg-base-300 py-4 px-6 text-right">{{ Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR', minimumFractionDigits: 0  }).format(invoice.loan_installment)}}</td>
+                    <td class="group-hover:bg-base-300 py-4 px-6 text-right">{{ Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR', minimumFractionDigits: 0  }).format(invoice.total)}}</td>
+                </tr>
+                </tbody>
+            </table>
+            <div class="modal-action flex justify-between space-x-4">
+                <div class="flex space-x-4">
+                    <Link as="button" :href="route('print.invoice.farmer.show', invoice.id)" class="btn btn-success">Print Invoice</Link>
+                </div>
+                <button class="btn btn-error" @click="modal = false">Batalkan</button>
+            </div>
+        </div>
+    </div>
+    <section class="px-4 grid gap-4">
+        <div>
+            <table class="w-full text-left text-base">
+                <thead class="text-sm uppercase bg-primary/20">
+                <tr>
+                    <th class="py-3 px-6">#</th>
+                    <th class="py-3 px-6">Invoice Number</th>
+                    <th class="py-3 px-6">Nama Petani</th>
+                    <th class="py-3 px-6">Alamat</th>
+                    <th class="py-3 px-6 text-right">Total</th>
+                    <th class="py-3 px-6 text-right">Pinjaman</th>
+                    <th class="py-3 px-6 text-right">Bayar Pinjaman</th>
+                    <th class="py-3 px-6 text-right">Diterima</th>
+                    <th class="py-3 px-6"></th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr v-if="props.invoices.data.length" class="hover:cursor-pointer group border-b" v-for="(item, index) in props.invoices.data" @click="openModal(index)">
+                    <th class="group-hover:bg-base-300 py-4 px-6">{{ props.invoices.from + index  }}</th>
+                    <td class="group-hover:bg-base-300 py-4 px-6">
+                        <div>
+                            <div class="font-bold">{{ item.invoice_number }}</div>
+                            <div class="text-sm opacity-50">{{item.invoice_date }}</div>
+                        </div>
+                    </td>
+                    <td class="group-hover:bg-base-300 py-4 px-6">
+                        <div>
+                            <div class="font-bold">{{ item.modelable.name }}</div>
+                            <div class="text-sm opacity-50">{{ item.modelable.phone }}</div>
+                        </div>
+                    </td>
+                    <td class="group-hover:bg-base-300 py-4 px-6" style="word-wrap: break-word"><p class="max-w-xs">{{ item.modelable.address }}</p> </td>
+                    <td class="group-hover:bg-base-300 py-4 px-6 text-right">{{ Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR', minimumFractionDigits: 0  }).format(item.total_buy)}}</td>
+                    <td class="group-hover:bg-base-300 py-4 px-6 text-right">{{ Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR', minimumFractionDigits: 0  }).format(item.loan)}}</td>
+                    <td class="group-hover:bg-base-300 py-4 px-6 text-right">{{ Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR', minimumFractionDigits: 0  }).format(item.loan_installment)}}</td>
+                    <td class="group-hover:bg-base-300 py-4 px-6 text-right">{{ Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR', minimumFractionDigits: 0  }).format(item.total)}}</td>
+                    <td class="group-hover:bg-base-300 py-4 px-6"><BaseIcon :path="mdiArrowRight" /></td>
+                </tr>
+                <tr v-else>
+                    <td colspan="9" class="text-center border-b-2">No Data <Link v-if="props.invoices.current_page > 1" class="link link-primary" :href="route('report.invoice.farmer.index')">Goto First Page</Link></td>
+                </tr>
+                </tbody>
+            </table>
+            <Pagination v-if="props.invoices.data.length" :links="props.invoices.links" />
+        </div>
+    </section>
 </template>
 
 <script setup>
 import Breadcrumb from "@/Shared/Breadcrumb.vue"
-import PageMenu from "@/Components/PageMenu.vue"
 import PageTitle from "@/Components/PageTitle.vue"
+import Pagination from "@/Components/Pagination.vue"
+import BaseIcon from "@/Components/BaseIcon.vue"
 
-import { Head } from '@inertiajs/inertia-vue3'
+import {mdiArrowRight} from '@mdi/js'
+import { Head, Link } from '@inertiajs/inertia-vue3'
+import {reactive, ref} from "vue";
+
 const breadcrumbs = [
     {
         "url": route('report.index'),
@@ -27,7 +121,37 @@ const breadcrumbs = [
     },
 ]
 
+const modal = ref(false)
 const props = defineProps({
     invoices: Object
 })
+
+
+const invoice = reactive({
+    id: 0,
+    invoice_number: '',
+    invoice_date: '',
+    name: '',
+    phone: '',
+    total_buy: '',
+    loan: '',
+    loan_installment: '',
+    total: '',
+})
+
+const openModal = function (index){
+    let data = props.invoices.data[index]
+
+    invoice.id = data.id
+    invoice.invoice_number = data.invoice_number
+    invoice.invoice_date = data.invoice_date
+    invoice.name = data.modelable.name
+    invoice.phone = data.modelable.phone
+    invoice.total_buy = data.total_buy
+    invoice.loan = data.loan
+    invoice.loan_installment = data.loan_installment
+    invoice.total = data.total
+
+    modal.value = true
+}
 </script>
