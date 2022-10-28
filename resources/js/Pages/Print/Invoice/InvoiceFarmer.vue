@@ -35,17 +35,17 @@
                     <span class="px-4 border-gray-800 border-l"></span>
                     <span class="px-4 border-gray-800 border-x"></span>
                 </div>
-                <div class="grid grid-cols-5" v-for="(item, index) in props.invoice.trades" :key="item.id">
-                    <span class="px-4 border-gray-800 border-l col-span-2">{{ item.trade_date }}</span>
-                    <span class="px-4 border-gray-800 border-l text-right">{{ Intl.NumberFormat('id-ID', { style: 'unit', unit: 'kilogram'}).format(item.net_weight) }}</span>
-                    <span class="px-4 border-gray-800 border-l text-right">{{ Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR', minimumFractionDigits: 0 }).format(item.buying_price) }}</span>
-                    <span class="px-4 border-gray-800 border-x text-right">{{ Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR', minimumFractionDigits: 0 }).format(item.net_weight * item.buying_price) }}</span>
+                <div class="grid grid-cols-5" v-for="(item, index) in props.invoice.trade_details" :key="item.id">
+                    <span class="px-4 border-gray-800 border-l col-span-2">{{ item.trade.trade_date }}</span>
+                    <span class="px-4 border-gray-800 border-l text-right">{{ Intl.NumberFormat('id-ID', { style: 'unit', unit: 'kilogram'}).format(item.weight) }}</span>
+                    <span class="px-4 border-gray-800 border-l text-right">{{ Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR', minimumFractionDigits: 0 }).format(item.price) }}</span>
+                    <span class="px-4 border-gray-800 border-x text-right">{{ Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR', minimumFractionDigits: 0 }).format(item.weight * item.price) }}</span>
                 </div>
                 <div class="grid grid-cols-5" >
                     <span class="px-4 pb-4 border-gray-800 border-l col-span-2"></span>
                     <span class="px-4 pb-4 border-gray-800 border-l"></span>
                     <span class="px-4 pb-4 border-gray-800 border-l"></span>
-                    <span class="px-4 pb-4 border-gray-800 border-x text-right font-bold">{{ Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR', minimumFractionDigits: 0 }).format(invoice.total_buy) }}</span>
+                    <span class="px-4 pb-4 border-gray-800 border-x text-right font-bold">{{ Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR', minimumFractionDigits: 0 }).format(invoice.total) }}</span>
                 </div>
 
                 <div class="grid grid-cols-5" v-for="n in createLine.value">
@@ -128,7 +128,7 @@ const createLine = reactive({
 
 onMounted( () => {
     const loanLine = props.invoice.loan ? 4 : 0;
-    const tradeLine = props.invoice.trades.length
+    const tradeLine = props.invoice.trade_details.length
     createLine.value = 10 - (loanLine + tradeLine)
 
 })

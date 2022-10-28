@@ -1,8 +1,8 @@
 <template>
-    <Head title="Transaksi Jual Beli" />
+    <Head title="Beli Sawit Petani" />
 
     <Breadcrumb :links="breadcrumbs"/>
-    <PageTitle :classes="'bg-base-content'" class="">Transaksi Jual Beli Sawit</PageTitle>
+    <PageTitle :classes="'bg-base-content'">Beli Sawit Petani</PageTitle>
 
     <input type="checkbox" id="modal-save" v-model="modal_save" class="modal-toggle" />
     <div class="modal modal-bottom sm:modal-middle">
@@ -107,7 +107,7 @@ const breadcrumbs = [
     },
     {
         "url": null,
-        "label": "Transaksi Jual Beli Sawit"
+        "label": "Beli Sawit Petani"
     }
 ]
 

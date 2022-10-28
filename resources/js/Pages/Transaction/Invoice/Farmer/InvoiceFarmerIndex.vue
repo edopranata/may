@@ -5,24 +5,22 @@
     <PageTitle :classes="'bg-base-content'" class="">Invoice Petani</PageTitle>
 
     <input type="checkbox" id="modal-option" v-model="modal" class="modal-toggle" />
-    <label for="modal-option" class="modal cursor-pointer modal-lg">
+    <div class="modal">
 
-        <label class="modal-box w-11/12 max-w-3xl" for="">
-            <span class="px-4 grid grid-cols-2 gap-4">
-                <span class="overflow-x-auto col-span-2">
-                  <table class="w-full text-left text-base print:text-xs">
-                    <!-- head -->
-                    <thead class="text-sm uppercase bg-primary/20">
-                      <tr>
+        <div class="modal-box w-11/12 max-w-4xl" for="">
+            <table class="w-full text-left text-base print:text-xs">
+            <!-- head -->
+                <thead class="text-sm uppercase bg-primary/20">
+                    <tr>
                         <th class="py-3 px-6">Nama</th>
                         <th class="py-3 px-6">Pinjaman</th>
                         <th class="py-3 px-6">Total</th>
                         <th class="py-3 px-6">Jumlah Transaksi</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      <!-- row 1 -->
-                      <tr>
+                    </tr>
+                </thead>
+                <tbody>
+                  <!-- row 1 -->
+                    <tr>
                         <td class="py-3 px-6">
                             <div class="font-bold">{{ farmer.name }}</div>
                             <div class="text-sm opacity-50">{{ farmer.phone }}</div>
@@ -30,17 +28,20 @@
                         <td class="py-3 px-6">{{ Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR' }).format(farmer.loan)  }}</td>
                         <td class="py-3 px-6">{{ Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR' }).format(farmer.total)  }}</td>
                         <td class="py-3 px-6">{{ farmer.counts }} Trx</td>
-                      </tr>
-                    </tbody>
-                  </table>
-                </span>
-                <span class="flex justify-center">
-                    <Link as="button" :href="route('transaction.invoice.farmer.show', farmer.id)" class="btn btn-xl btn-success btn-block pt-10 pb-14">Buat Invoice</Link>
-                </span>
-            </span>
-
-        </label>
-    </label>
+                    </tr>
+                </tbody>
+            </table>
+            <div class="modal-action flex justify-between space-x-4">
+                <div class="flex space-x-4">
+                    <Link as="button" :href="route('transaction.invoice.farmer.show', farmer.id)" class="btn btn-info">Buat Invoice</Link>
+                    <Link as="button" :href="route('transaction.invoice.farmer.show', farmer.id)" class="btn btn-success">Print Invoice</Link>
+                    <Link as="button" :href="route('transaction.invoice.farmer.show', farmer.id)" class="btn btn-primary">Tambah Pinjaman</Link>
+                    <Link as="button" :href="route('transaction.invoice.farmer.show', farmer.id)" class="btn btn-secondary">Bayar Pinjaman</Link>
+                </div>
+                <button class="btn btn-error" @click="modal = false">Batalkan</button>
+            </div>
+        </div>
+    </div>
 
     <section class="px-4 grid gap-4">
         <div>
@@ -81,7 +82,6 @@
 </template>
 
 <script setup>
-
 import Breadcrumb from "@/Shared/Breadcrumb.vue"
 import PageTitle from "@/Components/PageTitle.vue"
 import BaseIcon from "@/Components/BaseIcon.vue"
@@ -98,7 +98,7 @@ const breadcrumbs = [
         "label": "Transaksi"
     },
     {
-        "url": route('transaction.invoice.index'),
+        "url": null,
         "label": "Invoice / Gaji"
     },
     {

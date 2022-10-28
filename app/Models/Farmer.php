@@ -19,7 +19,7 @@ class Farmer extends Model
 
     public function trades()
     {
-        return $this->hasMany(Trade::class);
+        return $this->hasMany(TradeDetail::class);
     }
 
     public function invoices()

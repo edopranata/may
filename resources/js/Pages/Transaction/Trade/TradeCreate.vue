@@ -2,7 +2,7 @@
     <Head title="Transaksi Jual Beli" />
 
     <Breadcrumb :links="breadcrumbs"/>
-    <PageTitle :classes="'bg-base-content'" class="">Transaksi Jual Beli Sawit</PageTitle>
+    <PageTitle :classes="'bg-base-content'" class="">Timbangan Kebun</PageTitle>
 
     <input type="checkbox" id="modal-save" v-model="modal_save" class="modal-toggle" />
     <div class="modal modal-bottom sm:modal-middle">
@@ -60,20 +60,20 @@
                             <option value="0">PILIH PETANI</option>
                             <option v-for="(item, index) in props.farmers" :value="item.id" :key="item.id">{{ item.text.toUpperCase() }}</option>
                         </select>
-                        <label class="label" v-if="form.errors.farmer_id">
-                            <span class="label-text-alt text-error">{{ form.errors.farmer_id }}</span>
+                        <label class="label h-8">
+                            <span v-if="form.errors.farmer_id" class="label-text-alt text-error">{{ form.errors.farmer_id }}</span>
                         </label>
                     </div>
                     <div class="form-control w-full">
                         <VueNumberFormat @focus="form.clearErrors('weight')" :options="{ precision: 0, prefix: '', suffix: ' Kg', isInteger: true }" :readonly="form.processing" v-model:value="form.weight" class="input input-info input-bordered" />
-                        <label class="label" v-if="form.errors.weight">
-                            <span class="label-text-alt text-error">{{ form.errors.weight }}</span>
+                        <label class="label h-8">
+                            <span v-if="form.errors.weight" class="label-text-alt text-error">{{ form.errors.weight }}</span>
                         </label>
                     </div>
                     <div class="form-control w-full">
                         <VueNumberFormat @focus="form.clearErrors('price')" :options="{ precision: 0, prefix: 'Rp. ', suffix: '', isInteger: true }" :readonly="form.processing" v-model:value="form.price" class="input input-info input-bordered" />
-                        <label class="label" v-if="form.errors.price">
-                            <span class="label-text-alt text-error">{{ form.errors.price }}</span>
+                        <label class="label h-8">
+                            <span v-if="form.errors.price" class="label-text-alt text-error">{{ form.errors.price }}</span>
                         </label>
                     </div>
                     <div class="flex justify-between space-x-4 md:col-span-4 lg:col-span-5 xl:col-span-2">
@@ -136,11 +136,11 @@ const breadcrumbs = [
     },
     {
         "url": route('transaction.trade.index'),
-        "label": "Transaksi Jual Beli Sawit"
+        "label": "Beli Sawit Petani"
     },
     {
         "url": null,
-        "label": props.trade.car.no_pol.toUpperCase() + ' - ' + props.trade.car.name.toUpperCase()
+        "label": "Timbangan Kebun " + props.trade.car.no_pol.toUpperCase() + ' - ' + props.trade.car.name.toUpperCase()
     }
 ]
 

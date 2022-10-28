@@ -71,7 +71,7 @@ class TradeController extends Controller
     public function edit(Trade $trade)
     {
         return inertia('Transaction/Trade/TradeCreate', [
-            'trade'     => Trade::query()->with(['driver', 'car', 'details.farmer'])->first(),
+            'trade'     => $trade->load(['driver', 'car', 'details.farmer']),
             'farmers'   => Farmer::query()->get()->map(function ($farmer) {
                 return [
                     'id' => $farmer->id,

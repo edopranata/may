@@ -15,4 +15,9 @@ class TradeDetail extends Model
     {
         return $this->belongsTo(Farmer::class);
     }
+
+    public function trade()
+    {
+        return $this->belongsTo(Trade::class);
+    }
 }

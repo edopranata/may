@@ -15,6 +15,7 @@ return new class extends Migration
     {
         Schema::create('invoice_trade', function (Blueprint $table) {
             $table->foreignIdFor(\App\Models\Invoice::class)->nullable()->constrained()->cascadeOnUpdate()->nullOnDelete();
+            $table->foreignIdFor(\App\Models\TradeDetail::class)->nullable()->constrained()->cascadeOnUpdate()->nullOnDelete();
             $table->foreignIdFor(\App\Models\Trade::class)->nullable()->constrained()->cascadeOnUpdate()->nullOnDelete();
         });
     }

@@ -21,6 +21,11 @@ class Invoice extends Model
         return $this->morphTo();
     }
 
+    public function trade_details()
+    {
+        return $this->belongsToMany(TradeDetail::class, 'invoice_trade');
+    }
+
     public function trades()
     {
         return $this->belongsToMany(Trade::class, 'invoice_trade');

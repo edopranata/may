@@ -70,10 +70,10 @@
                 <span class="px-4 py-2 border-x"></span>
             </div>
             <div class="grid grid-cols-5" v-for="(item, index) in form.trades" :key="item.id">
-                <span class="px-4 border-l col-span-2">{{ item.trade_date }}</span>
-                <span class="px-4 border-l text-right">{{ Intl.NumberFormat('id-ID', { style: 'unit', unit: 'kilogram'}).format(item.net_weight) }}</span>
-                <span class="px-4 border-l text-right">{{ Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR', minimumFractionDigits: 0 }).format(item.buying_price) }}</span>
-                <span class="px-4 border-x text-right">{{ Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR', minimumFractionDigits: 0 }).format(item.net_weight * item.buying_price) }}</span>
+                <span class="px-4 border-l col-span-2">{{ item.trade.trade_date }}</span>
+                <span class="px-4 border-l text-right">{{ Intl.NumberFormat('id-ID', { style: 'unit', unit: 'kilogram'}).format(item.weight) }}</span>
+                <span class="px-4 border-l text-right">{{ Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR', minimumFractionDigits: 0 }).format(item.price) }}</span>
+                <span class="px-4 border-x text-right">{{ Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR', minimumFractionDigits: 0 }).format(item.weight * item.price) }}</span>
             </div>
 
             <div class="grid grid-cols-5" :class="!form.loan ? 'border-b' : ''">
@@ -164,7 +164,11 @@ const props = defineProps({
 })
 
 const submit = () => {
-    form.patch(route('transaction.invoice.farmer.update', props.farmer.id));
+    form.patch(route('transaction.invoice.farmer.update', props.farmer.id), {
+        onFinish: () => {
+            modal_save.value = false
+        }
+    });
 }
 const save = () => {
     form.print = false
@@ -179,13 +183,9 @@ onMounted( () =>{
     getTotal()
 })
 
-watch(() => _.cloneDeep(form), (current, old) => {
-
-})
-
 const getTotal = () => {
     let total = form.trades.reduce((arr, trade) => {
-        arr.push(trade.total_buy)
+        arr.push(trade.total)
         return (arr)
     }, []);
 

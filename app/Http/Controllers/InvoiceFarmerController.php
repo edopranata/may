@@ -26,12 +26,12 @@ class InvoiceFarmerController extends Controller
                 })
                 ->withCount([
                     'trades AS trades_count' => function (Builder $query) {
-                        $query->select(DB::raw("COUNT(total_buy) as total"))->whereNull('farmer_status');
+                        $query->select(DB::raw("COUNT(total) as total"))->whereNull('farmer_status');
                     }
                 ])
                 ->withCount([
                     'trades AS trades_total' => function (Builder $query) {
-                        $query->select(DB::raw("SUM(total_buy) as total"))->whereNull('farmer_status');
+                        $query->select(DB::raw("SUM(total) as total"))->whereNull('farmer_status');
                     }
                 ])->paginate(5)
                 ->withQueryString()
@@ -53,7 +53,7 @@ class InvoiceFarmerController extends Controller
     {
         return inertia('Transaction/Invoice/Farmer/InvoiceFarmerView', [
             'farmer'    =>  $farmer->load(['loan', 'trades' => function(Builder $builder){
-                                $builder->whereNull('farmer_status');
+                                $builder->with('trade')->whereNull('farmer_status');
                             }])
         ]);
     }
@@ -61,10 +61,11 @@ class InvoiceFarmerController extends Controller
     public function update(Farmer $farmer, Request $request)
     {
         $farmer->load(['loan']);
+
         $trades         = collect($request->trades)->pluck('id');
         $sequence       = $this->getLastSequence();
-        $invoice_number = 'MM' . now()->format('Ymd') . sprintf('%06d', $sequence);
-        $total_buy      = collect($request->trades)->sum('total_buy');
+        $invoice_number = 'MM' . now()->format('Y') . sprintf('%08d', $sequence);
+        $total_buy      = collect($request->trades)->sum('total');
         $loan           = $farmer->loan ? $farmer->loan->balance : 0;
         $max            = ($total_buy > $loan) ? $loan : $total_buy;
         $request->validate([
@@ -86,16 +87,20 @@ class InvoiceFarmerController extends Controller
                 'total' => $total_buy - $request->installment,
             ]);
 
-            // Insert into invoice_trade select from trades table
-            $invoice->trades()->attach($trades);
+            // Insert into invoice_trade select from trade_details table
+            $invoice->trade_details()->attach($trades);
 
-            $invoice->load('trades');
 
-            // update farmer_status from trades table
-            $invoice->trades()->update([
-                'farmer_status' => now()->toDateTimeString()
-            ]);
+            $invoice->load('trade_details');
+//            dd($invoice);
+            // update farmer_status from trade_details table
+            foreach ($invoice->trade_details as $trade_detail) {
+                $trade_detail->update([
+                    'farmer_status' => now()->toDateTimeString()
+                ]);
+            }
 
+//            dd($invoice);
             // Jika pernah ada pinjaman
             if($farmer->loan){
 
@@ -112,7 +117,6 @@ class InvoiceFarmerController extends Controller
                     ]);
                 }
             }
-//            dd($invoice->id);
             DB::commit();
 
             if($request->print){
