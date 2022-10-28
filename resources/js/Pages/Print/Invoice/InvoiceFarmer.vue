@@ -7,7 +7,7 @@
 
             <div class="grid text-xs grid-cols-1 w-full">
                 <div class="flex justify-between border-gray-800 border-b-2 print:hidden mb-10">
-                    <Link as="button" :href="route('transaction.index')" class="btn btn-sm mb-5"><BaseIcon :path="mdiArrowLeft"/> Ke Halaman Depan</Link>
+                    <Link as="button" :href="route('dashboard.index')" class="btn btn-sm mb-5"><BaseIcon :path="mdiArrowLeft"/> Ke Halaman Utama</Link>
 
                     <button class="btn btn-success btn-sm mb-5" onclick="window.print()"><BaseIcon :path="mdiPrinterPos"/> Print</button>
                 </div>

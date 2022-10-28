@@ -6,37 +6,44 @@
     <input type="checkbox" id="modal-option" v-model="modal" class="modal-toggle" />
     <div class="modal">
         <div class="modal-box w-11/12 max-w-5xl" for="">
-            <table class="w-full text-left text-base text-xs">
+            <table class="w-full text-left text-base">
                 <!-- head -->
-                <thead class="text-sm uppercase bg-primary/20">
+                <thead class="uppercase bg-primary/20">
                 <tr>
-                    <th class="py-3 px-6">Invoice Number</th>
-                    <th class="py-3 px-6">Nama Petani</th>
-                    <th class="py-3 px-6 text-right">Total</th>
-                    <th class="py-3 px-6 text-right">Pinjaman</th>
-                    <th class="py-3 px-6 text-right">Bayar Pinjaman</th>
-                    <th class="py-3 px-6 text-right">Diterima</th>
+                    <th class="py-1 px-2">Invoice Number</th>
+                    <th class="py-1 px-2">Nama Petani</th>
+                    <th class="py-1 px-2 text-right" colspan="2">Rincian</th>
                 </tr>
                 </thead>
                 <tbody>
                 <!-- row 1 -->
                 <tr>
-                    <td class="group-hover:bg-base-300 py-4 px-6">
+                    <td class="group-hover:bg-base-300 px-2 align-top" rowspan="4">
                         <div>
                             <div class="font-bold">{{ invoice.invoice_number }}</div>
                             <div class="text-sm opacity-50">{{invoice.invoice_date }}</div>
                         </div>
                     </td>
-                    <td class="group-hover:bg-base-300 py-4 px-6">
+                    <td class="group-hover:bg-base-300 px-2 align-top" rowspan="4">
                         <div>
                             <div class="font-bold">{{ invoice.name }}</div>
                             <div class="text-sm opacity-50">{{ invoice.phone }}</div>
                         </div>
                     </td>
-                    <td class="group-hover:bg-base-300 py-4 px-6 text-right">{{ Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR', minimumFractionDigits: 0  }).format(invoice.total_buy)}}</td>
-                    <td class="group-hover:bg-base-300 py-4 px-6 text-right">{{ Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR', minimumFractionDigits: 0  }).format(invoice.loan)}}</td>
-                    <td class="group-hover:bg-base-300 py-4 px-6 text-right">{{ Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR', minimumFractionDigits: 0  }).format(invoice.loan_installment)}}</td>
-                    <td class="group-hover:bg-base-300 py-4 px-6 text-right">{{ Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR', minimumFractionDigits: 0  }).format(invoice.total)}}</td>
+                    <td class="group-hover:bg-base-300 px-2 text-right font-bold">Total</td>
+                    <td class="group-hover:bg-base-300 px-2 text-right font-bold">{{ Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR', minimumFractionDigits: 0  }).format(invoice.total_buy)}}</td>
+                </tr>
+                <tr>
+                    <td class="group-hover:bg-base-300 px-2 text-right font-bold">Pinjaman</td>
+                    <td class="group-hover:bg-base-300 px-2 text-right font-bold">{{ Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR', minimumFractionDigits: 0  }).format(invoice.loan)}}</td>
+                </tr>
+                <tr>
+                    <td class="group-hover:bg-base-300 px-2 text-right">Bayar Pinjaman</td>
+                    <td class="group-hover:bg-base-300 px-2 text-right">{{ Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR', minimumFractionDigits: 0  }).format(invoice.loan_installment)}}</td>
+                </tr>
+                <tr>
+                    <td class="group-hover:bg-base-300 px-2 text-right font-bold">Uang Diterima</td>
+                    <td class="group-hover:bg-base-300 px-2 text-right font-bold">{{ Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR', minimumFractionDigits: 0  }).format(invoice.total)}}</td>
                 </tr>
                 </tbody>
             </table>
