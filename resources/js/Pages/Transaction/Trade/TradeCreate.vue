@@ -83,35 +83,42 @@
                         <button :disabled="form.processing" type="submit" class="btn">Tambahkan</button>
                     </div>
                 </div>
-                <table class="w-full text-left text-base">
-                    <thead class="text-sm uppercase bg-primary/20">
-                    <tr>
-                        <th class="py-3 px-6">#</th>
-                        <th class="py-3 px-6">No Polisi</th>
-                        <th class="py-3 px-6">Berat</th>
-                        <th class="py-3 px-6">Harga</th>
-                        <th class="py-3 px-6">Total</th>
-                        <th class="py-3 px-6">Invoice</th>
-                    </tr>
-                    </thead>
-                    <tbody>
-                    <tr v-if="props.trade.details.length" class="hover:cursor-pointer group border-b" v-for="(item, index) in props.trade.details" @click.prevent="openModal(index)">
-                        <td class="group-hover:bg-base-300 py-4 px-6">{{ index + 1 }}</td>
-                        <td class="group-hover:bg-base-300 py-4 px-6">{{ item.farmer.name }}</td>
-                        <td class="group-hover:bg-base-300 py-4 px-6">{{ Intl.NumberFormat('id-ID', { style: 'unit', unit: 'kilogram'}).format(item.weight) }}</td>
-                        <td class="group-hover:bg-base-300 py-4 px-6 ">{{ Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR', minimumFractionDigits: 0 }).format(item.price) }}</td>
-                        <td class="group-hover:bg-base-300 py-4 px-6">{{ Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR', minimumFractionDigits: 0 }).format(item.total) }}</td>
-                        <td class="group-hover:bg-base-300 py-4 px-6"><div class="flex justify-between"><span class="badge badge-lg" :class="item.farmer_status ? 'badge-success' : 'badge-error'">{{ item.farmer_status ? 'Terbit' : 'Belum' }}</span><BaseIcon :path="mdiArrowRight" /></div> </td>
-                    </tr>
-                    <tr class="border-t" v-if="props.trade.details.length">
-                        <th class="group-hover:bg-base-300 py-4 px-6 text-right" colspan="2">Total</th>
-                        <th class="group-hover:bg-base-300 py-4 px-6">{{Intl.NumberFormat('id-ID', { style: 'unit', unit: 'kilogram'}).format(props.trade.gross_weight) }}</th>
-                        <td class="group-hover:bg-base-300 py-4 px-6"></td>
-                        <th class="group-hover:bg-base-300 py-4 px-6">{{Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR', minimumFractionDigits: 0 }).format(props.trade.gross_total)}}</th>
-                        <td class="group-hover:bg-base-300 py-4 px-6"></td>
-                    </tr>
-                    </tbody>
-                </table>
+                <div class="w-full overflow-y-auto">
+                    <table class="w-full text-left text-base min-w-4xl">
+                        <thead class="text-sm uppercase bg-primary/20">
+                        <tr>
+                            <th class="py-3 px-6">#</th>
+                            <th class="py-3 px-6">Petani</th>
+                            <th class="py-3 px-6 text-right">Berat</th>
+                            <th class="py-3 px-6 text-right">Harga</th>
+                            <th class="py-3 px-6 text-right">Total</th>
+                            <th class="py-3 px-6">Invoice</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr v-if="props.trade.details.length" class="hover:cursor-pointer group border-b" v-for="(item, index) in props.trade.details" @click.prevent="openModal(index)">
+                            <td class="group-hover:bg-base-300 py-4 px-6">{{ index + 1 }}</td>
+                            <td class="group-hover:bg-base-300 py-4 px-6">
+                                <div>
+                                    <div class="font-bold">{{ item.farmer.name }}</div>
+                                    <div class="text-sm opacity-50">{{ item.farmer.phone }}</div>
+                                </div>
+                            </td>
+                            <td class="group-hover:bg-base-300 py-4 px-6 text-right">{{ Intl.NumberFormat('id-ID', { style: 'unit', unit: 'kilogram'}).format(item.weight) }}</td>
+                            <td class="group-hover:bg-base-300 py-4 px-6 text-right ">{{ Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR', minimumFractionDigits: 0 }).format(item.price) }}</td>
+                            <td class="group-hover:bg-base-300 py-4 px-6 text-right">{{ Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR', minimumFractionDigits: 0 }).format(item.total) }}</td>
+                            <td class="group-hover:bg-base-300 py-4 px-6"><div class="flex justify-between"><span class="badge badge-lg" :class="item.farmer_status ? 'badge-success' : 'badge-error'">{{ item.farmer_status ? 'Terbit' : 'Belum' }}</span><BaseIcon :path="mdiArrowRight" /></div> </td>
+                        </tr>
+                        <tr class="border-t" v-if="props.trade.details.length">
+                            <th class="group-hover:bg-base-300 py-4 px-6 text-right" colspan="2">Total</th>
+                            <th class="group-hover:bg-base-300 py-4 px-6 text-right">{{Intl.NumberFormat('id-ID', { style: 'unit', unit: 'kilogram'}).format(props.trade.gross_weight) }}</th>
+                            <td class="group-hover:bg-base-300 py-4 px-6"></td>
+                            <th class="group-hover:bg-base-300 py-4 px-6 text-right">{{Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR', minimumFractionDigits: 0 }).format(props.trade.gross_total)}}</th>
+                            <td class="group-hover:bg-base-300 py-4 px-6"></td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
             </form>
         </div>
     </section>

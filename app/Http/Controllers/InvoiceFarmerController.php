@@ -14,13 +14,10 @@ class InvoiceFarmerController extends Controller
     public function index(Request $request)
     {
         return inertia('Transaction/Invoice/Farmer/InvoiceFarmerIndex', [
+            'invoice'       => $request->invoice,
+            'farmer'        => $request->farmer,
             'farmers'    =>  Farmer::query()->with(['loan'])
-                ->when($request->search, function (\Illuminate\Database\Eloquent\Builder $builder, $value){
-                $builder
-                    ->where('name', 'like', '%'.$value.'%')
-                    ->orWhere('address', 'like', '%'.$value.'%')
-                    ->orWhere('phone', 'like', '%'.$value.'%');
-                })
+                ->filter($request->farmer)
                 ->whereHas('trades', function (Builder $builder){
                     $builder->whereNull('farmer_status');
                 })

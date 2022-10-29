@@ -27,6 +27,15 @@ class Farmer extends Model
         return $this->morphMany(Invoice::class, 'modelable');
     }
 
+    public function scopeFilter($query, $search)
+    {
+        $query->when($search, function ($query, $value) {
+            $query->where('name', 'like', '%'.$value.'%')
+                ->orWhere('address', 'like', '%'.$value.'%')
+                ->orWhere('phone', 'like', '%'.$value.'%');
+        });
+    }
+
     public function toSearchableArray()
     {
         return [

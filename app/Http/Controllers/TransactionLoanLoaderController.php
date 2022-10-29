@@ -7,7 +7,7 @@ use Illuminate\Contracts\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
-class LoaderLoanController extends Controller
+class TransactionLoanLoaderController extends Controller
 {
     public function index(Request $request)
     {

@@ -2,99 +2,108 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Car;
 use App\Models\Configuration;
+use App\Models\Supervisor;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
-class CarController extends Controller
+class DataSupervisorController extends Controller
 {
     public function index(Request $request)
     {
-        return inertia('Data/Car/CarIndex', [
-            'cars'    => Car::query()->when($request->search, function (Builder $builder, $value){
+        return inertia('Data/Supervisor/SupervisorIndex', [
+            'supervisors' => Supervisor::query()->with('price')->when($request->search, function (Builder $builder, $value){
                 $builder
                     ->where('name', 'like', '%'.$value.'%')
-                    ->orWhere('no_pol', 'like', '%'.$value.'%')
-                    ->orWhere('description', 'like', '%'.$value.'%');
+                    ->orWhere('address', 'like', '%'.$value.'%')
+                    ->orWhere('phone', 'like', '%'.$value.'%');
 
             })->orderByDesc('created_at')->paginate(5)->withQueryString(),
+            'price' => 0
         ]);
     }
+
 
     public function store(Request $request)
     {
         $request->validate([
-            'name'  => ['required', 'string', 'max:255'],
-            'no_pol'  => ['required', 'string', 'max:12']
+            'name'  => ['required', 'unique:supervisors', 'string', 'max:255'],
+            'phone'  => ['required', 'string', 'max:255']
         ]);
 
         DB::beginTransaction();
         try {
-            $car = Car::query()
-                ->create($request->only(['name', 'description', 'year', 'no_pol']));
+            $supervisor = Supervisor::query()
+                ->create($request->only(['name', 'address', 'phone']));
+
+            $supervisor->price()->create(['value' => $request->price]);
+
+            $supervisor->loan()->create();
 
             DB::commit();
             return redirect()->back()->with('alert', [
                 'type'    => 'success',
                 'title'   => 'Success',
-                'message' => "Data mobil disimpan"
+                'message' => "Data mandor disimpan"
             ]);
         }catch (\Exception $exception){
             DB::rollBack();
             return redirect()->back()->with('alert', [
                 'type'    => 'error',
                 'title'   => 'Failed',
-                'message' => "Data mobil gagal disimpan: " . $exception->getMessage()
+                'message' => "Data mandor gagal disimpan: " . $exception->getMessage()
             ]);
         }
     }
 
-    public function update(Car $car, Request $request)
+    public function update(Supervisor $supervisor, Request $request)
     {
         $request->validate([
-            'name'  => ['required', 'string', 'max:255'],
-            'no_pol'  => ['required', 'string', 'max:12']
+            'name'  => ['required', 'string', 'max:255', 'unique:supervisors,name,' . $supervisor->id],
+            'phone'  => ['required', 'string', 'max:255']
         ]);
 
         DB::beginTransaction();
         try {
-            $car->update($request->only(['name', 'description', 'year', 'no_pol']));
-
+            $supervisor->update($request->only(['name', 'address', 'phone']));
+            $supervisor->price()->updateOrCreate(
+                ['modelable_id' => $supervisor->id],
+                ['value' => $request->price]
+            );
             DB::commit();
             return redirect()->back()->with('alert', [
                 'type'    => 'info',
                 'title'   => 'Success',
-                'message' => "Data mobil berhasil diubah"
+                'message' => "Data mandor berhasil diubah"
             ]);
         }catch (\Exception $exception){
             DB::rollBack();
             return redirect()->back()->with('alert', [
                 'type'    => 'error',
                 'title'   => 'Failed',
-                'message' => "Data mobil gagal diubah: " . $exception->getMessage()
+                'message' => "Data mandor gagal diubah: " . $exception->getMessage()
             ]);
         }
     }
 
-    public function destroy(Car $car)
+    public function destroy(Supervisor $supervisor)
     {
         DB::beginTransaction();
         try {
-            $car->delete();
+            $supervisor->delete();
             DB::commit();
             return redirect()->back()->with('alert', [
                 'type'    => 'warn',
                 'title'   => 'Success',
-                'message' => "Data mobil berhasil dihapus"
+                'message' => "Data mandor berhasil dihapus"
             ]);
         }catch (\Exception $exception){
             DB::rollBack();
             return redirect()->back()->with('alert', [
                 'type'    => 'error',
                 'title'   => 'Failed',
-                'message' => "Data mobil gagal dihapus"
+                'message' => "Data mandor gagal dihapus"
             ]);
         }
     }

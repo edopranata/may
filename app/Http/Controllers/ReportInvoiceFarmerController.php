@@ -14,7 +14,14 @@ class ReportInvoiceFarmerController extends Controller
     public function index(Request $request)
     {
         return inertia('Report/Invoice/ReportInvoiceFarmerIndex', [
-            'invoices'    =>  Invoice::query()->with(['trade_details.trade', 'modelable'])
+            'farmer'        => $request->farmer,
+            'invoices'      =>  Invoice::query()
+                    ->when($request->invoice, function (Builder $builder, $invoice){
+                        $builder->where('invoice_number', 'like', '%' . $invoice . '%');
+                    })
+                        ->with(['trade_details.trade', 'modelable'])->whereHasMorph('modelable', [Farmer::class], function (Builder $builder) use ($request){
+                        $builder->filter($request->farmer);
+                })
                 ->paginate()
                 ->withQueryString()
         ]);

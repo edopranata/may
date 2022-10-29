@@ -3,24 +3,24 @@
 namespace App\Http\Controllers;
 
 use App\Models\Configuration;
-use App\Models\Supervisor;
+use App\Models\Loader;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
-class SupervisorController extends Controller
+class DataLoaderController extends Controller
 {
     public function index(Request $request)
     {
-        return inertia('Data/Supervisor/SupervisorIndex', [
-            'supervisors' => Supervisor::query()->with('price')->when($request->search, function (Builder $builder, $value){
+        return inertia('Data/Loader/LoaderIndex', [
+            'loaders' => Loader::query()->when($request->search, function (Builder $builder, $value){
                 $builder
                     ->where('name', 'like', '%'.$value.'%')
                     ->orWhere('address', 'like', '%'.$value.'%')
                     ->orWhere('phone', 'like', '%'.$value.'%');
 
-            })->orderByDesc('created_at')->paginate(5)->withQueryString(),
-            'price' => 0
+            })->with('price')->orderByDesc('created_at')->paginate(5)->withQueryString(),
+            'price'   => Configuration::query()->where('name', 'loader')->first()->value
         ]);
     }
 
@@ -28,82 +28,82 @@ class SupervisorController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'name'  => ['required', 'unique:supervisors', 'string', 'max:255'],
+            'name'  => ['required', 'unique:loaders', 'string', 'max:255'],
             'phone'  => ['required', 'string', 'max:255']
         ]);
 
         DB::beginTransaction();
         try {
-            $supervisor = Supervisor::query()
+            $loader = Loader::query()
                 ->create($request->only(['name', 'address', 'phone']));
 
-            $supervisor->price()->create(['value' => $request->price]);
+            $loader->price()->create(['value' => $request->price]);
 
-            $supervisor->loan()->create();
+            $loader->loan()->create();
 
             DB::commit();
             return redirect()->back()->with('alert', [
                 'type'    => 'success',
                 'title'   => 'Success',
-                'message' => "Data mandor disimpan"
+                'message' => "Data tukang muat disimpan"
             ]);
         }catch (\Exception $exception){
             DB::rollBack();
             return redirect()->back()->with('alert', [
                 'type'    => 'error',
                 'title'   => 'Failed',
-                'message' => "Data mandor gagal disimpan: " . $exception->getMessage()
+                'message' => "Data tukang muat gagal disimpan: " . $exception->getMessage()
             ]);
         }
     }
 
-    public function update(Supervisor $supervisor, Request $request)
+    public function update(Loader $loader, Request $request)
     {
         $request->validate([
-            'name'  => ['required', 'string', 'max:255', 'unique:supervisors,name,' . $supervisor->id],
+            'name'  => ['required', 'string', 'max:255', 'unique:loaders,name,' . $loader->id],
             'phone'  => ['required', 'string', 'max:255']
         ]);
 
         DB::beginTransaction();
         try {
-            $supervisor->update($request->only(['name', 'address', 'phone']));
-            $supervisor->price()->updateOrCreate(
-                ['modelable_id' => $supervisor->id],
+            $loader->update($request->only(['name', 'address', 'phone']));
+            $loader->price()->updateOrCreate(
+                ['modelable_id' => $loader->id],
                 ['value' => $request->price]
             );
             DB::commit();
             return redirect()->back()->with('alert', [
                 'type'    => 'info',
                 'title'   => 'Success',
-                'message' => "Data mandor berhasil diubah"
+                'message' => "Data tukang muat berhasil diubah"
             ]);
         }catch (\Exception $exception){
             DB::rollBack();
             return redirect()->back()->with('alert', [
                 'type'    => 'error',
                 'title'   => 'Failed',
-                'message' => "Data mandor gagal diubah: " . $exception->getMessage()
+                'message' => "Data tukang muat gagal diubah: " . $exception->getMessage()
             ]);
         }
     }
 
-    public function destroy(Supervisor $supervisor)
+    public function destroy(Loader $loader)
     {
         DB::beginTransaction();
         try {
-            $supervisor->delete();
+            $loader->delete();
             DB::commit();
             return redirect()->back()->with('alert', [
                 'type'    => 'warn',
                 'title'   => 'Success',
-                'message' => "Data mandor berhasil dihapus"
+                'message' => "Data tukang muat berhasil dihapus"
             ]);
         }catch (\Exception $exception){
             DB::rollBack();
             return redirect()->back()->with('alert', [
                 'type'    => 'error',
                 'title'   => 'Failed',
-                'message' => "Data mandor gagal dihapus"
+                'message' => "Data tukang muat gagal dihapus"
             ]);
         }
     }

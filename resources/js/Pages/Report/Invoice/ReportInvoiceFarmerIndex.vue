@@ -56,7 +56,21 @@
         </div>
     </div>
     <section class="px-4 grid gap-4">
-        <div>
+        <div class="w-full overflow-y-auto">
+            <div class="flex items-center mb-4">
+                <div class="form-control p-1">
+                    <label class="label">
+                        <span class="label-text">Invoice Number</span>
+                    </label>
+                    <input v-model="form_search.invoice" type="text" placeholder="Cari Invoice Number" class="input input-success input-bordered" />
+                </div>
+                <div class="form-control p-1">
+                    <label class="label">
+                        <span class="label-text">Cari Petani</span>
+                    </label>
+                    <input v-model="form_search.farmer" type="text" placeholder="Cari Petani" class="input input-success input-bordered" />
+                </div>
+            </div>
             <table class="w-full text-left text-base">
                 <thead class="text-sm uppercase bg-primary/20">
                 <tr>
@@ -82,11 +96,11 @@
                     </td>
                     <td class="group-hover:bg-base-300 py-4 px-6">
                         <div>
-                            <div class="font-bold">{{ item.modelable.name }}</div>
-                            <div class="text-sm opacity-50">{{ item.modelable.phone }}</div>
+                            <div class="font-bold">{{ item.modelable ? item.modelable.name : '' }}</div>
+                            <div class="text-sm opacity-50">{{ item.modelable ? item.modelable.phone : '' }}</div>
                         </div>
                     </td>
-                    <td class="group-hover:bg-base-300 py-4 px-6" style="word-wrap: break-word"><p class="max-w-xs">{{ item.modelable.address }}</p> </td>
+                    <td class="group-hover:bg-base-300 py-4 px-6" style="word-wrap: break-word"><p class="max-w-xs">{{ item.modelable ? item.modelable.address : ''}}</p> </td>
                     <td class="group-hover:bg-base-300 py-4 px-6 text-right">{{ Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR', minimumFractionDigits: 0  }).format(item.total_buy)}}</td>
                     <td class="group-hover:bg-base-300 py-4 px-6 text-right">{{ Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR', minimumFractionDigits: 0  }).format(item.loan)}}</td>
                     <td class="group-hover:bg-base-300 py-4 px-6 text-right">{{ Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR', minimumFractionDigits: 0  }).format(item.loan_installment)}}</td>
@@ -110,8 +124,10 @@ import Pagination from "@/Components/Pagination.vue"
 import BaseIcon from "@/Components/BaseIcon.vue"
 
 import {mdiArrowRight} from '@mdi/js'
-import { Head, Link } from '@inertiajs/inertia-vue3'
-import {reactive, ref} from "vue";
+import {Head, Link, useForm} from '@inertiajs/inertia-vue3'
+import {reactive, ref, watch} from "vue";
+import {debounce} from "lodash";
+import {Inertia} from "@inertiajs/inertia";
 
 const breadcrumbs = [
     {
@@ -130,9 +146,33 @@ const breadcrumbs = [
 
 const modal = ref(false)
 const props = defineProps({
+    farmer: String,
+    invoice: String,
     invoices: Object
 })
 
+const form_search = useForm({
+    farmer: props.farmer,
+    invoice: props.invoice
+})
+
+watch(
+    form_search,
+    debounce(function (value) {
+        Inertia.get(
+            route('report.invoice.farmer.index'),
+            {
+                farmer: value.farmer,
+                invoice: value.invoice,
+            },
+            {
+                preserveState: true,
+                replace: true,
+            }
+        );
+    }, 500),
+    { deep: true }
+);
 
 const invoice = reactive({
     id: 0,

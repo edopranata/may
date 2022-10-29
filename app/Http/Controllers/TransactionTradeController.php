@@ -13,7 +13,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Validation\Rule;
 
-class TradeController extends Controller
+class TransactionTradeController extends Controller
 {
 
     public function index()
@@ -99,6 +99,7 @@ class TradeController extends Controller
 
             $trade->details()
                 ->create([
+                    'trade_date'    => $request->date,
                     'farmer_id'     => $request->farmer_id,
                     'weight'        => $request->weight,
                     'price'         => $request->price,

@@ -4,11 +4,11 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 
-class PrintController extends Controller
+class DataController extends Controller
 {
 
     public function index()
     {
-        return to_route('dashboard.index');
+        return inertia('Data/DataIndex');
     }
 }

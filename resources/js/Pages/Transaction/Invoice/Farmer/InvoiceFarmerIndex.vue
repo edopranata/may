@@ -45,6 +45,20 @@
 
     <section class="px-4 grid gap-4">
         <div>
+            <div class="flex items-center mb-4">
+                <div class="form-control p-1">
+                    <label class="label">
+                        <span class="label-text">Tanggal Invoice</span>
+                    </label>
+                    <input v-model="form_search.date" type="date" class="input input-success input-bordered" />
+                </div>
+                <div class="form-control p-1">
+                    <label class="label">
+                        <span class="label-text">Cari Petani</span>
+                    </label>
+                    <input v-model="form_search.farmer" type="text" placeholder="Cari Petani" class="input input-success input-bordered" />
+                </div>
+            </div>
             <table class="w-full text-left text-base">
                 <thead class="text-sm uppercase bg-primary/20">
                 <tr>
@@ -88,8 +102,10 @@ import BaseIcon from "@/Components/BaseIcon.vue"
 import Pagination from "@/Components/Pagination.vue"
 
 import { mdiArrowRight } from "@mdi/js";
-import {Head, Link} from '@inertiajs/inertia-vue3'
-import {reactive, ref} from "vue";
+import {Head, Link, useForm} from '@inertiajs/inertia-vue3'
+import {reactive, ref, watch} from "vue";
+import {debounce} from "lodash";
+import {Inertia} from "@inertiajs/inertia";
 
 const modal = ref(false)
 const breadcrumbs = [
@@ -108,9 +124,33 @@ const breadcrumbs = [
 ]
 
 const props = defineProps({
+    farmer: String,
+    date: String,
     farmers: Object
 })
 
+const form_search = useForm({
+    farmer: props.farmer,
+    date: props.date
+})
+
+watch(
+    form_search,
+    debounce(function (value) {
+        Inertia.get(
+            route('transaction.invoice.farmer.index'),
+            {
+                farmer: value.farmer,
+                date: value.date,
+            },
+            {
+                preserveState: true,
+                replace: true,
+            }
+        );
+    }, 500),
+    { deep: true }
+);
 const farmer = reactive({
     id: 0,
     name: '',

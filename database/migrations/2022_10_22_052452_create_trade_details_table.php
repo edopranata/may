@@ -18,6 +18,7 @@ return new class extends Migration
             $table->foreignIdFor(\App\Models\Trade::class)->nullable()->constrained()->cascadeOnUpdate()->nullOnDelete();
             $table->foreignIdFor(\App\Models\Farmer::class)->nullable()->constrained()->cascadeOnUpdate()->nullOnDelete();
 
+            $table->date('trade_date');
             $table->integer('weight');
             $table->double('price');
             $table->double('total');

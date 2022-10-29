@@ -6,7 +6,7 @@ use App\Models\Configuration;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
-class ConfigurationController extends Controller
+class ConfigPriceController extends Controller
 {
     public function index()
     {
