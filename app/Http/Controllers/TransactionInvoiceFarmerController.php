@@ -5,30 +5,36 @@ namespace App\Http\Controllers;
 use App\Models\Farmer;
 use App\Models\Invoice;
 use App\Models\Trade;
+use App\Models\TradeDetail;
 use Illuminate\Contracts\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
-class InvoiceFarmerController extends Controller
+class TransactionInvoiceFarmerController extends Controller
 {
     public function index(Request $request)
     {
         return inertia('Transaction/Invoice/Farmer/InvoiceFarmerIndex', [
-            'invoice'       => $request->invoice,
             'farmer'        => $request->farmer,
-            'farmers'    =>  Farmer::query()->with(['loan'])
+            'farmers'       => Farmer::query()->with(['loan'])
                 ->filter($request->farmer)
-                ->whereHas('trades', function (Builder $builder){
-                    $builder->whereNull('farmer_status');
+                ->whereHas('trades', function (Builder $builder) use ($request){
+                    $builder->whereNull('farmer_status')->when($request->date, function (Builder $query, $date){
+                        $query->where('trade_date', $date);
+                    });
                 })
                 ->withCount([
-                    'trades AS trades_count' => function (Builder $query) {
-                        $query->select(DB::raw("COUNT(total) as total"))->whereNull('farmer_status');
+                    'trades AS trades_count' => function (Builder $query) use ($request) {
+                        $query->select(DB::raw("COUNT(total) as total"))->whereNull('farmer_status')->when($request->date, function (Builder $query, $date){
+                            $query->where('trade_date', $date);
+                        });
                     }
                 ])
                 ->withCount([
-                    'trades AS trades_total' => function (Builder $query) {
-                        $query->select(DB::raw("SUM(total) as total"))->whereNull('farmer_status');
+                    'trades AS trades_total' => function (Builder $query) use ($request) {
+                        $query->select(DB::raw("SUM(total) as total"))->whereNull('farmer_status')->when($request->date, function (Builder $query, $date){
+                            $query->where('trade_date', $date);
+                        });
                     }
                 ])->paginate(5)
                 ->withQueryString()

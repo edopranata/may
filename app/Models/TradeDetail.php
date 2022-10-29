@@ -10,6 +10,11 @@ class TradeDetail extends Model
     use HasFactory;
 
     protected $guarded = ['id'];
+    protected $casts = [
+        'trade_date' => 'datetime:Y-m-d',
+        'created_at' => 'datetime:Y-m-d',
+        'updated_at' => 'datetime:Y-m-d',
+    ];
 
     public function farmer()
     {

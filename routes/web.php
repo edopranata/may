@@ -49,9 +49,9 @@ Route::middleware(['auth'])->group(function (){
 
             Route::resource('trade', \App\Http\Controllers\TransactionTradeController::class)->only(['index', 'store', 'edit', 'update', 'destroy']);
 
-            Route::resource('invoice', \App\Http\Controllers\InvoiceController::class)->only(['index']);
+            Route::resource('invoice', \App\Http\Controllers\TransactionInvoiceController::class)->only(['index']);
             Route::group(['prefix' => 'invoice', 'as' => 'invoice.'], function (){
-                Route::resource('farmer', \App\Http\Controllers\InvoiceFarmerController::class)->only(['index','store', 'show', 'edit', 'update']);
+                Route::resource('farmer', \App\Http\Controllers\TransactionInvoiceFarmerController::class)->only(['index','store', 'show', 'edit', 'update']);
             });
         });
 

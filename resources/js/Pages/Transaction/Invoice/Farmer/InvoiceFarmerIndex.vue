@@ -48,12 +48,6 @@
             <div class="flex items-center mb-4">
                 <div class="form-control p-1">
                     <label class="label">
-                        <span class="label-text">Tanggal Invoice</span>
-                    </label>
-                    <input v-model="form_search.date" type="date" class="input input-success input-bordered" />
-                </div>
-                <div class="form-control p-1">
-                    <label class="label">
                         <span class="label-text">Cari Petani</span>
                     </label>
                     <input v-model="form_search.farmer" type="text" placeholder="Cari Petani" class="input input-success input-bordered" />
@@ -114,8 +108,8 @@ const breadcrumbs = [
         "label": "Transaksi"
     },
     {
-        "url": null,
-        "label": "Invoice / Gaji"
+        "url": route('transaction.invoice.index'),
+        "label": "Invoice"
     },
     {
         "url": null,
@@ -125,13 +119,11 @@ const breadcrumbs = [
 
 const props = defineProps({
     farmer: String,
-    date: String,
     farmers: Object
 })
 
 const form_search = useForm({
     farmer: props.farmer,
-    date: props.date
 })
 
 watch(
@@ -141,7 +133,6 @@ watch(
             route('transaction.invoice.farmer.index'),
             {
                 farmer: value.farmer,
-                date: value.date,
             },
             {
                 preserveState: true,

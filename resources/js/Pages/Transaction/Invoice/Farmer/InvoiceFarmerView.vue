@@ -133,7 +133,7 @@ const breadcrumbs = [
     },
     {
         "url": route('transaction.invoice.index'),
-        "label": "Invoice / Gaji"
+        "label": "Invoice"
     },
     {
         "url": route('transaction.invoice.farmer.index'),
@@ -141,7 +141,7 @@ const breadcrumbs = [
     },
     {
         "url": null,
-        "label": props.farmer.name
+        "label": props.farmer.name.toUpperCase()
     }
 ]
 
