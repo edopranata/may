@@ -16,7 +16,7 @@ class FarmerSeeder extends Seeder
      */
     public function run()
     {
-        Farmer::factory()->times(10)->create([
+        Farmer::factory()->times(200)->create([
             'user_id'   => User::query()->first()->id
         ])->each(function ($farmer){
             $farmer->loan()->create();

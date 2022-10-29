@@ -1,8 +1,8 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Data;
 
-use App\Models\Configuration;
+use App\Http\Controllers\Controller;
 use App\Models\Supervisor;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;

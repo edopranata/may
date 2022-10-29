@@ -34,7 +34,7 @@ Route::middleware(['auth'])->group(function (){
             Route::resource('car', \App\Http\Controllers\Data\DataCarController::class)->only(['index', 'store', 'update', 'destroy']);
             Route::resource('driver', \App\Http\Controllers\Data\DataDriverController::class)->only(['index', 'store', 'update', 'destroy']);
             Route::resource('loader', \App\Http\Controllers\Data\DataLoaderController::class)->only(['index', 'store', 'update', 'destroy']);
-            Route::resource('supervisor', \App\Http\Controllers\DataSupervisorController::class)->only(['index', 'store', 'update', 'destroy']);
+            Route::resource('supervisor', \App\Http\Controllers\Data\DataSupervisorController::class)->only(['index', 'store', 'update', 'destroy']);
         });
 
         Route::resource('transaction', \App\Http\Controllers\Transaction\TransactionController::class)->only(['index']);

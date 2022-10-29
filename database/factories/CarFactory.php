@@ -17,10 +17,10 @@ class CarFactory extends Factory
     public function definition()
     {
         return [
-            'name'          => $this->faker->unique()->word(),
+            'name'          => $this->faker->randomElement(['HINO', 'MITSUBISHI', 'ISUZU', 'TATA', 'VOLVO']),
             'no_pol'        => 'BM ' . $this->faker->randomNumber(4, true) . ' ' . mb_strtoupper(substr($this->faker->words(2, true), 0, '2')),
             'year'          => $this->faker->year(2021),
-            'description'   => $this->faker->words(10, true),
+            'description'   => $this->faker->words(6, true),
         ];
     }
 }
