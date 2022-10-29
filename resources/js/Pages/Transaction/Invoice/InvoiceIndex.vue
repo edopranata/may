@@ -4,9 +4,9 @@
     <Breadcrumb :links="breadcrumbs"/>
     <PageTitle :classes="'bg-base-content'">Invoice</PageTitle>
     <section class="px-4 grid xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 gap-4">
-        <PageMenu class="bg-success text-success-content hover:shadow-xl hover:bg-success/80" title="Invoice" :link="route('transaction.invoice.farmer.index')">Invoice Petani</PageMenu>
-        <PageMenu class="bg-success text-success-content hover:shadow-xl hover:bg-success/80" title="Invoice / Gaji" :link="route('transaction.invoice.farmer.index')">Invoice Supir</PageMenu>
-        <PageMenu class="bg-success text-success-content hover:shadow-xl hover:bg-success/80" title="Invoice / Gaji" :link="route('transaction.invoice.farmer.index')">Invoice Tukang Muat</PageMenu>
+        <PageMenu class="bg-error text-error-content hover:shadow-xl hover:bg-error/80" title="Invoice" :link="route('transaction.invoice.farmer.index')">Invoice Petani</PageMenu>
+        <PageMenu class="bg-error text-error-content hover:shadow-xl hover:bg-error/80" title="Invoice / Gaji" :link="route('transaction.invoice.driver.index')">Invoice Supir</PageMenu>
+        <PageMenu class="bg-error text-error-content hover:shadow-xl hover:bg-error/80" title="Invoice / Gaji" :link="route('transaction.invoice.farmer.index')">Invoice Tukang Muat</PageMenu>
     </section>
 </template>
 

@@ -8,7 +8,7 @@ import { resolvePageComponent } from 'laravel-vite-plugin/inertia-helpers'
 import { ZiggyVue } from '../../vendor/tightenco/ziggy/dist/vue.m'
 import Notifications from '@kyvg/vue3-notification'
 import { createPinia } from 'pinia'
-
+import vSelect from 'vue-select'
 
 import AuthenticatedLayout from '@/Layouts/Authenticated.vue';
 import AuthenticatedPrint from '@/Layouts/Print.vue';
@@ -42,6 +42,7 @@ createInertiaApp({
             .use(ZiggyVue)
             .use(Notifications)
             .use(pinia)
+            .component('v-select', vSelect)
             .mount(el);
     },
 });

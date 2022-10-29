@@ -93,14 +93,19 @@
     <PageTitle :classes="'bg-base-content'" class="">Data Mobil</PageTitle>
 
     <section class="px-4 grid gap-4">
-        <div>
-            <div class="flex justify-between items-center mb-4">
-                <div class="form-control">
-                    <input v-model="form_search.search" type="text" placeholder="Search…" class="input input-bordered" />
+        <div class="card w-full rounded-none border-2 border-info shadow-xl">
+            <div class="card-body grid gap-4">
+                <div class="flex justify-between items-center mb-4">
+                    <div class="form-control">
+                        <input v-model="form_search.search" type="text" placeholder="Search…" class="input input-bordered" />
+                    </div>
+                    <label @click="set_default_form" for="modal-create" class="btn modal-button">Tambah Mobil Baru</label>
                 </div>
-                <label @click="set_default_form" for="modal-create" class="btn modal-button">Tambah Mobil Baru</label>
             </div>
-            <table class="w-full text-left text-base">
+        </div>
+        <div class="card w-full rounded-none border-2 border-info shadow-xl">
+            <div class="card-body grid gap-4">
+                <table class="w-full text-left text-base">
                 <thead class="text-sm uppercase bg-primary/20">
                 <tr>
                     <th class="py-3 px-6">#</th>
@@ -125,8 +130,8 @@
                 </tr>
                 </tbody>
             </table>
-            <Pagination v-if="props.cars.data.length" :links="props.cars.links" />
-
+                <Pagination v-if="props.cars.data.length" :links="props.cars.links" />
+            </div>
         </div>
     </section>
 </template>

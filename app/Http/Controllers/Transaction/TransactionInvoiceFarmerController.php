@@ -65,11 +65,11 @@ class TransactionInvoiceFarmerController extends Controller
         $farmer->load(['loan']);
 
         $trades         = collect($request->trades)->pluck('id');
-        $sequence       = $this->getLastSequence();
-        $invoice_number = 'MM' . now()->format('Y') . sprintf('%08d', $sequence);
+
         $total_buy      = collect($request->trades)->sum('total');
         $loan           = $farmer->loan ? $farmer->loan->balance : 0;
         $max            = ($total_buy > $loan) ? $loan : $total_buy;
+
         $request->validate([
             'invoice_date'  => ['required', 'date', 'before:tomorrow'],
             'installment'   => ['integer', 'min:0', 'max:' . $max ]
@@ -77,6 +77,8 @@ class TransactionInvoiceFarmerController extends Controller
 
         DB::beginTransaction();
         try {
+            $sequence       = $this->getLastSequence();
+            $invoice_number = 'MM' . now()->format('Y') . sprintf('%08d', $sequence);
 
             // Insert into invoices table
             $invoice = $farmer->invoices()->create([
@@ -92,9 +94,7 @@ class TransactionInvoiceFarmerController extends Controller
             // Insert into invoice_trade select from trade_details table
             $invoice->trade_details()->attach($trades);
 
-
             $invoice->load('trade_details');
-//            dd($invoice);
             // update farmer_status from trade_details table
             foreach ($invoice->trade_details as $trade_detail) {
                 $trade_detail->update([
@@ -102,7 +102,6 @@ class TransactionInvoiceFarmerController extends Controller
                 ]);
             }
 
-//            dd($invoice);
             // Jika pernah ada pinjaman
             if($farmer->loan){
 
@@ -115,7 +114,7 @@ class TransactionInvoiceFarmerController extends Controller
                     $farmer->loan->details()->create([
                         'description' => 'Pot Pinjaman Inv #' . $invoice_number,
                         'amount' => $request->installment * -1,
-                        'status' => 'BAYAR'
+                        'status' => 'POTONG'
                     ]);
                 }
             }
@@ -125,13 +124,13 @@ class TransactionInvoiceFarmerController extends Controller
                 return to_route('print.invoice.farmer.show', $invoice->id)->with('alert', [
                     'type'    => 'success',
                     'title'   => 'Success',
-                    'message' => "Pinjaman petani berhasil disimpan"
+                    'message' => "Invoice petani berhasil disimpan"
                 ]);
             }else{
                 return redirect()->route('transaction.invoice.farmer.index')->with('alert', [
                     'type'    => 'success',
                     'title'   => 'Success',
-                    'message' => "Pinjaman petani berhasil disimpan"
+                    'message' => "Invoice petani berhasil disimpan"
                 ]);
             }
 
@@ -140,7 +139,7 @@ class TransactionInvoiceFarmerController extends Controller
             return redirect()->back()->with('alert', [
                 'type'    => 'error',
                 'title'   => 'Failed',
-                'message' => "Pinjaman petani gagal disimpan: " . $exception->getMessage()
+                'message' => "Invoice petani gagal disimpan: " . $exception->getMessage()
             ]);
         }
     }

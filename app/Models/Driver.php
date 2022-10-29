@@ -22,6 +22,14 @@ class Driver extends Model
         return $this->morphOne(Loan::class, 'modelable');
     }
 
+    public function scopeFilter($query, $search)
+    {
+        $query->when($search, function ($query, $value) {
+            $query->where('name', 'like', '%'.$value.'%')
+                ->orWhere('address', 'like', '%'.$value.'%')
+                ->orWhere('phone', 'like', '%'.$value.'%');
+        });
+    }
     public function trades()
     {
         return $this->hasMany(Trade::class);

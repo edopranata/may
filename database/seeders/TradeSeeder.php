@@ -39,9 +39,10 @@ class TradeSeeder extends Seeder
                             'total'         => $weight * $price,
                         ]);
                     $trade->increment('gross_weight', $weight);
-                    $trade->increment('gross_price', $price);
                     $trade->increment('gross_total', $weight * $price);
                 }
+                $trade->update(['gross_price' => $trade->details()->avg('price')]);
+
             });
         }
     }

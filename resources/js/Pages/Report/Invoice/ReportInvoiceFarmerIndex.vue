@@ -56,63 +56,69 @@
         </div>
     </div>
     <section class="px-4 grid gap-4">
-        <div class="w-full overflow-y-auto">
-            <div class="flex items-center mb-4">
-                <div class="form-control p-1">
-                    <label class="label">
-                        <span class="label-text">Invoice Number</span>
-                    </label>
-                    <input v-model="form_search.invoice" type="text" placeholder="Cari Invoice Number" class="input input-success input-bordered" />
-                </div>
-                <div class="form-control p-1">
-                    <label class="label">
-                        <span class="label-text">Cari Petani</span>
-                    </label>
-                    <input v-model="form_search.farmer" type="text" placeholder="Cari Petani" class="input input-success input-bordered" />
+        <div class="card w-full rounded-none border-2 border-info shadow-xl">
+            <div class="card-body grid gap-4">
+                <div class="flex items-center mb-4">
+                    <div class="form-control p-1">
+                        <label class="label">
+                            <span class="label-text">Invoice Number</span>
+                        </label>
+                        <input v-model="form_search.invoice" type="text" placeholder="Cari Invoice Number" class="input input-success input-bordered" />
+                    </div>
+                    <div class="form-control p-1">
+                        <label class="label">
+                            <span class="label-text">Cari Petani</span>
+                        </label>
+                        <input v-model="form_search.farmer" type="text" placeholder="Cari Petani" class="input input-success input-bordered" />
+                    </div>
                 </div>
             </div>
-            <table class="w-full text-left text-base">
-                <thead class="text-sm uppercase bg-primary/20">
-                <tr>
-                    <th class="py-3 px-6">#</th>
-                    <th class="py-3 px-6">Invoice Number</th>
-                    <th class="py-3 px-6">Nama Petani</th>
-                    <th class="py-3 px-6">Alamat</th>
-                    <th class="py-3 px-6 text-right">Total</th>
-                    <th class="py-3 px-6 text-right">Pinjaman</th>
-                    <th class="py-3 px-6 text-right">Bayar Pinjaman</th>
-                    <th class="py-3 px-6 text-right">Diterima</th>
-                    <th class="py-3 px-6"></th>
-                </tr>
-                </thead>
-                <tbody>
-                <tr v-if="props.invoices.data.length" class="hover:cursor-pointer group border-b" v-for="(item, index) in props.invoices.data" @click="openModal(index)">
-                    <th class="group-hover:bg-base-300 py-4 px-6">{{ props.invoices.from + index  }}</th>
-                    <td class="group-hover:bg-base-300 py-4 px-6">
-                        <div>
-                            <div class="font-bold">{{ item.invoice_number }}</div>
-                            <div class="text-sm opacity-50">{{item.invoice_date }}</div>
-                        </div>
-                    </td>
-                    <td class="group-hover:bg-base-300 py-4 px-6">
-                        <div>
-                            <div class="font-bold">{{ item.modelable ? item.modelable.name : '' }}</div>
-                            <div class="text-sm opacity-50">{{ item.modelable ? item.modelable.phone : '' }}</div>
-                        </div>
-                    </td>
-                    <td class="group-hover:bg-base-300 py-4 px-6" style="word-wrap: break-word"><p class="max-w-xs">{{ item.modelable ? item.modelable.address : ''}}</p> </td>
-                    <td class="group-hover:bg-base-300 py-4 px-6 text-right">{{ Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR', minimumFractionDigits: 0  }).format(item.total_buy)}}</td>
-                    <td class="group-hover:bg-base-300 py-4 px-6 text-right">{{ Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR', minimumFractionDigits: 0  }).format(item.loan)}}</td>
-                    <td class="group-hover:bg-base-300 py-4 px-6 text-right">{{ Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR', minimumFractionDigits: 0  }).format(item.loan_installment)}}</td>
-                    <td class="group-hover:bg-base-300 py-4 px-6 text-right">{{ Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR', minimumFractionDigits: 0  }).format(item.total)}}</td>
-                    <td class="group-hover:bg-base-300 py-4 px-6"><BaseIcon :path="mdiArrowRight" /></td>
-                </tr>
-                <tr v-else>
-                    <td colspan="9" class="text-center border-b-2">No Data <Link v-if="props.invoices.current_page > 1" class="link link-primary" :href="route('report.invoice.farmer.index')">Goto First Page</Link></td>
-                </tr>
-                </tbody>
-            </table>
-            <Pagination v-if="props.invoices.data.length" :links="props.invoices.links" />
+        </div>
+        <div class="card w-full rounded-none border-2 border-info shadow-xl">
+            <div class="card-body grid gap-4">
+                <table class="w-full text-left text-base">
+                    <thead class="text-sm uppercase bg-primary/20">
+                    <tr>
+                        <th class="py-3 px-6">#</th>
+                        <th class="py-3 px-6">Invoice Number</th>
+                        <th class="py-3 px-6">Nama Petani</th>
+                        <th class="py-3 px-6">Alamat</th>
+                        <th class="py-3 px-6 text-right">Total</th>
+                        <th class="py-3 px-6 text-right">Pinjaman</th>
+                        <th class="py-3 px-6 text-right">Bayar Pinjaman</th>
+                        <th class="py-3 px-6 text-right">Diterima</th>
+                        <th class="py-3 px-6"></th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr v-if="props.invoices.data.length" class="hover:cursor-pointer group border-b" v-for="(item, index) in props.invoices.data" @click="openModal(index)">
+                        <th class="group-hover:bg-base-300 py-4 px-6">{{ props.invoices.from + index  }}</th>
+                        <td class="group-hover:bg-base-300 py-4 px-6">
+                            <div>
+                                <div class="font-bold">{{ item.invoice_number }}</div>
+                                <div class="text-sm opacity-50">{{item.invoice_date }}</div>
+                            </div>
+                        </td>
+                        <td class="group-hover:bg-base-300 py-4 px-6">
+                            <div>
+                                <div class="font-bold">{{ item.modelable ? item.modelable.name : '' }}</div>
+                                <div class="text-sm opacity-50">{{ item.modelable ? item.modelable.phone : '' }}</div>
+                            </div>
+                        </td>
+                        <td class="group-hover:bg-base-300 py-4 px-6" style="word-wrap: break-word"><p class="max-w-xs">{{ item.modelable ? item.modelable.address : ''}}</p> </td>
+                        <td class="group-hover:bg-base-300 py-4 px-6 text-right">{{ Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR', minimumFractionDigits: 0  }).format(item.total_buy)}}</td>
+                        <td class="group-hover:bg-base-300 py-4 px-6 text-right">{{ Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR', minimumFractionDigits: 0  }).format(item.loan)}}</td>
+                        <td class="group-hover:bg-base-300 py-4 px-6 text-right">{{ Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR', minimumFractionDigits: 0  }).format(item.loan_installment)}}</td>
+                        <td class="group-hover:bg-base-300 py-4 px-6 text-right">{{ Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR', minimumFractionDigits: 0  }).format(item.total)}}</td>
+                        <td class="group-hover:bg-base-300 py-4 px-6"><BaseIcon :path="mdiArrowRight" /></td>
+                    </tr>
+                    <tr v-else>
+                        <td colspan="9" class="text-center border-b-2">No Data <Link v-if="props.invoices.current_page > 1" class="link link-primary" :href="route('report.invoice.farmer.index')">Goto First Page</Link></td>
+                    </tr>
+                    </tbody>
+                </table>
+                <Pagination v-if="props.invoices.data.length" :links="props.invoices.links" />
+            </div>
         </div>
     </section>
 </template>

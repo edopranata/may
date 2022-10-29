@@ -48,10 +48,12 @@ Route::middleware(['auth'])->group(function (){
             });
 
             Route::resource('trade', \App\Http\Controllers\Transaction\TransactionTradeController::class)->only(['index', 'store', 'edit', 'update', 'destroy']);
+            Route::resource('factory', \App\Http\Controllers\Transaction\TransactionTradeFactoryController::class)->only(['index', 'show', 'update', 'destroy']);
 
             Route::resource('invoice', \App\Http\Controllers\Transaction\TransactionInvoiceController::class)->only(['index']);
             Route::group(['prefix' => 'invoice', 'as' => 'invoice.'], function (){
                 Route::resource('farmer', \App\Http\Controllers\Transaction\TransactionInvoiceFarmerController::class)->only(['index','store', 'show', 'edit', 'update']);
+                Route::resource('driver', \App\Http\Controllers\Transaction\TransactionInvoiceDriverController::class)->only(['index','store', 'show', 'edit', 'update']);
             });
         });
 

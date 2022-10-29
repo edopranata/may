@@ -105,8 +105,10 @@ class TransactionTradeController extends Controller
                     'total'         => $request->total,
                 ]);
             $trade->increment('gross_weight', $request->weight);
-            $trade->increment('gross_price', $request->price);
             $trade->increment('gross_total', $request->total);
+
+            $trade->update(['gross_price' => $trade->details()->avg('price')]);
+
 
             DB::commit();
             return redirect()->back()->with('alert', [

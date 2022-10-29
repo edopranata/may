@@ -19,7 +19,18 @@ class FarmerSeeder extends Seeder
         Farmer::factory()->times(200)->create([
             'user_id'   => User::query()->first()->id
         ])->each(function ($farmer){
-            $farmer->loan()->create();
+            $one = [100000, 200000, 300000, 400000, 500000];
+            $two = [10,20,30,40,50,60,70,80,90];
+            $balance = $one[array_rand($one)] * ($two[array_rand($two)] + 5) + $one[array_rand($one)];
+            $farmer->loan()->create([
+                'balance' => $balance
+            ]);
+            $farmer->loan->details()->create([
+                'description'   => 'Pinjaman ' . now()->format('d F Y'),
+                'amount'        => $balance,
+                'status'        => 'PINJAM'
+            ]);
+
         });
     }
 }
