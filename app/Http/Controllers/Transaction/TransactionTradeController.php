@@ -1,14 +1,13 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Transaction;
 
+use App\Http\Controllers\Controller;
 use App\Models\Car;
 use App\Models\Driver;
 use App\Models\Farmer;
-use App\Models\Loader;
 use App\Models\Trade;
 use App\Models\TradeDetail;
-use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Validation\Rule;

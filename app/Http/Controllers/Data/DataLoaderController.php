@@ -1,111 +1,110 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Data;
 
+use App\Http\Controllers\Controller;
 use App\Models\Configuration;
-use App\Models\Driver;
-use Illuminate\Contracts\Database\Eloquent\Builder;
+use App\Models\Loader;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
-class DataDriverController extends Controller
+class DataLoaderController extends Controller
 {
-
     public function index(Request $request)
     {
-        return inertia('Data/Driver/DriverIndex', [
-            'drivers'    => Driver::query()->when($request->search, function (Builder $builder, $value){
+        return inertia('Data/Loader/LoaderIndex', [
+            'loaders' => Loader::query()->when($request->search, function (Builder $builder, $value){
                 $builder
                     ->where('name', 'like', '%'.$value.'%')
                     ->orWhere('address', 'like', '%'.$value.'%')
                     ->orWhere('phone', 'like', '%'.$value.'%');
 
-            })->with(['loan', 'price'])->paginate(5)->withQueryString(),
-            'price'      => Configuration::query()->where('name', 'driver')->first()->value,
+            })->with('price')->orderByDesc('created_at')->paginate(5)->withQueryString(),
+            'price'   => Configuration::query()->where('name', 'loader')->first()->value
         ]);
     }
+
 
     public function store(Request $request)
     {
         $request->validate([
-            'name'  => ['required', 'unique:drivers', 'string', 'max:255'],
+            'name'  => ['required', 'unique:loaders', 'string', 'max:255'],
             'phone'  => ['required', 'string', 'max:255']
         ]);
 
         DB::beginTransaction();
         try {
-            $driver = Driver::query()
+            $loader = Loader::query()
                 ->create($request->only(['name', 'address', 'phone']));
 
-            $driver->price()->create(['value' => $request->price]);
+            $loader->price()->create(['value' => $request->price]);
 
-            $driver->loan()->create();
+            $loader->loan()->create();
 
             DB::commit();
             return redirect()->back()->with('alert', [
                 'type'    => 'success',
                 'title'   => 'Success',
-                'message' => "Data supir disimpan"
+                'message' => "Data tukang muat disimpan"
             ]);
         }catch (\Exception $exception){
             DB::rollBack();
             return redirect()->back()->with('alert', [
                 'type'    => 'error',
                 'title'   => 'Failed',
-                'message' => "Data supir gagal disimpan: " . $exception->getMessage()
+                'message' => "Data tukang muat gagal disimpan: " . $exception->getMessage()
             ]);
         }
     }
 
-    public function update(Driver $driver, Request $request)
+    public function update(Loader $loader, Request $request)
     {
         $request->validate([
-            'name'  => ['required', 'string', 'max:255', 'unique:drivers,name,' . $driver->id],
+            'name'  => ['required', 'string', 'max:255', 'unique:loaders,name,' . $loader->id],
             'phone'  => ['required', 'string', 'max:255']
         ]);
 
-        $driver->load('price');
-
         DB::beginTransaction();
         try {
-            $driver->update($request->only(['name', 'address', 'phone']));
-            $driver->price()->updateOrCreate(
-                ['modelable_id' => $driver->id],
+            $loader->update($request->only(['name', 'address', 'phone']));
+            $loader->price()->updateOrCreate(
+                ['modelable_id' => $loader->id],
                 ['value' => $request->price]
             );
             DB::commit();
             return redirect()->back()->with('alert', [
                 'type'    => 'info',
                 'title'   => 'Success',
-                'message' => "Data supir berhasil diubah"
+                'message' => "Data tukang muat berhasil diubah"
             ]);
         }catch (\Exception $exception){
             DB::rollBack();
             return redirect()->back()->with('alert', [
                 'type'    => 'error',
                 'title'   => 'Failed',
-                'message' => "Data supir gagal diubah: " . $exception->getMessage()
+                'message' => "Data tukang muat gagal diubah: " . $exception->getMessage()
             ]);
         }
     }
 
-    public function destroy(Driver $driver)
+    public function destroy(Loader $loader)
     {
         DB::beginTransaction();
         try {
-            $driver->delete();
+            $loader->delete();
             DB::commit();
             return redirect()->back()->with('alert', [
                 'type'    => 'warn',
                 'title'   => 'Success',
-                'message' => "Data supir berhasil dihapus"
+                'message' => "Data tukang muat berhasil dihapus"
             ]);
         }catch (\Exception $exception){
             DB::rollBack();
             return redirect()->back()->with('alert', [
                 'type'    => 'error',
                 'title'   => 'Failed',
-                'message' => "Data supir gagal dihapus"
+                'message' => "Data tukang muat gagal dihapus"
             ]);
         }
     }

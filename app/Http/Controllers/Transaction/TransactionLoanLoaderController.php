@@ -1,7 +1,8 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Transaction;
 
+use App\Http\Controllers\Controller;
 use App\Models\Loader;
 use Illuminate\Contracts\Database\Eloquent\Builder;
 use Illuminate\Http\Request;

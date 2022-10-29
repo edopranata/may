@@ -1,12 +1,12 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Report;
 
+use App\Http\Controllers\Controller;
 use App\Models\Farmer;
 use App\Models\Invoice;
 use Illuminate\Contracts\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
 
 class ReportInvoiceFarmerController extends Controller
 {

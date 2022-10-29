@@ -1,11 +1,10 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Transaction;
 
+use App\Http\Controllers\Controller;
 use App\Models\Farmer;
 use App\Models\Invoice;
-use App\Models\Trade;
-use App\Models\TradeDetail;
 use Illuminate\Contracts\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;

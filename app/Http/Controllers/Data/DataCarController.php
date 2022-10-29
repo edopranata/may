@@ -1,94 +1,100 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Data;
 
-use App\Models\Farmer;
+use App\Http\Controllers\Controller;
+use App\Models\Car;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
-class DataFarmerController extends Controller
+class DataCarController extends Controller
 {
-
     public function index(Request $request)
     {
-        return inertia('Data/Farmer/FarmerIndex', [
-            'farmers'   => Farmer::query()->filter($request->search)->paginate(5)->withQueryString(),
+        return inertia('Data/Car/CarIndex', [
+            'cars'    => Car::query()->when($request->search, function (Builder $builder, $value){
+                $builder
+                    ->where('name', 'like', '%'.$value.'%')
+                    ->orWhere('no_pol', 'like', '%'.$value.'%')
+                    ->orWhere('description', 'like', '%'.$value.'%');
+
+            })->orderByDesc('created_at')->paginate(5)->withQueryString(),
         ]);
     }
 
     public function store(Request $request)
     {
         $request->validate([
-            'name'  => ['required', 'unique:farmers', 'string', 'max:255'],
-            'phone'  => ['required', 'string', 'max:255']
+            'name'  => ['required', 'string', 'max:255'],
+            'no_pol'  => ['required', 'string', 'max:12']
         ]);
 
         DB::beginTransaction();
         try {
-            $farmer = Farmer::query()
-                ->create($request->only(['name', 'address', 'phone', 'distance']));
+            $car = Car::query()
+                ->create($request->only(['name', 'description', 'year', 'no_pol']));
 
-            $farmer->loan()->create();
             DB::commit();
             return redirect()->back()->with('alert', [
                 'type'    => 'success',
                 'title'   => 'Success',
-                'message' => "Data petani disimpan"
+                'message' => "Data mobil disimpan"
             ]);
         }catch (\Exception $exception){
             DB::rollBack();
             return redirect()->back()->with('alert', [
                 'type'    => 'error',
                 'title'   => 'Failed',
-                'message' => "Data petani gagal disimpan: " . $exception->getMessage()
+                'message' => "Data mobil gagal disimpan: " . $exception->getMessage()
             ]);
         }
     }
 
-    public function update(Farmer $farmer, Request $request)
+    public function update(Car $car, Request $request)
     {
         $request->validate([
-            'name'  => ['required', 'string', 'max:255', 'unique:farmers,name,' . $farmer->id],
-            'phone'  => ['required', 'string', 'max:255']
+            'name'  => ['required', 'string', 'max:255'],
+            'no_pol'  => ['required', 'string', 'max:12']
         ]);
 
         DB::beginTransaction();
         try {
-            $farmer->update($request->only(['name', 'address', 'phone', 'distance']));
+            $car->update($request->only(['name', 'description', 'year', 'no_pol']));
+
             DB::commit();
             return redirect()->back()->with('alert', [
                 'type'    => 'info',
                 'title'   => 'Success',
-                'message' => "Data petani berhasil diubah"
+                'message' => "Data mobil berhasil diubah"
             ]);
         }catch (\Exception $exception){
             DB::rollBack();
             return redirect()->back()->with('alert', [
                 'type'    => 'error',
                 'title'   => 'Failed',
-                'message' => "Data petani gagal diubah: " . $exception->getMessage()
+                'message' => "Data mobil gagal diubah: " . $exception->getMessage()
             ]);
         }
     }
 
-    public function destroy(Farmer $farmer)
+    public function destroy(Car $car)
     {
         DB::beginTransaction();
         try {
-            $farmer->delete();
+            $car->delete();
             DB::commit();
             return redirect()->back()->with('alert', [
                 'type'    => 'warn',
                 'title'   => 'Success',
-                'message' => "Data petani berhasil dihapus"
+                'message' => "Data mobil berhasil dihapus"
             ]);
         }catch (\Exception $exception){
             DB::rollBack();
             return redirect()->back()->with('alert', [
                 'type'    => 'error',
                 'title'   => 'Failed',
-                'message' => "Data petani gagal dihapus"
+                'message' => "Data mobil gagal dihapus"
             ]);
         }
     }
