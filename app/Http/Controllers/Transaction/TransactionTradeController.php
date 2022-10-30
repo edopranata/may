@@ -73,8 +73,8 @@ class TransactionTradeController extends Controller
             'trade'     => $trade->load(['driver', 'car', 'details.farmer']),
             'farmers'   => Farmer::query()->get()->map(function ($farmer) {
                 return [
-                    'id' => $farmer->id,
-                    'text' => $farmer->name . ' (' . $farmer->phone . ')'
+                    'value' => $farmer->id,
+                    'label' => $farmer->name . ' (' . $farmer->phone . ')'
                 ];
             }),
         ]);

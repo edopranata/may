@@ -16,7 +16,6 @@
         </div>
     </div>
 
-
     <input type="checkbox" id="modal-delete" v-model="modal_delete" class="modal-toggle" />
     <div class="modal modal-bottom sm:modal-middle">
         <div class="modal-box">
@@ -56,29 +55,30 @@
             <form @submit.prevent="modal_save=true" class="card-body">
                 <div class="grid md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-4">
                     <div class="form-control w-full md:col-span-2 lg:col-span-3 xl:col-span-2">
-                        <select ref="opt_farmer" @focus="form.clearErrors('farmer_id')" :disabled="form.processing" v-model="form.farmer_id" class="select select-info select-bordered">
-                            <option value="0">PILIH PETANI</option>
-                            <option v-for="(item, index) in props.farmers" :value="item.id" :key="item.id">{{ item.text.toUpperCase() }}</option>
-                        </select>
+                        <Multiselect class="select  select-bordered rounded"
+                                     :searchable="true"
+                                     v-model="form.farmer_id"
+                                     :options="props.farmers"
+                        />
                         <label class="label h-8">
                             <span v-if="form.errors.farmer_id" class="label-text-alt text-error">{{ form.errors.farmer_id }}</span>
                         </label>
                     </div>
                     <div class="form-control w-full">
-                        <VueNumberFormat @focus="form.clearErrors('weight')" :options="{ precision: 0, prefix: '', suffix: ' Kg', isInteger: true }" :readonly="form.processing" v-model:value="form.weight" class="input input-info input-bordered" />
+                        <VueNumberFormat @focus="form.clearErrors('weight')" :options="{ precision: 0, prefix: '', suffix: ' Kg', isInteger: true }" :readonly="form.processing" v-model:value="form.weight" class="input  input-bordered" />
                         <label class="label h-8">
                             <span v-if="form.errors.weight" class="label-text-alt text-error">{{ form.errors.weight }}</span>
                         </label>
                     </div>
                     <div class="form-control w-full">
-                        <VueNumberFormat @focus="form.clearErrors('price')" :options="{ precision: 0, prefix: 'Rp. ', suffix: '', isInteger: true }" :readonly="form.processing" v-model:value="form.price" class="input input-info input-bordered" />
+                        <VueNumberFormat @focus="form.clearErrors('price')" :options="{ precision: 0, prefix: 'Rp. ', suffix: '', isInteger: true }" :readonly="form.processing" v-model:value="form.price" class="input  input-bordered" />
                         <label class="label h-8">
                             <span v-if="form.errors.price" class="label-text-alt text-error">{{ form.errors.price }}</span>
                         </label>
                     </div>
                     <div class="flex justify-between space-x-4 md:col-span-4 lg:col-span-5 xl:col-span-2">
                         <div class="form-control w-full min-w-xs">
-                            <VueNumberFormat :options="{ precision: 0, prefix: 'Rp. ', suffix: '', isInteger: true }" readonly v-model:value="form.total" class="input input-info input-bordered" />
+                            <VueNumberFormat :options="{ precision: 0, prefix: 'Rp. ', suffix: '', isInteger: true }" readonly v-model:value="form.total" class="input  input-bordered" />
                         </div>
                         <button :disabled="form.processing" type="submit" class="btn">Tambahkan</button>
                     </div>
@@ -130,6 +130,7 @@ import Breadcrumb from "@/Shared/Breadcrumb.vue"
 import PageTitle from "@/Components/PageTitle.vue"
 import BaseIcon from "@/Components/BaseIcon.vue"
 
+import Multiselect from '@vueform/multiselect'
 import {mdiArrowRight} from '@mdi/js'
 import VueNumberFormat from 'vue-number-format'
 import {Head, useForm} from '@inertiajs/inertia-vue3'
