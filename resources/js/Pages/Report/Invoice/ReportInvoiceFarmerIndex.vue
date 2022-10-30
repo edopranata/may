@@ -1,5 +1,5 @@
 <template>
-    <Head title="Invoice Petani" />
+    <Head title="Invoice Pembayaran Petani" />
 
     <Breadcrumb :links="breadcrumbs"/>
     <PageTitle :classes="'bg-base-content'" class="">Cetak Ulang Invoice Petani</PageTitle>
@@ -61,7 +61,7 @@
                 <div class="flex items-center mb-4">
                     <div class="form-control p-1">
                         <label class="label">
-                            <span class="label-text">Invoice Number</span>
+                            <span class="label-text">Nomor Invoice</span>
                         </label>
                         <input v-model="form_search.invoice" type="text" placeholder="Cari Invoice Number" class="input input-success input-bordered" />
                     </div>

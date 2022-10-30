@@ -4,12 +4,12 @@
     <Breadcrumb :links="breadcrumbs"/>
     <PageTitle :classes="'bg-base-content'">Invoice Pembayaran Petani</PageTitle>
     <section class="px-4 grid xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 gap-4">
-        <PageMenu class="bg-error text-error-content hover:shadow-xl hover:bg-error/80" title="Invoice" :link="route('transaction.invoice.farmer.index')">Invoice Petani</PageMenu>
+        <PageMenu class="bg-error text-error-content hover:shadow-xl hover:bg-error/80" title="Invoice" :link="route('transaction.invoice.farmer.index')">Invoice Pembayaran Petani</PageMenu>
     </section>
     <PageTitle :classes="'bg-base-content'">Pembayaran Gaji</PageTitle>
     <section class="px-4 grid xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 gap-4">
-        <PageMenu class="bg-accent text-accent-content hover:shadow-xl hover:bg-accent/80" title="Invoice / Gaji" :link="route('transaction.invoice.driver.index')">Invoice Supir</PageMenu>
-        <PageMenu class="bg-accent text-accent-content hover:shadow-xl hover:bg-accent/80" title="Invoice / Gaji" :link="route('transaction.invoice.farmer.index')">Invoice Tukang Muat</PageMenu>
+        <PageMenu class="bg-accent text-accent-content hover:shadow-xl hover:bg-accent/80" title="Invoice / Gaji" :link="route('transaction.invoice.driver.index')">Gaji Supir</PageMenu>
+        <PageMenu class="bg-accent text-accent-content hover:shadow-xl hover:bg-accent/80" title="Invoice / Gaji" :link="route('transaction.invoice.farmer.index')">Gaji Tukang Muat</PageMenu>
     </section>
 </template>
 

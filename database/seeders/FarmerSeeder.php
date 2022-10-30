@@ -30,7 +30,6 @@ class FarmerSeeder extends Seeder
                 'amount'        => $balance,
                 'status'        => 'PINJAM'
             ]);
-
         });
     }
 }

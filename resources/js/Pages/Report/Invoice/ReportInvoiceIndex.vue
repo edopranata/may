@@ -5,7 +5,7 @@
     <PageTitle :classes="'bg-base-content'" class="">Cetak Invoice</PageTitle>
 
     <section class="px-4 grid xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 gap-4">
-        <PageMenu class="bg-primary text-primary-content hover:shadow-xl hover:bg-primary/90" title="Cetak Invoice" :link="route('report.invoice.farmer.index')">Invoice Petani</PageMenu>
+        <PageMenu class="bg-primary text-primary-content hover:shadow-xl hover:bg-primary/90" title="Cetak Invoice" :link="route('report.invoice.farmer.index')">Invoice Pembayaran Petani</PageMenu>
     </section>
 
 </template>
