@@ -13,7 +13,7 @@ class DataFarmerController extends Controller
     public function index(Request $request)
     {
         return inertia('Data/Farmer/FarmerIndex', [
-            'farmers'   => Farmer::query()->filter($request->search)->paginate(5)->withQueryString(),
+            'farmers'   => Farmer::query()->filter($request->search)->paginate()->withQueryString(),
         ]);
     }
 

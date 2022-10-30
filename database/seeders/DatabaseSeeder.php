@@ -23,6 +23,7 @@ class DatabaseSeeder extends Seeder
             SupervisorSeeder::class,
             ConfigurationSeeder::class,
             TradeSeeder::class,
+            UpdateTradeSeeder::class,
         ]);
     }
 }

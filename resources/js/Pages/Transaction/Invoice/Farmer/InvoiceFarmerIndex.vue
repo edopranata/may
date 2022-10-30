@@ -6,7 +6,6 @@
 
     <input type="checkbox" id="modal-option" v-model="modal" class="modal-toggle" />
     <div class="modal">
-
         <div class="modal-box w-11/12 max-w-4xl" for="">
             <table class="w-full text-left text-base print:text-xs">
             <!-- head -->
@@ -34,57 +33,63 @@
             <div class="modal-action flex justify-between space-x-4">
                 <div class="flex space-x-4">
                     <Link as="button" :href="route('transaction.invoice.farmer.show', farmer.id)" class="btn btn-info">Buat Invoice</Link>
-                    <Link as="button" :href="route('transaction.invoice.farmer.show', farmer.id)" class="btn btn-success">Print Invoice</Link>
-                    <Link as="button" :href="route('transaction.invoice.farmer.show', farmer.id)" class="btn btn-primary">Tambah Pinjaman</Link>
-                    <Link as="button" :href="route('transaction.invoice.farmer.show', farmer.id)" class="btn btn-secondary">Bayar Pinjaman</Link>
+                    <Link as="button" :href="route('transaction.loan.farmer.show', farmer.id)" class="btn btn-primary">Tambah Pinjaman</Link>
+                    <Link as="button" :href="route('transaction.loan.farmer.edit', farmer.id)" class="btn btn-secondary">Bayar Pinjaman</Link>
                 </div>
                 <button class="btn btn-error" @click="modal = false">Batalkan</button>
             </div>
         </div>
     </div>
 
+
     <section class="px-4 grid gap-4">
-        <div>
-            <div class="flex items-center mb-4">
-                <div class="form-control p-1">
-                    <label class="label">
-                        <span class="label-text">Cari Petani</span>
-                    </label>
-                    <input v-model="form_search.farmer" type="text" placeholder="Cari Petani" class="input input-success input-bordered" />
+        <div class="card w-full rounded-none border-2 border-success shadow-xl">
+            <div class="card-body">
+                <div class="flex items-center mb-4">
+                    <div class="form-control p-1">
+                        <label class="label">
+                            <span class="label-text">Cari Petani</span>
+                        </label>
+                        <input v-model="form_search.farmer" type="text" placeholder="Cari Petani" class="input input-success input-bordered" />
+                    </div>
                 </div>
             </div>
-            <table class="w-full text-left text-base">
-                <thead class="text-sm uppercase bg-primary/20">
-                <tr>
-                    <th class="py-3 px-6">#</th>
-                    <th class="py-3 px-6">Nama Petani</th>
-                    <th class="py-3 px-6">Alamat</th>
-                    <th class="py-3 px-6">No Telepon</th>
-                    <th class="py-3 px-6">Jarak</th>
-                    <th class="py-3 px-6">Total</th>
-                    <th class="py-3 px-6">Jumlah Trx</th>
-                    <th class="py-3 px-6">Pinjaman</th>
-                    <th class="py-3 px-6"></th>
-                </tr>
-                </thead>
-                <tbody>
-                <tr v-if="props.farmers.data.length" class="hover:cursor-pointer group border-b" v-for="(item, index) in props.farmers.data" @click="openModal(index)">
-                    <th class="group-hover:bg-base-300 py-4 px-6">{{ props.farmers.from + index  }}</th>
-                    <td class="group-hover:bg-base-300 py-4 px-6">{{ item.name }}</td>
-                    <td class="group-hover:bg-base-300 py-4 px-6" style="word-wrap: break-word"><p class="max-w-xs">{{ item.address }}</p> </td>
-                    <td class="group-hover:bg-base-300 py-4 px-6">{{ item.phone }}</td>
-                    <td class="group-hover:bg-base-300 py-4 px-6">{{ item.distance }} Km</td>
-                    <td class="group-hover:bg-base-300 py-4 px-6">{{ Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR', minimumFractionDigits: 0  }).format(item.trades_total)}}</td>
-                    <td class="group-hover:bg-base-300 py-4 px-6">{{ item.trades_count }}</td>
-                    <td class="group-hover:bg-base-300 py-4 px-6">{{ Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR', minimumFractionDigits: 0  }).format(item.loan_total)}}</td>
-                    <td class="group-hover:bg-base-300 py-4 px-6"><BaseIcon :path="mdiArrowRight" /></td>
-                </tr>
-                <tr v-else>
-                    <td colspan="9" class="text-center border-b-2">No Data <Link v-if="props.farmers.current_page > 1" class="link link-primary" :href="route('data.farmer.index')">Goto First Page</Link></td>
-                </tr>
-                </tbody>
-            </table>
-            <Pagination v-if="props.farmers.data.length" :links="props.farmers.links" />
+        </div>
+        <div class="card w-full rounded-none border-2 border-success shadow-xl">
+            <div class="card-body">
+                <table class="w-full text-left text-base">
+                    <thead class="text-sm uppercase bg-primary/20">
+                    <tr>
+                        <th class="py-3 px-6">#</th>
+                        <th class="py-3 px-6">Nama Petani</th>
+                        <th class="py-3 px-6">Alamat</th>
+                        <th class="py-3 px-6">No Telepon</th>
+                        <th class="py-3 px-6">Jarak</th>
+                        <th class="py-3 px-6">Total</th>
+                        <th class="py-3 px-6">Jumlah Trx</th>
+                        <th class="py-3 px-6">Pinjaman</th>
+                        <th class="py-3 px-6"></th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr v-if="props.farmers.data.length" class="hover:cursor-pointer group border-b" v-for="(item, index) in props.farmers.data" @click="openModal(index)">
+                        <th class="group-hover:bg-base-300 py-4 px-6">{{ props.farmers.from + index  }}</th>
+                        <td class="group-hover:bg-base-300 py-4 px-6">{{ item.name }}</td>
+                        <td class="group-hover:bg-base-300 py-4 px-6" style="word-wrap: break-word"><p class="max-w-xs">{{ item.address }}</p> </td>
+                        <td class="group-hover:bg-base-300 py-4 px-6">{{ item.phone }}</td>
+                        <td class="group-hover:bg-base-300 py-4 px-6">{{ item.distance }} Km</td>
+                        <td class="group-hover:bg-base-300 py-4 px-6">{{ Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR', minimumFractionDigits: 0  }).format(item.trades_total)}}</td>
+                        <td class="group-hover:bg-base-300 py-4 px-6">{{ item.trades_count }}</td>
+                        <td class="group-hover:bg-base-300 py-4 px-6">{{ Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR', minimumFractionDigits: 0  }).format(item.loan_total)}}</td>
+                        <td class="group-hover:bg-base-300 py-4 px-6"><BaseIcon :path="mdiArrowRight" /></td>
+                    </tr>
+                    <tr v-else>
+                        <td colspan="9" class="text-center border-b-2">No Data <Link v-if="props.farmers.current_page > 1" class="link link-primary" :href="route('data.farmer.index')">Goto First Page</Link></td>
+                    </tr>
+                    </tbody>
+                </table>
+                <Pagination v-if="props.farmers.data.length" :links="props.farmers.links" />
+            </div>
         </div>
     </section>
 </template>

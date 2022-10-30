@@ -65,7 +65,6 @@ class TransactionTradeFactoryController extends Controller
         try {
 
             $factory->update([
-                'trade_date'    => $request->date,
                 'net_weight'    => $request->weight,
                 'net_price'     => $request->price,
                 'net_total'     => $request->total,

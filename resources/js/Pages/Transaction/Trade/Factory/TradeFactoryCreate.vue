@@ -1,14 +1,14 @@
 <template>
-    <Head title="Transaksi Jual Beli" />
+    <Head title="Timbangan Pabrik" />
 
     <Breadcrumb :links="breadcrumbs"/>
-    <PageTitle :classes="'bg-base-content'" class="">Timbangan Kebun</PageTitle>
+    <PageTitle :classes="'bg-base-content'" class="">Timbangan Pabrik</PageTitle>
 
     <input type="checkbox" id="modal-save" v-model="modal_save" class="modal-toggle" />
     <div class="modal modal-bottom sm:modal-middle">
         <div class="modal-box">
             <h3 class="font-bold text-lg">Data timbangan pabrik sudah benar?</h3>
-            <p class="py-4">Simpan data dan lanjut tambahkan data timbangan pabrik yang lainnya</p>
+            <p class="py-4">Simpan data dan lanjut tambahkan ke timbangan pabrik yang lainnya</p>
             <div class="modal-action">
                 <button :disabled="form.processing" ref="btn_save" type="button" class="btn" @click="save">Simpan</button>
                 <label for="modal-save" class="btn btn-warning">Batal</label>
