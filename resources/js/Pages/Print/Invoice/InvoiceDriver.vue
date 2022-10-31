@@ -7,7 +7,7 @@
 
             <div class="grid text-sm grid-cols-1 w-full">
                 <div class="flex justify-between border-gray-800 border-b-2 print:hidden mb-10">
-                    <Link as="button" :href="route('dashboard.index')" class="btn btn-sm mb-5"><BaseIcon :path="mdiArrowLeft"/> Ke Halaman Utama</Link>
+                    <Link as="button" :href="route('report.invoice.index')" class="btn btn-sm mb-5"><BaseIcon :path="mdiArrowLeft"/> Ke Halaman Utama</Link>
 
                     <button class="btn btn-success btn-sm mb-5" onclick="window.print()"><BaseIcon :path="mdiPrinterPos"/> Print</button>
                 </div>
@@ -30,7 +30,7 @@
                     <span class="font-bold text-center px-4 py-1 border-gray-800 border-x border-gray-800 border-y">Total</span>
                 </div>
                 <div class="grid grid-cols-5">
-                    <span class="px-4 border-gray-800 border-l font-bold col-span-2">Pembelian Sawit</span>
+                    <span class="px-4 border-gray-800 border-l font-bold col-span-2">Tanggal Angkut</span>
                     <span class="px-4 border-gray-800 border-l"></span>
                     <span class="px-4 border-gray-800 border-l"></span>
                     <span class="px-4 border-gray-800 border-x"></span>

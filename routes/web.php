@@ -64,10 +64,7 @@ Route::middleware(['auth'])->group(function (){
 
         Route::resource('report', \App\Http\Controllers\Report\ReportController::class)->only(['index']);
         Route::group(['prefix' => 'report', 'as' => 'report.'], function (){
-            Route::group(['prefix' => 'invoice', 'as' => 'invoice.'], function () {
-                Route::get('/', [\App\Http\Controllers\Report\ReportInvoiceController::class, 'index'])->name('index');
-                Route::resource('farmer', \App\Http\Controllers\Report\ReportInvoiceFarmerController::class)->only(['index']);
-            });
+            Route::resource('invoice', \App\Http\Controllers\Report\ReportInvoiceController::class)->only(['index']);
         });
 
         Route::resource('print', \App\Http\Controllers\Prints\PrintController::class)->only(['index']);

@@ -3,13 +3,66 @@
 namespace App\Http\Controllers\Report;
 
 use App\Http\Controllers\Controller;
+use App\Models\Driver;
+use App\Models\Farmer;
+use App\Models\Invoice;
+use Illuminate\Contracts\Database\Eloquent\Builder;
+use Illuminate\Http\Request;
 
 class ReportInvoiceController extends Controller
 {
 
-    public function index()
+    private function getType($modelable_type, $id)
     {
-        return inertia('Report/Invoice/ReportInvoiceIndex');
+        $model = collect(explode('\\', $modelable_type))->last();
 
+        switch ($model){
+            case "Farmer":
+                return [
+                    'title'         => 'Invoice Petani',
+                    'badge'         => 'badge-primary',
+                    'url_print'     => route('print.invoice.farmer.show', $id)
+                ];
+            case "Driver":
+                return [
+                    'title'         => 'Gaji Supir',
+                    'badge'         => 'badge-success',
+                    'url_print'     => route('print.invoice.driver.show', $id)
+                ];
+            default:
+                return $model;
+        }
+
+    }
+
+    public function index(Request $request)
+    {
+        return inertia('Report/Invoice/ReportInvoiceIndex', [
+            'search'        => $request->search,
+            'invoices'      =>  Invoice::query()
+                ->when($request->invoice, function (Builder $builder, $invoice){
+                    $builder->where('invoice_number', 'like', '%' . $invoice . '%');
+                })
+                ->with(['modelable'])->whereHasMorph(
+                    'modelable', [Farmer::class, Driver::class], function (Builder $builder) use ($request){
+                    $builder->filter($request->search);
+                })
+                ->paginate()
+                ->withQueryString()
+                ->through( function ($invoice) {
+
+                    return [
+                        'id'                => $invoice->id,
+                        'invoice_number'    => $invoice->invoice_number,
+                        'type'              => $this->getType($invoice->modelable_type, $invoice->id),
+                        'invoice_date'      => $invoice->invoice_date->format('d F Y'),
+                        'total_buy'         => $invoice->total_buy,
+                        'loan'              => $invoice->loan,
+                        'loan_installment'  => $invoice->loan_installment,
+                        'total'             => $invoice->total,
+                        'modelable'         => $invoice->modelable
+                    ];
+                })
+        ]);
     }
 }
