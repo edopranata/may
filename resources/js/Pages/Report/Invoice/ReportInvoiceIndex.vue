@@ -105,7 +105,12 @@
                         </td>
 
                         <td class="group-hover:bg-base-300 py-4 px-6">
-                            <div>
+                            <div v-if="item.type.name === 'car'">
+                                <div class="font-bold">{{ item.modelable ? item.modelable.no_pol : '' }}</div>
+                                <div class="text-sm opacity-50">{{ item.modelable ? item.modelable.name : '' }}</div>
+                            </div>
+
+                            <div v-else>
                                 <div class="font-bold">{{ item.modelable ? item.modelable.name : '' }}</div>
                                 <div class="text-sm opacity-50">{{ item.modelable ? item.modelable.phone : '' }}</div>
                             </div>

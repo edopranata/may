@@ -16,13 +16,13 @@ class LoaderSeeder extends Seeder
      */
     public function run()
     {
-        Loader::factory()->times(10)->create([
-            'user_id'   => User::query()->first()->id
+        Loader::query()->create([
+            'user_id'   => User::query()->first()->id,
+            'name'      => 'Tukang Muat'
         ])->each(function ($loader){
-            $loader->loan()->create();
             $loader->price()->create([
-                'value' => random_int(90, 120)
+                'value' => 45
             ]);
-        });;
+        });
     }
 }

@@ -8,7 +8,6 @@
         <PageMenu class="bg-primary text-primary-content hover:shadow-xl hover:bg-primary/90" title="Master Data" :link="route('data.farmer.index')">Petani</PageMenu>
         <PageMenu class="bg-primary text-primary-content hover:shadow-xl hover:bg-primary/90" title="Master Data" :link="route('data.car.index')">Mobil</PageMenu>
         <PageMenu class="bg-primary text-primary-content hover:shadow-xl hover:bg-primary/90" title="Master Data" :link="route('data.driver.index')">Supir</PageMenu>
-        <PageMenu class="bg-primary text-primary-content hover:shadow-xl hover:bg-primary/90" title="Master Data" :link="route('data.loader.index')">Tukang Muat</PageMenu>
         <PageMenu class="bg-primary text-primary-content hover:shadow-xl hover:bg-primary/90" title="Master Data" :link="route('data.supervisor.index')">Mandor</PageMenu>
     </section>
 

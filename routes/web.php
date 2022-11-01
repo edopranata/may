@@ -54,6 +54,8 @@ Route::middleware(['auth'])->group(function (){
             Route::group(['prefix' => 'invoice', 'as' => 'invoice.'], function (){
                 Route::resource('farmer', \App\Http\Controllers\Transaction\TransactionInvoiceFarmerController::class)->only(['index','store', 'show', 'edit', 'update']);
                 Route::resource('driver', \App\Http\Controllers\Transaction\TransactionInvoiceDriverController::class)->only(['index', 'show', 'update']);
+                Route::resource('car', \App\Http\Controllers\Transaction\TransactionInvoiceCarController::class)->only(['index', 'show', 'update']);
+
             });
         });
 
@@ -73,6 +75,8 @@ Route::middleware(['auth'])->group(function (){
             Route::group(['prefix' => 'invoice', 'as' => 'invoice.'], function (){
                 Route::resource('farmer', \App\Http\Controllers\Prints\PrintInvoiceFarmerController::class)->only(['show']);
                 Route::resource('driver', \App\Http\Controllers\Prints\PrintInvoiceDriverController::class)->only(['show']);
+                Route::resource('car', \App\Http\Controllers\Prints\PrintInvoiceCarController::class)->only(['show']);
+
             });
             Route::group(['prefix' => 'report', 'as' => 'report.'], function (){
 

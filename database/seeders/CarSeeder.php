@@ -18,6 +18,10 @@ class CarSeeder extends Seeder
     {
         Car::factory()->times(10)->create([
             'user_id'   => User::query()->first()->id
-        ]);
+        ])->each(function ($car){
+            $car->price()->create([
+                'value' => 100
+            ]);
+        });
     }
 }

@@ -17,10 +17,14 @@ class SupervisorSeeder extends Seeder
      */
     public function run()
     {
-        Supervisor::factory()->times(10)->create([
-            'user_id'   => User::query()->first()->id
+        Supervisor::query()->create([
+            'user_id'   => User::query()->first()->id,
+            'name'      => 'Nama Mandor',
+            'phone'     => '08123456789',
         ])->each(function ($supervisor){
-            $supervisor->loan()->create();
-        });;
+            $supervisor->price()->create([
+                'value' => 5600000
+            ]);
+        });
     }
 }

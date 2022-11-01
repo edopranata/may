@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Report;
 
 use App\Http\Controllers\Controller;
+use App\Models\Car;
 use App\Models\Driver;
 use App\Models\Farmer;
 use App\Models\Invoice;
@@ -19,15 +20,24 @@ class ReportInvoiceController extends Controller
         switch ($model){
             case "Farmer":
                 return [
+                    'name'          => 'farmer',
                     'title'         => 'Invoice Petani',
                     'badge'         => 'badge-primary',
                     'url_print'     => route('print.invoice.farmer.show', $id)
                 ];
             case "Driver":
                 return [
+                    'name'          => 'driver',
                     'title'         => 'Gaji Supir',
                     'badge'         => 'badge-success',
                     'url_print'     => route('print.invoice.driver.show', $id)
+                ];
+            case "Car":
+                return [
+                    'name'          => 'car',
+                    'title'         => 'Amprah Mobil',
+                    'badge'         => 'badge-secondary',
+                    'url_print'     => route('print.invoice.car.show', $id)
                 ];
             default:
                 return $model;
@@ -44,7 +54,7 @@ class ReportInvoiceController extends Controller
                     $builder->where('invoice_number', 'like', '%' . $invoice . '%');
                 })
                 ->with(['modelable'])->whereHasMorph(
-                    'modelable', [Farmer::class, Driver::class], function (Builder $builder) use ($request){
+                    'modelable', [Farmer::class, Car::class, Driver::class], function (Builder $builder) use ($request){
                     $builder->filter($request->search);
                 })
                 ->paginate()

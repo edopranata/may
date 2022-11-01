@@ -18,11 +18,11 @@ class ConfigurationSeeder extends Seeder
         $configs = [
             0 => [
                 'name'      => 'driver',
-                'value'     => 100
+                'value'     => 80
             ],
             1 => [
                 'name'      => 'loader',
-                'value'     => 80
+                'value'     => 45
             ],
             2 => [
                 'name'      => 'car',

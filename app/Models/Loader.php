@@ -22,12 +22,4 @@ class Loader extends Model
         return $this->morphOne(Loan::class, 'modelable');
     }
 
-    public function toSearchableArray()
-    {
-        return [
-            'name'  => $this->name,
-            'phone'   => $this->phone,
-            'address'       => $this->address,
-        ];
-    }
 }
