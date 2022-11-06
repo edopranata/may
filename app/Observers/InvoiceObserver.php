@@ -24,7 +24,9 @@ class InvoiceObserver
             'day'   => $invoice->invoice_date->format('d'),
             'month' => $invoice->invoice_date->format('m'),
             'year'  => $invoice->invoice_date->format('Y'),
-        ], []);
+        ], [
+            'date'  => $invoice->invoice_date
+        ]);
 
         $type = collect(explode('\\', $invoice->modelable_type));
 

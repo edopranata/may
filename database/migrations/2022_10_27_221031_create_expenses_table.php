@@ -18,6 +18,7 @@ return new class extends Migration
             $table->integer('day');
             $table->integer('month');
             $table->integer('year');
+            $table->date('date');
             $table->double('balance')->default(0);
             $table->timestamps();
         });

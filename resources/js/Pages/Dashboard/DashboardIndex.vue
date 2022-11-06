@@ -3,8 +3,28 @@
 
     <Breadcrumb :links="breadcrumbs"/>
 
-    <section class="px-4 flex flex-wrap gap-4">
+    <section class="px-4 grid lg:grid-cols-2 xl:grid-cols-3 gap-4">
+        <div class="stats shadow w-full border border-info">
+            <div class="stat">
+                <div class="stat-title">Pendapatan</div>
+                <div class="stat-value text-info tracking-wider">{{ Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR', minimumFractionDigits: 0  }).format(props.income) }}</div>
+                <div class="stat-desc mt-1">Total pemasukan bulan ini</div>
+                <div class="stat-actions flex justify-end">
+                    <button class="btn btn-sm btn-info">Detail</button>
+                </div>
+            </div>
+        </div>
+        <div class="stats shadow w-full border border-error">
+            <div class="stat">
+                <div class="stat-title">Pengeluaran</div>
+                <div class="stat-value text-error tracking-wider">{{ Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR', minimumFractionDigits: 0  }).format(props.expense) }}</div>
+                <div class="stat-desc mt-1">Total pengeluaran bulan ini</div>
+                <div class="stat-actions flex justify-end">
+                    <button class="btn btn-sm btn-error flex justify-end">Detail</button>
+                </div>
+            </div>
 
+        </div>
     </section>
 
 </template>
@@ -19,4 +39,9 @@ const breadcrumbs = [
         "label": "Dashboard"
     }
 ]
+
+const props = defineProps({
+    income: Object,
+    expense: Object,
+})
 </script>

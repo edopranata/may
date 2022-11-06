@@ -23,7 +23,9 @@ class TradeObserver
                 'day'   => $trade->trade_status->format('d'),
                 'month' => $trade->trade_status->format('m'),
                 'year'  => $trade->trade_status->format('Y'),
-            ], []);
+            ], [
+                'date'  => $trade->trade_status
+            ]);
 
             $income->details()->create([
                 'trade_id'      => $trade->id,
