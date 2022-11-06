@@ -1,8 +1,8 @@
 <template>
-    <Head title="Invoice Supir" />
+    <Head title="Amprah Mobil" />
 
     <Breadcrumb :links="breadcrumbs"/>
-    <PageTitle :classes="'bg-base-content'" class="">Invoice Supir </PageTitle>
+    <PageTitle :classes="'bg-base-content'" class="">Amprah Mobil </PageTitle>
 
     <input type="checkbox" id="modal-option" v-model="modal_save" class="modal-toggle" />
     <label for="modal-option" class="modal cursor-pointer modal-lg">
@@ -39,24 +39,9 @@
                         </div>
                         <div class="form-control w-full">
                             <label class="label">Upah Supir (Rp  / Kg)</label>
-                            <VueNumberFormat :options="{ precision: 0, prefix: 'Rp ', isInteger: true }" :readonly="form.processing" v-model:value="form.driver_fee" class="input input-bordered w-full" />
-                            <label class="label" v-if="form.errors.driver_fee">
-                                <span class="label-text-alt text-error">{{ form.errors.driver_fee }}</span>
-                            </label>
-                        </div>
-
-                        <div class="form-control w-full">
-                            <label class="label">Pinjaman</label>
-                            <VueNumberFormat :options="{ precision: 0, prefix: 'Rp ', isInteger: true }" :readonly="form.processing" v-model:value="form.loan" class="input input-bordered w-full" />
-                            <label class="label" v-if="form.errors.loan">
-                                <span class="label-text-alt text-error">{{ form.errors.loan }}</span>
-                            </label>
-                        </div>
-                        <div class="form-control w-full">
-                            <label class="label">Angsuran Pinjaman</label>
-                            <VueNumberFormat :options="{ precision: 0, prefix: 'Rp ', isInteger: true }" :readonly="form.processing" v-model:value="form.installment" class="input input-bordered w-full" />
-                            <label class="label" v-if="form.errors.installment">
-                                <span class="label-text-alt text-error">{{ form.errors.installment }}</span>
+                            <VueNumberFormat :options="{ precision: 0, prefix: 'Rp ', isInteger: true }" :readonly="form.processing" v-model:value="form.car_fee" class="input input-bordered w-full" />
+                            <label class="label" v-if="form.errors.car_fee">
+                                <span class="label-text-alt text-error">{{ form.errors.car_fee }}</span>
                             </label>
                         </div>
                         <div class="flex justify-between col-span-2">
@@ -81,44 +66,13 @@
                     <div class="grid grid-cols-5" v-for="(item, index) in form.trades" :key="item.id">
                         <span class="px-4 border-l col-span-2">{{ item.trade_date }}</span>
                         <span class="px-4 border-l text-right">{{ Intl.NumberFormat('id-ID', { style: 'unit', unit: 'kilogram'}).format(item.net_weight) }}</span>
-                        <span class="px-4 border-l text-right">{{ Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR', minimumFractionDigits: 0 }).format(form.driver_fee) }}</span>
-                        <span class="px-4 border-x text-right">{{ Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR', minimumFractionDigits: 0 }).format(item.net_weight * form.driver_fee) }}</span>
+                        <span class="px-4 border-l text-right">{{ Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR', minimumFractionDigits: 0 }).format(form.car_fee) }}</span>
+                        <span class="px-4 border-x text-right">{{ Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR', minimumFractionDigits: 0 }).format(item.net_weight * form.car_fee) }}</span>
                     </div>
 
-                    <div class="grid grid-cols-5" :class="!form.loan ? 'border-b' : ''">
-                        <span class="px-4 pb-4 border-l col-span-2"></span>
-                        <span class="px-4 pb-4 border-l"></span>
-                        <span class="px-4 pb-4 border-l"></span>
-                        <span class="px-4 pb-4 border-x text-right font-bold">{{ Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR', minimumFractionDigits: 0 }).format(form.total) }}</span>
-                    </div>
-
-                    <div class="grid grid-cols-5" v-if="form.loan">
-                        <span class="px-4 border-l font-bold col-span-2">Potongan</span>
-                        <span class="px-4 border-l"></span>
-                        <span class="px-4 border-l"></span>
-                        <span class="px-4 border-x text-right font-bold"></span>
-                    </div>
-                    <div class="grid grid-cols-5" v-if="form.loan">
-                        <span class="px-4 border-l col-span-2">Pinjaman Terakhir</span>
-                        <span class="px-4 border-l"></span>
-                        <span class="px-4 border-l"></span>
-                        <span class="px-4 border-x text-right font-bold">{{ Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR', minimumFractionDigits: 0 }).format(form.loan) }}</span>
-                    </div>
-                    <div class="grid grid-cols-5" v-if="form.loan">
-                        <span class="px-4 border-l col-span-2">Bayar Pinjaman</span>
-                        <span class="px-4 border-l"></span>
-                        <span class="px-4 border-l"></span>
-                        <span class="px-4 border-x text-right">{{ Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR', minimumFractionDigits: 0 }).format(form.installment ? form.installment * -1 : 0) }}</span>
-                    </div>
-                    <div class="grid grid-cols-5" v-if="form.loan" :class="form.loan > 1 ? 'border-b' : ''">
-                        <span class="px-4 border-l font-bold col-span-2">Sisa Pinjaman</span>
-                        <span class="px-4 border-l"></span>
-                        <span class="px-4 border-l"></span>
-                        <span class="px-4 border-x text-right font-bold">{{ Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR', minimumFractionDigits: 0 }).format(form.loan - form.installment) }}</span>
-                    </div>
-                    <div class="grid grid-cols-5 border-b font-bold">
+                    <div class="grid grid-cols-5 border-y font-bold">
                         <span class="px-4 py-2 border-l text-right col-span-4">Total Diterima</span>
-                        <span class="px-4 py-2 border-x text-right" >{{ Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR', minimumFractionDigits: 0 }).format(form.total - form.installment) }}</span>
+                        <span class="px-4 py-2 border-x text-right" >{{ Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR', minimumFractionDigits: 0 }).format(form.total) }}</span>
                     </div>
                 </div>
 
@@ -149,12 +103,12 @@ const breadcrumbs = [
         "label": "Invoice"
     },
     {
-        "url": route('transaction.invoice.driver.index'),
-        "label": "Invoice Supir"
+        "url": route('transaction.invoice.car.index'),
+        "label": "Amprah Mobil"
     },
     {
         "url": null,
-        "label": props.driver.name.toUpperCase()
+        "label": props.car.name.toUpperCase()
     }
 ]
 
@@ -164,20 +118,18 @@ const form = useForm({
     print: false,
     invoice_date: '',
     invoice_number: 'OTOMATIS',
-    driver_id: props.driver.id,
-    trades: props.driver.trades,
-    loan: props.driver.loan ? props.driver.loan.balance : 0,
-    driver_fee: props.driver.price ? props.driver.price.value : 0,
+    car_id: props.car.id,
+    trades: props.car.trades,
+    car_fee: props.car.price ? props.car.price.value : 0,
     total: 0,
-    installment: 0,
 })
 
 const props = defineProps({
-    driver: Object
+    car: Object
 })
 
 const submit = () => {
-    form.patch(route('transaction.invoice.driver.update', props.driver.id), {
+    form.patch(route('transaction.invoice.car.update', props.car.id), {
         onFinish: () => {
             modal_save.value = false
         }
@@ -197,22 +149,22 @@ onMounted( () => {
 })
 
 watch(() => _.cloneDeep(form), (current, old) => {
-    if(current.driver_fee){
+    if(current.car_fee){
         getTotal()
     }
 })
 
 const getTotal = () => {
-    let total = form.trades.reduce((arr, trade) => {
-        arr.push(trade.net_weight * form.driver_fee)
+    let totals = form.trades.reduce((arr, trade) => {
+        arr.push(trade.net_weight * form.car_fee)
         return (arr)
     }, []);
 
-    total = total.reduce((arr, n) => {
+    totals = totals.reduce((arr, n) => {
         return arr += n
     }, 0)
 
-    form.total = total
+    form.total = totals
 }
 
 </script>
