@@ -15,6 +15,12 @@ return new class extends Migration
     {
         Schema::create('income_details', function (Blueprint $table) {
             $table->id();
+            $table->foreignIdFor(\App\Models\Income::class)->nullable()->constrained()->cascadeOnUpdate()->nullOnDelete();
+            $table->foreignIdFor(\App\Models\Trade::class)->nullable()->constrained()->cascadeOnUpdate()->nullOnDelete();
+
+            $table->string('type');
+            $table->date('date');
+            $table->double('amount')->default(0);
             $table->timestamps();
         });
     }

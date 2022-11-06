@@ -8,4 +8,16 @@ use Illuminate\Database\Eloquent\Model;
 class Expense extends Model
 {
     use HasFactory;
+
+    protected $guarded = ['id'];
+
+    protected $casts = [
+        'created_at' => 'datetime:Y-md',
+        'updated_at' => 'datetime:Y-m-d',
+    ];
+
+    public function details()
+    {
+        return $this->hasMany(ExpenseDetail::class);
+    }
 }

@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Observers\InvoiceObserver;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
@@ -15,6 +16,11 @@ class Invoice extends Model
         'created_at' => 'datetime:Y-md',
         'updated_at' => 'datetime:Y-m-d',
     ];
+
+    public static function booted() {
+        parent::boot();
+        parent::observe(new InvoiceObserver);
+    }
 
     public function modelable()
     {

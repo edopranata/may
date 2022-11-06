@@ -12,9 +12,7 @@
                 <button type="button" @click="save" class="btn btn-primary"><BaseIcon :path="mdiContentSave"/> Simpan</button>
                 <button type="button" @click="print" class="btn btn-success"><BaseIcon :path="mdiPrinter"/> Simpan dan Print Invoice</button>
                 <button type="button" @click="modal_save=false" class="btn btn-warning"><BaseIcon :path="mdiCancel"/> Batal</button>
-
             </div>
-
         </label>
     </label>
     <section class="px-6 w-full">

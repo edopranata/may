@@ -55,6 +55,9 @@
             <form @submit.prevent="modal_save=true" class="card-body">
                 <div class="grid md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-4">
                     <div class="form-control w-full md:col-span-2 lg:col-span-3 xl:col-span-2">
+                        <label class="label">
+                            <span class="label-text">Nama Petani</span>
+                        </label>
                         <Multiselect class="select  select-bordered rounded"
                                      :searchable="true"
                                      v-model="form.farmer_id"
@@ -65,25 +68,37 @@
                         </label>
                     </div>
                     <div class="form-control w-full">
+                        <label class="label">
+                            <span class="label-text">Berat</span>
+                        </label>
                         <VueNumberFormat @focus="form.clearErrors('weight')" :options="{ precision: 0, prefix: '', suffix: ' Kg', isInteger: true }" :readonly="form.processing" v-model:value="form.weight" class="input  input-bordered" />
                         <label class="label h-8">
                             <span v-if="form.errors.weight" class="label-text-alt text-error">{{ form.errors.weight }}</span>
                         </label>
                     </div>
                     <div class="form-control w-full">
+                        <label class="label">
+                            <span class="label-text">Harga Beli</span>
+                        </label>
                         <VueNumberFormat @focus="form.clearErrors('price')" :options="{ precision: 0, prefix: 'Rp. ', suffix: '', isInteger: true }" :readonly="form.processing" v-model:value="form.price" class="input  input-bordered" />
                         <label class="label h-8">
                             <span v-if="form.errors.price" class="label-text-alt text-error">{{ form.errors.price }}</span>
                         </label>
                     </div>
-                    <div class="flex justify-between space-x-4 md:col-span-4 lg:col-span-5 xl:col-span-2">
-                        <div class="form-control w-full min-w-xs">
+                    <div class="form-control w-full">
+                        <label class="label">
+                            <span class="label-text">Total</span>
+                        </label>
+                        <div class="form-control w-full">
                             <VueNumberFormat :options="{ precision: 0, prefix: 'Rp. ', suffix: '', isInteger: true }" readonly v-model:value="form.total" class="input  input-bordered" />
                         </div>
+                    </div>
+                    <div class="form-control w-full pt-9">
+<!--                    <div class="flex justify-between space-x-4 md:col-span-4 lg:col-span-5 xl:col-span-2">-->
                         <button :disabled="form.processing" type="submit" class="btn">Tambahkan</button>
                     </div>
                 </div>
-                <div class="w-full overflow-y-auto">
+                <div class="w-full overflow-y-auto mt-10 md:mt-0">
                     <table class="w-full text-left text-base min-w-4xl">
                         <thead class="text-sm uppercase bg-primary/20">
                         <tr>

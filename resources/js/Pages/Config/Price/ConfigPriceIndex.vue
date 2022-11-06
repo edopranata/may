@@ -75,7 +75,7 @@
 
     <section class="px-4 grid xl:grid-cols-4 md:grid-cols-3 gap-4">
 
-        <div class="stats shadow hidden">
+        <div class="stats shadow">
             <div class="stat flex justify-between">
                 <div>
                     <div class="stat-title">Biaya Mobil</div>

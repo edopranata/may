@@ -46,17 +46,15 @@ class TransactionInvoiceCarController extends Controller
 
     public function update(Car $car, Request $request)
     {
-        $car->load(['loan', 'price']);
+        $car->load(['price']);
 
         $trades         = collect($request->trades)->pluck('id');
         $total          = $request->total;
-        $loan           = $car->loan ? $car->loan->balance : 0;
-        $max            = ($total > $loan) ? $loan : $total;
+        $max            = $total;
 
         $request->validate([
             'invoice_date'  => ['required', 'date', 'before:tomorrow'],
-            'installment'   => ['integer', 'min:0', 'max:' . $max ],
-            'car_fee'    => ['required', 'integer', 'min:1']
+            'car_fee'       => ['required', 'integer', 'min:1']
         ]);
 
         DB::beginTransaction();
@@ -71,8 +69,6 @@ class TransactionInvoiceCarController extends Controller
                 'invoice_number' => $invoice_number,
                 'invoice_date' => $request->invoice_date,
                 'total_buy' => $total,
-                'loan' => $loan,
-                'loan_installment' => $request->installment,
                 'total' => $total - $request->installment,
             ]);
 
@@ -81,39 +77,23 @@ class TransactionInvoiceCarController extends Controller
             $invoice->trades()->attach($trades);
 
             $invoice->trades()->update([
-                'car_status' => now()->toDateTimeString(),
-                'car_fee' => $request->car_fee ?? $car->price->value
+                'car_status' => $request->invoice_date,
+                'car_fee'    => $request->car_fee ?? $car->price->value
             ]);
 
-            // Jika pernah ada pinjaman
-            if($car->loan){
-
-                // Jika masih ada kewajiban angsuran
-                if($car->loan->balance > 0){
-                    // Kurangin sisa pinjaman
-                    $car->loan()->decrement('balance', $request->installment);
-
-                    // Insert into loan_details atas pembayaran pinjaman
-                    $car->loan->details()->create([
-                        'description' => 'Pot Pinjaman Inv #' . $invoice_number,
-                        'amount' => $request->installment * -1,
-                        'status' => 'POTONG'
-                    ]);
-                }
-            }
             DB::commit();
 
             if($request->print){
                 return to_route('print.invoice.car.show', $invoice->id)->with('alert', [
                     'type'    => 'success',
                     'title'   => 'Success',
-                    'message' => "Invoice supir berhasil disimpan"
+                    'message' => "Amprah mobil berhasil disimpan"
                 ]);
             }else{
                 return redirect()->route('transaction.invoice.car.index')->with('alert', [
                     'type'    => 'success',
                     'title'   => 'Success',
-                    'message' => "Invoice supir berhasil disimpan"
+                    'message' => "Amprah mobil berhasil disimpan"
                 ]);
             }
 
@@ -122,7 +102,7 @@ class TransactionInvoiceCarController extends Controller
             return redirect()->back()->with('alert', [
                 'type'    => 'error',
                 'title'   => 'Failed',
-                'message' => "Invoice supir gagal disimpan: " . $exception->getMessage()
+                'message' => "Amprah mobil gagal disimpan: " . $exception->getMessage()
             ]);
         }
     }

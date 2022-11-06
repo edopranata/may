@@ -15,6 +15,10 @@ return new class extends Migration
     {
         Schema::create('incomes', function (Blueprint $table) {
             $table->id();
+            $table->integer('day');
+            $table->integer('month');
+            $table->integer('year');
+            $table->double('balance')->default(0);
             $table->timestamps();
         });
     }

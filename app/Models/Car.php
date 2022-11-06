@@ -16,11 +16,6 @@ class Car extends Model
         return $this->morphOne(Price::class, 'modelable');
     }
 
-    public function loan()
-    {
-        return $this->morphOne(Loan::class, 'modelable');
-    }
-
     public function trades()
     {
         return $this->hasMany(Trade::class);

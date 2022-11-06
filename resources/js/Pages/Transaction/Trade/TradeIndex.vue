@@ -140,6 +140,10 @@ const form = useForm({
 })
 
 const save = () => {
-    form.post(route('transaction.trade.store'));
+    form.post(route('transaction.trade.store'), {
+        onFinish: () => {
+            modal_save.value = false;
+        }
+    });
 }
 </script>

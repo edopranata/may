@@ -104,10 +104,14 @@ class TransactionTradeController extends Controller
                     'price'         => $request->price,
                     'total'         => $request->total,
                 ]);
-            $trade->increment('gross_weight', $request->weight);
-            $trade->increment('gross_total', $request->total);
 
-            $trade->update(['gross_price' => $trade->details()->avg('price')]);
+            $trade->withoutEvents(function () use ($trade, $request) {
+                $trade->increment('gross_weight', $request->weight);
+                $trade->increment('gross_total', $request->total);
+
+                $trade->update(['gross_price' => $trade->details()->avg('price')]);
+            });
+
 
 
             DB::commit();
