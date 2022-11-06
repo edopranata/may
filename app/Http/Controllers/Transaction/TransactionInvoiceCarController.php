@@ -28,7 +28,7 @@ class TransactionInvoiceCarController extends Controller
                 ->when($request->car_id, function (Builder $builder, $value){
                     $builder->where('car_id', $value);
                 })
-                ->with(['car.price', 'car', 'details'])
+                ->with(['car.price', 'driver', 'details'])
                 ->orderByDesc('created_at')->paginate(),
 
         ]);
@@ -46,20 +46,22 @@ class TransactionInvoiceCarController extends Controller
 
     public function update(Car $car, Request $request)
     {
-        $car->load(['price']);
+        $car->load(['loan', 'price']);
 
         $trades         = collect($request->trades)->pluck('id');
         $total          = $request->total;
-        $max            = $total;
+        $loan           = $car->loan ? $car->loan->balance : 0;
+        $max            = ($total > $loan) ? $loan : $total;
 
         $request->validate([
             'invoice_date'  => ['required', 'date', 'before:tomorrow'],
             'installment'   => ['integer', 'min:0', 'max:' . $max ],
-            'car_fee'       => ['required', 'integer', 'min:1']
+            'car_fee'    => ['required', 'integer', 'min:1']
         ]);
 
         DB::beginTransaction();
         try {
+
             $sequence       = $this->getLastSequence();
             $invoice_number = 'MM' . now()->format('Y') . sprintf('%08d', $sequence);
 
@@ -69,8 +71,8 @@ class TransactionInvoiceCarController extends Controller
                 'invoice_number' => $invoice_number,
                 'invoice_date' => $request->invoice_date,
                 'total_buy' => $total,
-                'loan' => 0,
-                'loan_installment' => 0,
+                'loan' => $loan,
+                'loan_installment' => $request->installment,
                 'total' => $total - $request->installment,
             ]);
 
@@ -83,6 +85,22 @@ class TransactionInvoiceCarController extends Controller
                 'car_fee' => $request->car_fee ?? $car->price->value
             ]);
 
+            // Jika pernah ada pinjaman
+            if($car->loan){
+
+                // Jika masih ada kewajiban angsuran
+                if($car->loan->balance > 0){
+                    // Kurangin sisa pinjaman
+                    $car->loan()->decrement('balance', $request->installment);
+
+                    // Insert into loan_details atas pembayaran pinjaman
+                    $car->loan->details()->create([
+                        'description' => 'Pot Pinjaman Inv #' . $invoice_number,
+                        'amount' => $request->installment * -1,
+                        'status' => 'POTONG'
+                    ]);
+                }
+            }
             DB::commit();
 
             if($request->print){

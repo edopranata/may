@@ -7,10 +7,10 @@
     <input type="checkbox" id="modal-option" v-model="modal" class="modal-toggle" />
     <div class="modal modal-bottom sm:modal-middle">
         <div class="modal-box">
-            <h3 class="font-bold text-lg">Lanjutkan proses perhitungan amprah mobil</h3>
-            <p class="py-4">Klik Lihat Perhitungan amprah mobil, untuk mengetahui rincian dan total amprah mobil yang akan diterima</p>
+            <h3 class="font-bold text-lg">Lanjutkan proses perhitungan amprah</h3>
+            <p class="py-4">Klik Lihat Perhitungan amprah, untuk mengetahui rincian dan total amprah yang akan diterima</p>
             <div class="modal-action flex justify-between">
-                <Link as="button" :disabled="props.trades.total < 1" :href="props.car_id ? route('transaction.invoice.car.show', props.car_id) : route('transaction.invoice.car.index')" class="btn btn-primary"><BaseIcon :path="mdiContentSave"/> Lihat Perhitungan Amprah Mobil</Link>
+                <Link as="button" :disabled="props.trades.total < 1" :href="props.car_id ? route('transaction.invoice.car.show', props.car_id) : route('transaction.invoice.car.index')" class="btn btn-primary"><BaseIcon :path="mdiContentSave"/> Lihat Perhitungan Gaji</Link>
                 <button type="button" @click="modal=false" class="btn btn-warning"><BaseIcon :path="mdiCancel"/> Batal</button>
             </div>
         </div>
@@ -19,19 +19,19 @@
 
     <section class="px-4 grid gap-4">
         <div class="card w-full rounded-none border-2 border-info shadow-xl">
-            <div class="card-body grid md:grid-cols-2 gap-4">
+            <div class="card-body grid md:grid-cols-4 gap-4">
                 <div class="form-control w-full">
                     <label class="label">
                         <span class="label-text">Mobil</span>
                     </label>
-                    <div class="space-x-4">
-                        <select :disabled="form.processing" v-model="form.car_id" class="select select-info select-bordered">
-                            <option value="0">Pilih Mobil</option>
-                            <option v-for="(item, index) in props.cars" :value="item.id" :key="item.id">{{ item.text.toUpperCase() }}</option>
-                        </select>
-                        <button :disabled="form.processing" @click="setFilter" class="btn">Filter</button>
-                        <button :disabled="(props.car_id<1 || props.trades.total < 1)" @click="modal=true" class="btn btn-primary">Hitung Amprah Mobil</button>
-                    </div>
+                    <select :disabled="form.processing" v-model="form.car_id" class="select select-info select-bordered">
+                        <option value="0">Pilih Mobil</option>
+                        <option v-for="(item, index) in props.cars" :value="item.id" :key="item.id">{{ item.text.toUpperCase() }}</option>
+                    </select>
+                </div>
+                <div class="grid grid-cols-2 gap-4 py-1">
+                    <button :disabled="form.processing" @click="setFilter" class="btn mt-8">Filter</button>
+                    <button :disabled="(props.car_id<1 || props.trades.total < 1)" @click="modal=true" class="btn btn-primary mt-8">Hitung Gaji</button>
                 </div>
             </div>
         </div>
@@ -56,8 +56,8 @@
                         <td class="group-hover:bg-base-300 py-4 px-6">{{ item.trade_date }}</td>
                         <td class="group-hover:bg-base-300 py-4 px-6">
                             <div>
-                                <div class="font-bold">{{ item.car.no_pol }}</div>
-                                <div class="text-sm opacity-50">{{ item.car.name }}</div>
+                                <div class="font-bold">{{ item.car.no_pol }} - {{ item.car.name }}</div>
+                                <div class="text-sm opacity-50">{{ item.driver.name }}</div>
                             </div>
                         </td>
                         <td class="group-hover:bg-base-300 py-4 px-6 text-center">{{ item.details.length }} Petani</td>
