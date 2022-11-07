@@ -44,6 +44,9 @@ class InvoiceObserver
             case "loader":
                 $expense_type = "UPAH MUAT";
                 break;
+            case "supervisor":
+                $expense_type = "UPAH MANDOR";
+                break;
             default:
                 $expense_type = "LAIN LAIN";
         }

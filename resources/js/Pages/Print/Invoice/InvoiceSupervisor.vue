@@ -80,7 +80,7 @@
                 </div>
                 <div class="grid grid-cols-5 border-gray-800 border-y-2 font-bold">
                     <span class="px-4 py-1 border-gray-800 border-l text-right col-span-4">Total Diterima</span>
-                    <span class="px-4 py-1 border-gray-800 border-x text-right" >{{ Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR', minimumFractionDigits: 0 }).format(invoice.total) }}</span>
+                    <span class="px-4 py-1 border-gray-800 border-x text-right" >{{ Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR', minimumFractionDigits: 0 }).format(invoice.total - invoice.loan_installment) }}</span>
                 </div>
 
                 <div class="grid grid-cols-6 mt-8 gap-y-12">
