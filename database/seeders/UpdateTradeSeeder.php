@@ -22,7 +22,7 @@ class UpdateTradeSeeder extends Seeder
 
         foreach ($trades as $trade) {
             $weight = $trade->gross_weight - rand(123,512);
-            $price = $trade->_gross_price + 350;
+            $price = round($trade->gross_price, 0) + 350;
             $trade->update([
                 'net_weight'    => $weight,
                 'net_price'     => $price,

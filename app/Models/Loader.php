@@ -17,9 +17,14 @@ class Loader extends Model
         return $this->morphOne(Price::class, 'modelable');
     }
 
-    public function loan()
+    public function trades()
     {
-        return $this->morphOne(Loan::class, 'modelable');
+        return $this->hasMany(Trade::class);
+    }
+
+    public function invoices()
+    {
+        return $this->morphMany(Invoice::class, 'modelable');
     }
 
 }

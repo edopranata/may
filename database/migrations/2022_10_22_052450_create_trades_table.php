@@ -30,9 +30,11 @@ return new class extends Migration
             $table->double('net_total')->default(0);        // total harga jual pabrik x timbangan pabrik
             $table->double('driver_fee')->default(0);       // Upah supir
             $table->double('car_fee')->default(0);          // Uang mobil (upah sewa mobil)
-            $table->dateTime('driver_status')->nullable();        // status dan tanggal pembayaran ke driver
-            $table->dateTime('car_status')->nullable();           // status dan tanggal pembayaran uang mobil
-            $table->dateTime('trade_status')->nullable();         // status dan tanggal di bayar oleh pabrik
+            $table->double('loader_fee')->default(0);       // upah muat (upah muat sawit)
+            $table->dateTime('driver_status')->nullable();       // status dan tanggal pembayaran ke driver
+            $table->dateTime('car_status')->nullable();          // status dan tanggal pembayaran uang mobil
+            $table->dateTime('loader_status')->nullable();       // status dan tanggal pembayaran upah muat
+            $table->dateTime('trade_status')->nullable();        // status dan tanggal di bayar oleh pabrik
 
             $table->timestamps();
         });

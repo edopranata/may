@@ -12,9 +12,9 @@ class Invoice extends Model
     protected $guarded = ['id'];
 
     protected $casts = [
-        'invoice_date' => 'datetime:d F Y',
-        'created_at' => 'datetime:Y-md',
-        'updated_at' => 'datetime:Y-m-d',
+        'invoice_date'  => 'datetime:d F Y',
+        'created_at'    => 'datetime:Y-md',
+        'updated_at'    => 'datetime:Y-m-d',
     ];
 
     public static function booted() {

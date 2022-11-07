@@ -55,6 +55,7 @@ Route::middleware(['auth'])->group(function (){
                 Route::resource('farmer', \App\Http\Controllers\Transaction\TransactionInvoiceFarmerController::class)->only(['index','store', 'show', 'edit', 'update']);
                 Route::resource('driver', \App\Http\Controllers\Transaction\TransactionInvoiceDriverController::class)->only(['index', 'show', 'update']);
                 Route::resource('car', \App\Http\Controllers\Transaction\TransactionInvoiceCarController::class)->only(['index', 'show', 'update']);
+                Route::resource('loader', \App\Http\Controllers\Transaction\TransactionInvoiceLoaderController::class)->only(['index', 'show', 'update']);
 
             });
         });
