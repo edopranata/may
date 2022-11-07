@@ -16,6 +16,7 @@ class TransactionInvoiceLoaderController extends Controller
     public function index(Request $request)
     {
         return inertia('Transaction/Invoice/Loader/InvoiceLoaderIndex', [
+            'loader_id' => Loader::query()->first()->id,
             'price'     => Configuration::query()->where('name', 'loader')->first()->value,
             'dates'     => [
                 'start' => $request->start_date,
@@ -36,13 +37,25 @@ class TransactionInvoiceLoaderController extends Controller
         ]);
     }
 
-    public function show(Loader $loader)
+    public function show(Loader $loader, Request $request)
     {
+
         return inertia('Transaction/Invoice/Loader/InvoiceLoaderView', [
-            'loader'    =>  $loader->load(['price','trades' => function(Builder $builder){
-                $builder->whereNotNull('trade_status')
-                    ->whereNull('loader_status');
-            }])
+            'dates'     => [
+                'start' => $request->start,
+                'end'   => $request->end,
+            ],
+            'loader'    =>  $loader->load(['price']),
+            'trades'    => Trade::query()
+                ->whereNotNull('trade_status')
+                ->whereNull('loader_status')
+                ->when($request->start, function (Builder $builder, $value){
+                    $builder->whereDate('trade_date', '>=', $value);
+                })
+                ->when($request->end, function (Builder $builder, $value){
+                    $builder->whereDate('trade_date', '<=', $value);
+                })
+                ->with(['driver', 'car', 'details'])->get()
         ]);
     }
 
@@ -52,10 +65,10 @@ class TransactionInvoiceLoaderController extends Controller
 
         $trades         = collect($request->trades)->pluck('id');
         $total          = $request->total;
-        $max            = $total;
+
 
         $request->validate([
-            'invoice_date'  => ['required', 'date', 'before:tomorrow'],
+            'invoice_date'      => ['required', 'date', 'before:tomorrow'],
             'loader_fee'       => ['required', 'integer', 'min:1']
         ]);
 
@@ -71,7 +84,7 @@ class TransactionInvoiceLoaderController extends Controller
                 'invoice_number' => $invoice_number,
                 'invoice_date' => $request->invoice_date,
                 'total_buy' => $total,
-                'total' => $total - $request->installment,
+                'total' => $total,
             ]);
 
             // Insert into invoice_trade select from trade table

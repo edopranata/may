@@ -1,8 +1,8 @@
 <template>
-    <Head title="Amprah Mobil" />
+    <Head title="Upah Muat" />
 
     <Breadcrumb :links="breadcrumbs"/>
-    <PageTitle :classes="'bg-base-content'" class="">Amprah Mobil </PageTitle>
+    <PageTitle :classes="'bg-base-content'" class="">Upah Muat </PageTitle>
 
     <input type="checkbox" id="modal-option" v-model="modal_save" class="modal-toggle" />
     <label for="modal-option" class="modal cursor-pointer modal-lg">
@@ -36,10 +36,10 @@
                             </label>
                         </div>
                         <div class="form-control w-full">
-                            <label class="label">Upah Supir (Rp  / Kg)</label>
-                            <VueNumberFormat :options="{ precision: 0, prefix: 'Rp ', isInteger: true }" :readonly="form.processing" v-model:value="form.car_fee" class="input input-bordered w-full" />
-                            <label class="label" v-if="form.errors.car_fee">
-                                <span class="label-text-alt text-error">{{ form.errors.car_fee }}</span>
+                            <label class="label">Upah Muat</label>
+                            <VueNumberFormat :options="{ precision: 0, prefix: 'Rp ', isInteger: true }" :readonly="form.processing" v-model:value="form.loader_fee" class="input input-bordered w-full" />
+                            <label class="label" v-if="form.errors.loader_fee">
+                                <span class="label-text-alt text-error">{{ form.errors.loader_fee }}</span>
                             </label>
                         </div>
                         <div class="flex justify-between col-span-2">
@@ -64,8 +64,8 @@
                     <div class="grid grid-cols-5" v-for="(item, index) in form.trades" :key="item.id">
                         <span class="px-4 border-l col-span-2">{{ item.trade_date }}</span>
                         <span class="px-4 border-l text-right">{{ Intl.NumberFormat('id-ID', { style: 'unit', unit: 'kilogram'}).format(item.net_weight) }}</span>
-                        <span class="px-4 border-l text-right">{{ Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR', minimumFractionDigits: 0 }).format(form.car_fee) }}</span>
-                        <span class="px-4 border-x text-right">{{ Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR', minimumFractionDigits: 0 }).format(item.net_weight * form.car_fee) }}</span>
+                        <span class="px-4 border-l text-right">{{ Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR', minimumFractionDigits: 0 }).format(form.loader_fee) }}</span>
+                        <span class="px-4 border-x text-right">{{ Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR', minimumFractionDigits: 0 }).format(item.net_weight * form.loader_fee) }}</span>
                     </div>
 
                     <div class="grid grid-cols-5 border-y font-bold">
@@ -101,12 +101,12 @@ const breadcrumbs = [
         "label": "Invoice"
     },
     {
-        "url": route('transaction.invoice.car.index'),
-        "label": "Amprah Mobil"
+        "url": route('transaction.invoice.loader.index'),
+        "label": "Upah Muat"
     },
     {
         "url": null,
-        "label": props.car.name.toUpperCase()
+        "label": props.dates.start + ' - ' + props.dates.end
     }
 ]
 
@@ -116,18 +116,20 @@ const form = useForm({
     print: false,
     invoice_date: '',
     invoice_number: 'OTOMATIS',
-    car_id: props.car.id,
-    trades: props.car.trades,
-    car_fee: props.car.price ? props.car.price.value : 0,
+    loader_id: props.loader.id,
+    trades: props.trades,
+    loader_fee: props.loader.price ? props.loader.price.value : 0,
     total: 0,
 })
 
 const props = defineProps({
-    car: Object
+    dates: Object,
+    loader: Object,
+    trades: Array
 })
 
 const submit = () => {
-    form.patch(route('transaction.invoice.car.update', props.car.id), {
+    form.patch(route('transaction.invoice.loader.update', props.loader.id), {
         onFinish: () => {
             modal_save.value = false
         }
@@ -147,14 +149,14 @@ onMounted( () => {
 })
 
 watch(() => _.cloneDeep(form), (current, old) => {
-    if(current.car_fee){
+    if(current.loader_fee){
         getTotal()
     }
 })
 
 const getTotal = () => {
     let totals = form.trades.reduce((arr, trade) => {
-        arr.push(trade.net_weight * form.car_fee)
+        arr.push(trade.net_weight * form.loader_fee)
         return (arr)
     }, []);
 

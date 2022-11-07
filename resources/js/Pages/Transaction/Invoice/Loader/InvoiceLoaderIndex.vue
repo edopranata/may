@@ -7,9 +7,10 @@
     <input type="checkbox" id="modal-option" v-model="modal" class="modal-toggle" />
     <div class="modal modal-bottom sm:modal-middle">
         <div class="modal-box">
-            <h3 class="font-bold text-lg">Lanjutkan proses perhitungan amprah</h3>
-            <p class="py-4">Klik Lihat Perhitungan amprah, untuk mengetahui rincian dan total amprah yang akan diterima</p>
+            <h3 class="font-bold text-lg">Lanjutkan proses perhitungan upah muat</h3>
+            <p class="py-4">Klik Lihat Perhitungan upah muat, untuk mengetahui rincian dan total upah muat yang akan diterima</p>
             <div class="modal-action flex justify-between">
+                <Link as="button" :disabled="!props.dates.start || !props.dates.end" :href="(props.dates.start || props.dates.end) ? route('transaction.invoice.loader.show', {loader: props.loader_id, _query: { start: props.dates.start, end: props.dates.end,}}) : route('transaction.invoice.loader.index')" class="btn btn-primary"><BaseIcon :path="mdiContentSave"/> Lihat Perhitungan Gaji</Link>
                 <button type="button" @click="modal=false" class="btn btn-warning"><BaseIcon :path="mdiCancel"/> Batal</button>
             </div>
         </div>
@@ -33,6 +34,8 @@
                 </div>
                 <div class="grid grid-cols-2 gap-4 py-1">
                     <button :disabled="form.processing" @click="setFilter" class="btn mt-8">Filter</button>
+                    <button :disabled="(!props.dates.start || !props.dates.end)" @click="modal=true" class="btn btn-primary mt-8">Hitung Gaji</button>
+
                 </div>
             </div>
         </div>
@@ -105,6 +108,7 @@ const breadcrumbs = [
 ]
 
 const props = defineProps({
+    loader_id: Number,
     price: Number,
     dates: Object,
     trades: Object,

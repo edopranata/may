@@ -27,4 +27,11 @@ class Loader extends Model
         return $this->morphMany(Invoice::class, 'modelable');
     }
 
+    public function scopeFilter($query, $search)
+    {
+        $query->when($search, function ($query, $value) {
+            $query->where('name', 'like', '%'.$value.'%');
+        });
+    }
+
 }

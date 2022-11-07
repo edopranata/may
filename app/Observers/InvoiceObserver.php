@@ -42,10 +42,10 @@ class InvoiceObserver
                 $expense_type = "BAYAR PETANI";
                 break;
             case "loader":
-                $expense_type = "BAYAR TUKANG MUAT";
+                $expense_type = "UPAH MUAT";
                 break;
             default:
-                $expense_type = null;
+                $expense_type = "LAIN LAIN";
         }
 
         $expense->details()->create([
