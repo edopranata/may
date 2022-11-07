@@ -22,6 +22,7 @@ class SupervisorSeeder extends Seeder
             'name'      => 'Nama Mandor',
             'phone'     => '08123456789',
         ])->each(function ($supervisor){
+            $supervisor->loan()->create();
             $supervisor->price()->create([
                 'value' => 5600000
             ]);

@@ -39,23 +39,24 @@ Route::middleware(['auth'])->group(function (){
 
         Route::resource('transaction', \App\Http\Controllers\Transaction\TransactionController::class)->only(['index']);
         Route::group(['prefix' => 'transaction', 'as' => 'transaction.'], function (){
-            Route::resource('loan', \App\Http\Controllers\Transaction\TransactionLoanController::class)->only(['index']);
+            Route::resource('loan', \App\Http\Controllers\Transaction\Loan\TransactionLoanController::class)->only(['index']);
             Route::group(['prefix' => 'loan', 'as' => 'loan.'], function (){
-                Route::resource('farmer', \App\Http\Controllers\Transaction\TransactionLoanFarmerController::class)->only(['index', 'store', 'show', 'edit', 'update']);
-                Route::resource('driver', \App\Http\Controllers\Transaction\TransactionLoanDriverController::class)->only(['index', 'store', 'show', 'edit', 'update']);
-                Route::resource('loader', \App\Http\Controllers\Transaction\TransactionLoanLoaderController::class)->only(['index', 'store', 'show', 'edit', 'update']);
-                Route::resource('supervisor', \App\Http\Controllers\Transaction\TransactionLoanSupervisorController::class)->only(['index', 'store', 'show', 'edit', 'update']);
+                Route::resource('farmer', \App\Http\Controllers\Transaction\Loan\TransactionLoanFarmerController::class)->only(['index', 'store', 'show', 'edit', 'update']);
+                Route::resource('driver', \App\Http\Controllers\Transaction\Loan\TransactionLoanDriverController::class)->only(['index', 'store', 'show', 'edit', 'update']);
+                Route::resource('loader', \App\Http\Controllers\Transaction\Loan\TransactionLoanLoaderController::class)->only(['index', 'store', 'show', 'edit', 'update']);
+                Route::resource('supervisor', \App\Http\Controllers\Transaction\Loan\TransactionLoanSupervisorController::class)->only(['index', 'store', 'show', 'edit', 'update']);
             });
 
-            Route::resource('trade', \App\Http\Controllers\Transaction\TransactionTradeController::class)->only(['index', 'store', 'edit', 'update', 'destroy']);
-            Route::resource('factory', \App\Http\Controllers\Transaction\TransactionTradeFactoryController::class)->only(['index', 'show', 'update', 'destroy']);
+            Route::resource('trade', \App\Http\Controllers\Transaction\Trade\TransactionTradeController::class)->only(['index', 'store', 'edit', 'update', 'destroy']);
+            Route::resource('factory', \App\Http\Controllers\Transaction\Trade\TransactionTradeFactoryController::class)->only(['index', 'show', 'update', 'destroy']);
 
-            Route::resource('invoice', \App\Http\Controllers\Transaction\TransactionInvoiceController::class)->only(['index']);
+            Route::resource('invoice', \App\Http\Controllers\Transaction\Invoice\TransactionInvoiceController::class)->only(['index']);
             Route::group(['prefix' => 'invoice', 'as' => 'invoice.'], function (){
-                Route::resource('farmer', \App\Http\Controllers\Transaction\TransactionInvoiceFarmerController::class)->only(['index','store', 'show', 'edit', 'update']);
-                Route::resource('driver', \App\Http\Controllers\Transaction\TransactionInvoiceDriverController::class)->only(['index', 'show', 'update']);
-                Route::resource('car', \App\Http\Controllers\Transaction\TransactionInvoiceCarController::class)->only(['index', 'show', 'update']);
-                Route::resource('loader', \App\Http\Controllers\Transaction\TransactionInvoiceLoaderController::class)->only(['index', 'show', 'update']);
+                Route::resource('farmer', \App\Http\Controllers\Transaction\Invoice\TransactionInvoiceFarmerController::class)->only(['index','store', 'show', 'edit', 'update']);
+                Route::resource('driver', \App\Http\Controllers\Transaction\Invoice\TransactionInvoiceDriverController::class)->only(['index', 'show', 'update']);
+                Route::resource('car', \App\Http\Controllers\Transaction\Invoice\TransactionInvoiceCarController::class)->only(['index', 'show', 'update']);
+                Route::resource('loader', \App\Http\Controllers\Transaction\Invoice\TransactionInvoiceLoaderController::class)->only(['index', 'show', 'update']);
+                Route::resource('supervisor', \App\Http\Controllers\Transaction\Invoice\TransactionInvoiceSupervisorController::class)->only(['index', 'show', 'update']);
 
             });
         });
@@ -67,7 +68,7 @@ Route::middleware(['auth'])->group(function (){
 
         Route::resource('report', \App\Http\Controllers\Report\ReportController::class)->only(['index']);
         Route::group(['prefix' => 'report', 'as' => 'report.'], function (){
-            Route::resource('invoice', \App\Http\Controllers\Report\ReportInvoiceController::class)->only(['index']);
+            Route::resource('invoice', \App\Http\Controllers\Report\Invoice\ReportInvoiceController::class)->only(['index']);
         });
 
         Route::resource('print', \App\Http\Controllers\Prints\PrintController::class)->only(['index']);
@@ -78,6 +79,7 @@ Route::middleware(['auth'])->group(function (){
                 Route::resource('driver', \App\Http\Controllers\Prints\PrintInvoiceDriverController::class)->only(['show']);
                 Route::resource('car', \App\Http\Controllers\Prints\PrintInvoiceCarController::class)->only(['show']);
                 Route::resource('loader', \App\Http\Controllers\Prints\PrintInvoiceLoaderController::class)->only(['show']);
+                Route::resource('supervisor', \App\Http\Controllers\Prints\PrintInvoiceSupervisorController::class)->only(['show']);
 
             });
             Route::group(['prefix' => 'report', 'as' => 'report.'], function (){

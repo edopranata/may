@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\Transaction;
+namespace App\Http\Controllers\Transaction\Trade;
 
 use App\Http\Controllers\Controller;
 use App\Models\Car;

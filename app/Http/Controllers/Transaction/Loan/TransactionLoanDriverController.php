@@ -1,19 +1,19 @@
 <?php
 
-namespace App\Http\Controllers\Transaction;
+namespace App\Http\Controllers\Transaction\Loan;
 
 use App\Http\Controllers\Controller;
-use App\Models\Loader;
+use App\Models\Driver;
 use Illuminate\Contracts\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
-class TransactionLoanLoaderController extends Controller
+class TransactionLoanDriverController extends Controller
 {
     public function index(Request $request)
     {
-        return inertia('Transaction/Loan/LoaderLoanIndex', [
-            'loaders' => Loader::query()->when($request->search, function (Builder $builder, $value){
+        return inertia('Transaction/Loan/DriverLoanIndex', [
+            'drivers' => Driver::query()->when($request->search, function (Builder $builder, $value){
                 $builder
                     ->where('name', 'like', '%'.$value.'%')
                     ->orWhere('address', 'like', '%'.$value.'%')
@@ -25,8 +25,8 @@ class TransactionLoanLoaderController extends Controller
     public function show($id, Request $request)
     {
 
-        return inertia('Transaction/Loan/LoaderLoan', [
-            'loader'    => Loader::query()->with('loan')->where('id', $id)->first(),
+        return inertia('Transaction/Loan/DriverLoan', [
+            'driver'    => Driver::query()->with('loan')->where('id', $id)->first(),
         ]);
 
     }
@@ -40,7 +40,7 @@ class TransactionLoanLoaderController extends Controller
             ]);
             DB::beginTransaction();
             try {
-                $customer_loan = Loader::query()->where('id', $request->id)
+                $customer_loan = Driver::query()->where('id', $request->id)
                     ->with('loan')->first();
 
                 $loan = $customer_loan->loan()->increment('balance', $request->amount);
@@ -51,10 +51,10 @@ class TransactionLoanLoaderController extends Controller
                     'status' => 'PINJAM'
                 ]);
                 DB::commit();
-                return redirect()->route('transaction.loan.loader.index')->with('alert', [
+                return redirect()->route('transaction.loan.driver.index')->with('alert', [
                     'type'    => 'success',
                     'title'   => 'Success',
-                    'message' => "Pinjaman tukang muat berhasil disimpan"
+                    'message' => "Pinjaman supir berhasil disimpan"
                 ]);
 
             }catch (\Exception $exception){
@@ -62,7 +62,7 @@ class TransactionLoanLoaderController extends Controller
                 return redirect()->back()->with('alert', [
                     'type'    => 'error',
                     'title'   => 'Failed',
-                    'message' => "Pinjaman tukang muat gagal disimpan: " . $exception->getMessage()
+                    'message' => "Pinjaman supir gagal disimpan: " . $exception->getMessage()
                 ]);
             }
         }else{
@@ -70,16 +70,16 @@ class TransactionLoanLoaderController extends Controller
         }
     }
 
-    public function edit(Loader $loader, Request $request)
+    public function edit(Driver $driver, Request $request)
     {
-        return inertia('Transaction/Loan/LoaderLoanPay', [
-            'loader'    => $loader->load('loan'),
+        return inertia('Transaction/Loan/DriverLoanPay', [
+            'driver'    => $driver->load('loan'),
         ]);
     }
 
-    public function update(Loader $loader, Request $request)
+    public function update(Driver $driver, Request $request)
     {
-        $customer_loan = $loader->load('loan');
+        $customer_loan = $driver->load('loan');
         $max = $customer_loan->loan ? $customer_loan->loan->balance : 0;
         $request->validate([
             'date'      => ['required', 'date'],
@@ -97,10 +97,10 @@ class TransactionLoanLoaderController extends Controller
                 'status' => 'BAYAR'
             ]);
             DB::commit();
-            return redirect()->route('transaction.loan.loader.index')->with('alert', [
+            return redirect()->route('transaction.loan.driver.index')->with('alert', [
                 'type'    => 'success',
                 'title'   => 'Success',
-                'message' => "Pinjaman tukang muat berhasil disimpan"
+                'message' => "Pinjaman supir berhasil disimpan"
             ]);
 
         }catch (\Exception $exception){
@@ -108,7 +108,7 @@ class TransactionLoanLoaderController extends Controller
             return redirect()->back()->with('alert', [
                 'type'    => 'error',
                 'title'   => 'Failed',
-                'message' => "Pinjaman tukang muat gagal disimpan: " . $exception->getMessage()
+                'message' => "Pinjaman supir gagal disimpan: " . $exception->getMessage()
             ]);
         }
     }

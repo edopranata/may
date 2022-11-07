@@ -11,6 +11,7 @@
         <PageMenu class="bg-accent text-accent-content hover:shadow-xl hover:bg-accent/80" title="Invoice / Gaji" :link="route('transaction.invoice.driver.index')">Gaji Supir</PageMenu>
         <PageMenu class="bg-accent text-accent-content hover:shadow-xl hover:bg-accent/80" title="Invoice / Gaji" :link="route('transaction.invoice.car.index')">Amprah Mobil</PageMenu>
         <PageMenu class="bg-accent text-accent-content hover:shadow-xl hover:bg-accent/80" title="Invoice / Gaji" :link="route('transaction.invoice.loader.index')">Gaji Tukang Muat</PageMenu>
+        <PageMenu class="bg-accent text-accent-content hover:shadow-xl hover:bg-accent/80" title="Invoice / Gaji" :link="route('transaction.invoice.supervisor.index')">Gaji Mandor</PageMenu>
     </section>
 </template>
 

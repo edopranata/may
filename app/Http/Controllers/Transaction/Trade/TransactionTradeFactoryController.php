@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\Transaction;
+namespace App\Http\Controllers\Transaction\Trade;
 
 use App\Http\Controllers\Controller;
 use App\Models\Car;
@@ -9,7 +9,6 @@ use App\Models\Trade;
 use Illuminate\Contracts\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Validation\Rule;
 
 class TransactionTradeFactoryController extends Controller
 {

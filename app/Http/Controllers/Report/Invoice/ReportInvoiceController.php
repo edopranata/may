@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\Report;
+namespace App\Http\Controllers\Report\Invoice;
 
 use App\Http\Controllers\Controller;
 use App\Models\Car;
@@ -8,6 +8,7 @@ use App\Models\Driver;
 use App\Models\Farmer;
 use App\Models\Invoice;
 use App\Models\Loader;
+use App\Models\Supervisor;
 use Illuminate\Contracts\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
 
@@ -47,10 +48,16 @@ class ReportInvoiceController extends Controller
                     'badge'         => 'badge-error',
                     'url_print'     => route('print.invoice.loader.show', $id)
                 ];
+            case "Supervisor":
+                return [
+                    'name'          => 'supervisor',
+                    'title'         => 'Gaji Mandor',
+                    'badge'         => 'badge-info',
+                    'url_print'     => route('print.invoice.supervisor.show', $id)
+                ];
             default:
                 return $model;
         }
-
     }
 
     public function index(Request $request)
@@ -62,7 +69,7 @@ class ReportInvoiceController extends Controller
                     $builder->where('invoice_number', 'like', '%' . $invoice . '%');
                 })
                 ->with(['modelable'])->whereHasMorph(
-                    'modelable', [Farmer::class, Car::class, Driver::class, Loader::class], function (Builder $builder) use ($request){
+                    'modelable', [Farmer::class, Car::class, Driver::class, Loader::class, Supervisor::class], function (Builder $builder) use ($request){
                     $builder->filter($request->search);
                 })
                 ->paginate()

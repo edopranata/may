@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\Transaction;
+namespace App\Http\Controllers\Transaction\Loan;
 
 use App\Http\Controllers\Controller;
 use App\Models\Supervisor;
@@ -43,7 +43,7 @@ class TransactionLoanSupervisorController extends Controller
                 $customer_loan = Supervisor::query()->where('id', $request->id)
                     ->with('loan')->first();
 
-                $loan = $customer_loan->loan()->increment('balance', $request->amount);
+                $loan = $customer_loan->loan->increment('balance', $request->amount);
 
                 $customer_loan->loan->details()->create([
                     'description' => $request->description ?? 'Pinjaman ' . now()->format('d F Y'),

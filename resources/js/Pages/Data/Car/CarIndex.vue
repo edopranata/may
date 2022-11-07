@@ -7,12 +7,21 @@
         <label class="modal-box relative" for="">
             <h3 class="font-bold text-lg">Tambah data mobil</h3>
             <form @submit.prevent="save">
-                <div class="form-control w-full my-4">
-                    <label class="label">Merk Mobil</label>
-                    <input :readonly="form_save.processing" v-model="form_save.name" type="text" placeholder="Merk Mobil" class="input input-bordered w-full" />
-                    <label class="label" v-if="form_save.errors.name">
-                        <span class="label-text-alt text-error">{{ form_save.errors.name }}</span>
-                    </label>
+                <div class="grid md:grid-cols-3 gap-4">
+                    <div class="form-control w-full my-4 col-span-2">
+                        <label class="label">Merk Mobil</label>
+                        <input :readonly="form_save.processing" v-model="form_save.name" type="text" placeholder="Merk Mobil" class="input input-bordered w-full" />
+                        <label class="label" v-if="form_save.errors.name">
+                            <span class="label-text-alt text-error">{{ form_save.errors.name }}</span>
+                        </label>
+                    </div>
+                    <div class="form-control w-full my-4">
+                        <label class="label">Biaya / Kg</label>
+                        <input :readonly="form_save.processing" v-model="form_save.price" type="text" placeholder="Biaya / Kg" class="input input-bordered w-full" />
+                        <label class="label" v-if="form_save.errors.price">
+                            <span class="label-text-alt text-error">{{ form_save.errors.price }}</span>
+                        </label>
+                    </div>
                 </div>
                 <div class="grid md:grid-cols-3 gap-4">
                     <div class="form-control w-full my-4 col-span-2">
@@ -50,12 +59,21 @@
         <label class="modal-box relative" for="">
             <h3 class="font-bold text-lg">Ubah Data Mobil {{ form_edit.no_pol }}</h3>
             <form @submit.prevent="update">
-                <div class="form-control w-full my-4">
-                    <label class="label">Merk Mobil</label>
-                    <input :readonly="form_edit.processing" v-model="form_edit.name" type="text" placeholder="Merk Mobil" class="input input-bordered w-full" />
-                    <label class="label" v-if="form_edit.errors.name">
-                        <span class="label-text-alt text-error">{{ form_edit.errors.name }}</span>
-                    </label>
+                <div class="grid md:grid-cols-3 gap-4">
+                    <div class="form-control w-full my-4 col-span-2">
+                        <label class="label">Merk Mobil</label>
+                        <input :readonly="form_edit.processing" v-model="form_edit.name" type="text" placeholder="Merk Mobil" class="input input-bordered w-full" />
+                        <label class="label" v-if="form_edit.errors.name">
+                            <span class="label-text-alt text-error">{{ form_edit.errors.name }}</span>
+                        </label>
+                    </div>
+                    <div class="form-control w-full my-4">
+                        <label class="label">Biaya / Kg</label>
+                        <input :readonly="form_edit.processing" v-model="form_edit.price" type="text" placeholder="Biaya / Kg" class="input input-bordered w-full" />
+                        <label class="label" v-if="form_edit.errors.price">
+                            <span class="label-text-alt text-error">{{ form_edit.errors.price }}</span>
+                        </label>
+                    </div>
                 </div>
                 <div class="grid md:grid-cols-3 gap-4">
                     <div class="form-control w-full my-4 col-span-2">
@@ -109,20 +127,25 @@
                 <thead class="text-sm uppercase bg-primary/20">
                 <tr>
                     <th class="py-3 px-6">#</th>
-                    <th class="py-3 px-6">Merk Mobil</th>
+                    <th class="py-3 px-6">Mobil</th>
                     <th class="py-3 px-6">Keterangan</th>
-                    <th class="py-3 px-6">No Polisi</th>
                     <th class="py-3 px-6">Tahun</th>
+                    <th class="py-3 px-6">Biaya / Kg</th>
                     <th class="py-3 px-6"></th>
                 </tr>
                 </thead>
                 <tbody>
                 <tr v-if="props.cars.data.length" class="hover:cursor-pointer group border-b" v-for="(item, index) in props.cars.data" @click="edit(index)">
                     <th class="group-hover:bg-base-300 py-4 px-6">{{ props.cars.from + index  }}</th>
-                    <td class="group-hover:bg-base-300 py-4 px-6">{{ item.name }}</td>
+                    <td class="group-hover:bg-base-300 py-4 px-6">
+                        <div>
+                            <div class="font-bold">{{ item.no_pol }}</div>
+                            <div class="text-sm opacity-50">{{item.name.toUpperCase() }}</div>
+                        </div>
+                    </td>
                     <td class="group-hover:bg-base-300 py-4 px-6 max-w-xs">{{ item.description }}</td>
-                    <td class="group-hover:bg-base-300 py-4 px-6 ">{{ item.no_pol }}</td>
                     <td class="group-hover:bg-base-300 py-4 px-6">{{ item.year }}</td>
+                    <td class="group-hover:bg-base-300 py-4 px-6">{{ item.price ? item.price.value : 0 }}</td>
                     <td class="group-hover:bg-base-300 py-4 px-6"><BaseIcon :path="mdiArrowRight" /></td>
                 </tr>
                 <tr v-else>
@@ -164,17 +187,20 @@ const car_id = ref(null)
 
 const form_save = useForm({
     name: '',
+    price: props.price,
     no_pol: '',
     description: '',
     year: ''
 })
 const form_edit = useForm({
     name: '',
+    price: '',
     no_pol: '',
     description: '',
     year: ''
 })
 const props = defineProps({
+    price: Number,
     search: String,
     cars: {
         type: Object,
@@ -213,6 +239,7 @@ const edit = (index) => {
     car_id.value = data.id
 
     form_edit.name = data.name
+    form_edit.price = data.price.value
     form_edit.description = data.description
     form_edit.no_pol = data.no_pol
     form_edit.year = data.year
@@ -243,6 +270,7 @@ const set_default_form = () => {
 
     form_save.defaults({
         name:null,
+        price: props.price,
         description:null,
         no_pol:null,
         year:null,

@@ -8,7 +8,7 @@ use Laravel\Scout\Searchable;
 
 class Supervisor extends Model
 {
-    use HasFactory, Searchable;
+    use HasFactory;
 
     protected $guarded = ['id'];
 
@@ -22,12 +22,17 @@ class Supervisor extends Model
         return $this->morphOne(Price::class, 'modelable');
     }
 
-    public function toSearchableArray()
+    public function scopeFilter($query, $search)
     {
-        return [
-            'name'  => $this->name,
-            'phone'   => $this->phone,
-            'address'       => $this->address,
-        ];
+        $query->when($search, function ($query, $value) {
+            $query->where('name', 'like', '%'.$value.'%');
+            $query->orWhere('address', 'like', '%'.$value.'%');
+            $query->orWhere('phone', 'like', '%'.$value.'%');
+        });
+    }
+
+    public function invoices()
+    {
+        return $this->morphMany(Invoice::class, 'modelable');
     }
 }

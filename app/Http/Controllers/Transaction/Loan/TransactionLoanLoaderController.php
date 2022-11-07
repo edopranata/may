@@ -1,20 +1,19 @@
 <?php
 
-namespace App\Http\Controllers\Transaction;
+namespace App\Http\Controllers\Transaction\Loan;
 
 use App\Http\Controllers\Controller;
-use App\Models\Farmer;
+use App\Models\Loader;
 use Illuminate\Contracts\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
-class TransactionLoanFarmerController extends Controller
+class TransactionLoanLoaderController extends Controller
 {
-
     public function index(Request $request)
     {
-        return inertia('Transaction/Loan/FarmerLoanIndex', [
-            'farmers' => Farmer::query()->when($request->search, function (Builder $builder, $value){
+        return inertia('Transaction/Loan/LoaderLoanIndex', [
+            'loaders' => Loader::query()->when($request->search, function (Builder $builder, $value){
                 $builder
                     ->where('name', 'like', '%'.$value.'%')
                     ->orWhere('address', 'like', '%'.$value.'%')
@@ -26,8 +25,8 @@ class TransactionLoanFarmerController extends Controller
     public function show($id, Request $request)
     {
 
-        return inertia('Transaction/Loan/FarmerLoan', [
-            'farmer'    => Farmer::query()->with('loan')->where('id', $id)->first(),
+        return inertia('Transaction/Loan/LoaderLoan', [
+            'loader'    => Loader::query()->with('loan')->where('id', $id)->first(),
         ]);
 
     }
@@ -41,7 +40,7 @@ class TransactionLoanFarmerController extends Controller
             ]);
             DB::beginTransaction();
             try {
-                $customer_loan = Farmer::query()->where('id', $request->id)
+                $customer_loan = Loader::query()->where('id', $request->id)
                     ->with('loan')->first();
 
                 $loan = $customer_loan->loan()->increment('balance', $request->amount);
@@ -52,10 +51,10 @@ class TransactionLoanFarmerController extends Controller
                     'status' => 'PINJAM'
                 ]);
                 DB::commit();
-                return redirect()->route('transaction.loan.farmer.index')->with('alert', [
+                return redirect()->route('transaction.loan.loader.index')->with('alert', [
                     'type'    => 'success',
                     'title'   => 'Success',
-                    'message' => "Pinjaman petani berhasil disimpan"
+                    'message' => "Pinjaman tukang muat berhasil disimpan"
                 ]);
 
             }catch (\Exception $exception){
@@ -63,7 +62,7 @@ class TransactionLoanFarmerController extends Controller
                 return redirect()->back()->with('alert', [
                     'type'    => 'error',
                     'title'   => 'Failed',
-                    'message' => "Pinjaman petani gagal disimpan: " . $exception->getMessage()
+                    'message' => "Pinjaman tukang muat gagal disimpan: " . $exception->getMessage()
                 ]);
             }
         }else{
@@ -71,16 +70,16 @@ class TransactionLoanFarmerController extends Controller
         }
     }
 
-    public function edit(Farmer $farmer, Request $request)
+    public function edit(Loader $loader, Request $request)
     {
-        return inertia('Transaction/Loan/FarmerLoanPay', [
-            'farmer'    => $farmer->load('loan'),
+        return inertia('Transaction/Loan/LoaderLoanPay', [
+            'loader'    => $loader->load('loan'),
         ]);
     }
 
-    public function update(Farmer $farmer, Request $request)
+    public function update(Loader $loader, Request $request)
     {
-        $customer_loan = $farmer->load('loan');
+        $customer_loan = $loader->load('loan');
         $max = $customer_loan->loan ? $customer_loan->loan->balance : 0;
         $request->validate([
             'date'      => ['required', 'date'],
@@ -98,10 +97,10 @@ class TransactionLoanFarmerController extends Controller
                 'status' => 'BAYAR'
             ]);
             DB::commit();
-            return redirect()->route('transaction.loan.farmer.index')->with('alert', [
+            return redirect()->route('transaction.loan.loader.index')->with('alert', [
                 'type'    => 'success',
                 'title'   => 'Success',
-                'message' => "Pinjaman petani berhasil disimpan"
+                'message' => "Pinjaman tukang muat berhasil disimpan"
             ]);
 
         }catch (\Exception $exception){
@@ -109,7 +108,7 @@ class TransactionLoanFarmerController extends Controller
             return redirect()->back()->with('alert', [
                 'type'    => 'error',
                 'title'   => 'Failed',
-                'message' => "Pinjaman petani gagal disimpan: " . $exception->getMessage()
+                'message' => "Pinjaman tukang muat gagal disimpan: " . $exception->getMessage()
             ]);
         }
     }

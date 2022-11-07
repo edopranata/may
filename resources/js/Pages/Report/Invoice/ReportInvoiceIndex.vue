@@ -74,7 +74,7 @@
                 </div>
             </div>
         </div>
-        <div class="hidden badge-primary badge-secondary badge badge-accent badge-ghost"></div>
+        <div class="hidden badge-primary badge-secondary badge badge-accent badge-ghost badge-info badge-error"></div>
         <div class="card w-full rounded-none border-2 border-info shadow-xl">
             <div class="card-body grid gap-4">
                 <table class="w-full text-left text-base">
