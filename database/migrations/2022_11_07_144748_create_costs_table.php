@@ -15,7 +15,12 @@ return new class extends Migration
     {
         Schema::create('costs', function (Blueprint $table) {
             $table->id();
+            $table->foreignIdFor(\App\Models\Car::class)->nullable()->constrained()->cascadeOnUpdate()->nullOnDelete();
+
+            $table->dateTime('trade_date');
             $table->string('name');
+            $table->string('description')->nullable();
+            $table->double('amount');
             $table->softDeletes();
             $table->timestamps();
         });
