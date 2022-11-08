@@ -43,13 +43,15 @@ class TransactionLoanLoaderController extends Controller
                 $customer_loan = Loader::query()->where('id', $request->id)
                     ->with('loan')->first();
 
-                $loan = $customer_loan->loan()->increment('balance', $request->amount);
-
                 $customer_loan->loan->details()->create([
-                    'description' => $request->description ?? 'Pinjaman ' . now()->format('d F Y'),
-                    'amount' => $request->amount,
-                    'status' => 'PINJAM'
+                    'description'       => $request->description ?? 'Pinjaman ' . now()->format('d F Y'),
+                    'opening_balance'   => $customer_loan->loan->balance,
+                    'amount'            => $request->amount,
+                    'status'            => 'PINJAM'
                 ]);
+
+                $customer_loan->loan()->increment('balance', $request->amount);
+
                 DB::commit();
                 return redirect()->route('transaction.loan.loader.index')->with('alert', [
                     'type'    => 'success',
@@ -89,13 +91,15 @@ class TransactionLoanLoaderController extends Controller
         DB::beginTransaction();
         try {
 
-            $loan = $customer_loan->loan()->decrement('balance', $request->amount);
-
             $customer_loan->loan->details()->create([
-                'description' => $request->description ?? 'Angsuran Pinjaman ' . now()->format('d F Y'),
-                'amount' => $request->amount * -1,
-                'status' => 'BAYAR'
+                'description'       => $request->description ?? 'Angsuran Pinjaman ' . now()->format('d F Y'),
+                'opening_balance'   => $customer_loan->loan->balance,
+                'amount'            => $request->amount * -1,
+                'status'            => 'BAYAR'
             ]);
+
+            $customer_loan->loan()->decrement('balance', $request->amount);
+
             DB::commit();
             return redirect()->route('transaction.loan.loader.index')->with('alert', [
                 'type'    => 'success',

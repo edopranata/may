@@ -16,6 +16,7 @@ return new class extends Migration
         Schema::create('loan_details', function (Blueprint $table) {
             $table->id();
             $table->string('description')->nullable();
+            $table->double('opening_balance')->default(0);
             $table->double('amount');
             $table->string('status');
             $table->foreignIdFor(\App\Models\Loan::class)->nullable()->constrained()->cascadeOnUpdate()->nullOnDelete();

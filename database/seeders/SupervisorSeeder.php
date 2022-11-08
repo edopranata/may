@@ -24,7 +24,7 @@ class SupervisorSeeder extends Seeder
         ])->each(function ($supervisor){
             $supervisor->loan()->create();
             $supervisor->price()->create([
-                'value' => 5600000
+                'value' => 7600000
             ]);
         });
     }

@@ -22,14 +22,15 @@ class FarmerSeeder extends Seeder
             $one = [100000, 200000, 300000];
             $two = [5,10,15];
             $balance = $one[array_rand($one)] * ($two[array_rand($two)] + 5) + $one[array_rand($one)];
-            $farmer->loan()->create([
-                'balance' => $balance
-            ]);
+            $farmer->loan()->create();
+
             $farmer->loan->details()->create([
-                'description'   => 'Pinjaman ' . now()->format('d F Y'),
-                'amount'        => $balance,
-                'status'        => 'PINJAM'
+                'description'       => 'Pinjaman ' . now()->format('d F Y'),
+                'opening_balance'   => $farmer->loan->balance,
+                'amount'            => $balance,
+                'status'            => 'PINJAM'
             ]);
+            $farmer->loan()->increment('balance', $balance);
         });
     }
 }

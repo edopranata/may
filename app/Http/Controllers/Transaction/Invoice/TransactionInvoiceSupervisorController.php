@@ -110,15 +110,16 @@ class TransactionInvoiceSupervisorController extends Controller
 
                 // Jika masih ada kewajiban angsuran
                 if($supervisor->loan->balance > 0){
-                    // Kurangin sisa pinjaman
-                    $supervisor->loan()->decrement('balance', $request->installment);
-
                     // Insert into loan_details atas pembayaran pinjaman
                     $supervisor->loan->details()->create([
-                        'description' => 'Pot Pinjaman Inv #' . $invoice_number,
-                        'amount' => $request->installment * -1,
-                        'status' => 'POTONG'
+                        'description'       => 'Pot Pinjaman Inv #' . $invoice_number,
+                        'opening_balance'   => $supervisor->loan->balance,
+                        'amount'            => $request->installment * -1,
+                        'status'            => 'POTONG'
                     ]);
+
+                    // Kurangin sisa pinjaman
+                    $supervisor->loan()->decrement('balance', $request->installment);
                 }
             }
             DB::commit();

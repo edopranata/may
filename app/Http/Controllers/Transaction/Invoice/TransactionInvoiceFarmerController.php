@@ -107,15 +107,16 @@ class TransactionInvoiceFarmerController extends Controller
 
                 // Jika masih ada kewajiban angsuran
                 if($farmer->loan->balance > 0){
-                    // Kurangin sisa pinjaman
-                    $farmer->loan()->decrement('balance', $request->installment);
-
                     // Insert into loan_details atas pembayaran pinjaman
                     $farmer->loan->details()->create([
-                        'description' => 'Pot Pinjaman Inv #' . $invoice_number,
-                        'amount' => $request->installment * -1,
-                        'status' => 'POTONG'
+                        'description'       => 'Pot Pinjaman Inv #' . $invoice_number,
+                        'opening_balance'   => $farmer->loan->balance,
+                        'amount'            => $request->installment * -1,
+                        'status'            => 'POTONG'
                     ]);
+
+                    // Kurangin sisa pinjaman
+                    $farmer->loan()->decrement('balance', $request->installment);
                 }
             }
             DB::commit();

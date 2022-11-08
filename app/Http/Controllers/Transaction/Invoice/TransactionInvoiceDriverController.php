@@ -91,15 +91,17 @@ class TransactionInvoiceDriverController extends Controller
 
                 // Jika masih ada kewajiban angsuran
                 if($driver->loan->balance > 0){
-                    // Kurangin sisa pinjaman
-                    $driver->loan()->decrement('balance', $request->installment);
 
                     // Insert into loan_details atas pembayaran pinjaman
                     $driver->loan->details()->create([
-                        'description' => 'Pot Pinjaman Inv #' . $invoice_number,
-                        'amount' => $request->installment * -1,
-                        'status' => 'POTONG'
+                        'description'       => 'Pot Pinjaman Inv #' . $invoice_number,
+                        'opening_balance'   => $driver->loan->balance,
+                        'amount'            => $request->installment * -1,
+                        'status'            => 'POTONG'
                     ]);
+
+                    // Kurangin sisa pinjaman
+                    $driver->loan()->decrement('balance', $request->installment);
                 }
             }
             DB::commit();
