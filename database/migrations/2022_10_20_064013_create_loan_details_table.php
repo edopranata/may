@@ -15,6 +15,9 @@ return new class extends Migration
     {
         Schema::create('loan_details', function (Blueprint $table) {
             $table->id();
+            $table->date('invoice_date')->nullable();
+            $table->integer('sequence')->nullable();
+            $table->string('invoice_number')->nullable();
             $table->string('description')->nullable();
             $table->double('opening_balance')->default(0);
             $table->double('amount');

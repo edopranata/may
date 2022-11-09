@@ -109,6 +109,7 @@ class TransactionInvoiceFarmerController extends Controller
                 if($farmer->loan->balance > 0){
                     // Insert into loan_details atas pembayaran pinjaman
                     $farmer->loan->details()->create([
+                        'invoice_date'      => $request->invoice_date,
                         'description'       => 'Pot Pinjaman Inv #' . $invoice_number,
                         'opening_balance'   => $farmer->loan->balance,
                         'amount'            => $request->installment * -1,

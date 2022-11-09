@@ -73,17 +73,15 @@ Route::middleware(['auth'])->group(function (){
 
         Route::resource('print', \App\Http\Controllers\Prints\PrintController::class)->only(['index']);
         Route::group(['prefix' => 'print', 'as' => 'print.'], function (){
-            Route::resource('invoice', \App\Http\Controllers\Prints\PrintInvoiceController::class)->only(['index']);
+            Route::resource('invoice', \App\Http\Controllers\Prints\Invoice\PrintInvoiceController::class)->only(['index']);
             Route::group(['prefix' => 'invoice', 'as' => 'invoice.'], function (){
-                Route::resource('farmer', \App\Http\Controllers\Prints\PrintInvoiceFarmerController::class)->only(['show']);
-                Route::resource('driver', \App\Http\Controllers\Prints\PrintInvoiceDriverController::class)->only(['show']);
-                Route::resource('car', \App\Http\Controllers\Prints\PrintInvoiceCarController::class)->only(['show']);
-                Route::resource('loader', \App\Http\Controllers\Prints\PrintInvoiceLoaderController::class)->only(['show']);
-                Route::resource('supervisor', \App\Http\Controllers\Prints\PrintInvoiceSupervisorController::class)->only(['show']);
+                Route::resource('farmer', \App\Http\Controllers\Prints\Invoice\PrintInvoiceFarmerController::class)->only(['show']);
+                Route::resource('driver', \App\Http\Controllers\Prints\Invoice\PrintInvoiceDriverController::class)->only(['show']);
+                Route::resource('car', \App\Http\Controllers\Prints\Invoice\PrintInvoiceCarController::class)->only(['show']);
+                Route::resource('loader', \App\Http\Controllers\Prints\Invoice\PrintInvoiceLoaderController::class)->only(['show']);
+                Route::resource('supervisor', \App\Http\Controllers\Prints\Invoice\PrintInvoiceSupervisorController::class)->only(['show']);
 
-            });
-            Route::group(['prefix' => 'report', 'as' => 'report.'], function (){
-
+                Route::resource('loan', \App\Http\Controllers\Prints\Invoice\Loan\PrintInvoiceLoanController::class)->only(['show']);
             });
         });
 

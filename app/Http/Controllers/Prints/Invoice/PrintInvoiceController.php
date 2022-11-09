@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\Prints;
+namespace App\Http\Controllers\Prints\Invoice;
 
 use App\Http\Controllers\Controller;
 

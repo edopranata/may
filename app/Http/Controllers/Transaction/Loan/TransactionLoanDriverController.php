@@ -4,8 +4,9 @@ namespace App\Http\Controllers\Transaction\Loan;
 
 use App\Http\Controllers\Controller;
 use App\Models\Driver;
-use Illuminate\Contracts\Database\Eloquent\Builder;
+use App\Models\LoanDetail;
 use Illuminate\Http\Request;
+use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\DB;
 
 class TransactionLoanDriverController extends Controller
@@ -13,12 +14,7 @@ class TransactionLoanDriverController extends Controller
     public function index(Request $request)
     {
         return inertia('Transaction/Loan/DriverLoanIndex', [
-            'drivers' => Driver::query()->when($request->search, function (Builder $builder, $value){
-                $builder
-                    ->where('name', 'like', '%'.$value.'%')
-                    ->orWhere('address', 'like', '%'.$value.'%')
-                    ->orWhere('phone', 'like', '%'.$value.'%');
-            })->with('loan')->orderByDesc('created_at')->paginate(5),
+            'drivers' => Driver::query()->filter($request->search)->with('loan')->orderByDesc('created_at')->paginate(5),
         ]);
     }
 
@@ -38,12 +34,21 @@ class TransactionLoanDriverController extends Controller
                 'date'      => ['required', 'date'],
                 'amount'    => ['required', 'integer', 'min:100000']
             ]);
+
             DB::beginTransaction();
             try {
+
+                $date               = Carbon::parse($request->date);
+                $sequence           = $this->getLastSequence($date->format('Y'));
+                $invoice_number     = 'MM-P' . now()->format('Y') . sprintf('%06d', $sequence);
+
                 $customer_loan = Driver::query()->where('id', $request->id)
                     ->with('loan')->first();
 
-                $customer_loan->loan->details()->create([
+                $details = $customer_loan->loan->details()->create([
+                    'sequence'          => $sequence,
+                    'invoice_number'    => $invoice_number,
+                    'invoice_date'      => $date->toDateString(),
                     'description'       => $request->description ?? 'Pinjaman ' . now()->format('d F Y'),
                     'opening_balance'   => $customer_loan->loan->balance,
                     'amount'            => $request->amount,
@@ -53,11 +58,21 @@ class TransactionLoanDriverController extends Controller
                 $customer_loan->loan()->increment('balance', $request->amount);
 
                 DB::commit();
-                return redirect()->route('transaction.loan.driver.index')->with('alert', [
-                    'type'    => 'success',
-                    'title'   => 'Success',
-                    'message' => "Pinjaman supir berhasil disimpan"
-                ]);
+
+                if($request->print){
+                    return to_route('print.invoice.loan.show', $details->id)->with('alert', [
+                        'type'    => 'success',
+                        'title'   => 'Success',
+                        'message' => "Pinjaman supir berhasil disimpan"
+                    ]);
+                }else{
+                    return redirect()->route('transaction.loan.driver.index')->with('alert', [
+                        'type'    => 'success',
+                        'title'   => 'Success',
+                        'message' => "Pinjaman supir berhasil disimpan"
+                    ]);
+                }
+
 
             }catch (\Exception $exception){
                 DB::rollBack();
@@ -90,20 +105,37 @@ class TransactionLoanDriverController extends Controller
 
         DB::beginTransaction();
         try {
+            $date               = Carbon::parse($request->date);
+            $sequence           = $this->getLastSequence($date->format('Y'));
+            $invoice_number     = 'MM-B' . now()->format('Y') . sprintf('%06d', $sequence);
 
-            $customer_loan->loan->details()->create([
-                'description'       => $request->description ?? 'Angsuran Pinjaman ' . now()->format('d F Y'),
+            $details = $customer_loan->loan->details()->create([
+                'sequence'          => $sequence,
+                'invoice_number'    => $invoice_number,
+                'invoice_date'      => $date->toDateString(),
+                'description'       => $request->description ?? 'Angsuran Pinjaman ' . $date->toDateString() ,
                 'opening_balance'   => $customer_loan->loan->balance,
                 'amount'            => $request->amount * -1,
                 'status'            => 'BAYAR'
             ]);
+
             $customer_loan->loan()->decrement('balance', $request->amount);
+
             DB::commit();
-            return redirect()->route('transaction.loan.driver.index')->with('alert', [
-                'type'    => 'success',
-                'title'   => 'Success',
-                'message' => "Pinjaman supir berhasil disimpan"
-            ]);
+            if($request->print){
+                return to_route('print.invoice.loan.show', $details->id)->with('alert', [
+                    'type'    => 'success',
+                    'title'   => 'Success',
+                    'message' => "Pinjaman supir berhasil disimpan"
+                ]);
+            }else{
+                return redirect()->route('transaction.loan.driver.index')->with('alert', [
+                    'type'    => 'success',
+                    'title'   => 'Success',
+                    'message' => "Pinjaman supir berhasil disimpan"
+                ]);
+            }
+
 
         }catch (\Exception $exception){
             DB::rollBack();
@@ -113,5 +145,11 @@ class TransactionLoanDriverController extends Controller
                 'message' => "Pinjaman supir gagal disimpan: " . $exception->getMessage()
             ]);
         }
+    }
+
+    private function getLastSequence($year = null) {
+        $invoice = LoanDetail::query()->whereYear('invoice_date', $year ?? now()->format('Y'))->latest()->first();
+        return $invoice ? ($invoice->sequence + 1) : 1;
+
     }
 }

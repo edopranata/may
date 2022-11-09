@@ -4,6 +4,18 @@
     <Breadcrumb :links="breadcrumbs"/>
     <PageTitle :classes="'bg-base-content'">Pinjaman Supir</PageTitle>
 
+    <input type="checkbox" id="modal-option" v-model="modal" class="modal-toggle" />
+    <div class="modal modal-bottom sm:modal-middle">
+        <div class="modal-box">
+            <h3 class="font-bold text-lg">Lanjutkan proses pengajuan pinjaman</h3>
+            <p class="py-4">Klik simpan untuk lanjutkan pengajuan pinjaman atau klik simpan dan print untuk simpan pengajuan pinjaman dan print</p>
+            <div class="modal-action flex justify-between">
+                <button type="button" @click="save" :disabled="!form.date || !form.amount"  class="btn btn-primary"><BaseIcon :path="mdiContentSave"/> Simpan</button>
+                <button type="button" @click="save_print" :disabled="!form.date || !form.amount"  class="btn btn-primary"><BaseIcon :path="mdiPrinter"/> Simpan dan Print</button>
+                <button type="button" @click="modal=false" class="btn btn-warning"><BaseIcon :path="mdiCancel"/> Batal</button>
+            </div>
+        </div>
+    </div>
 
     <section class="px-4 grid md:grid-cols-2 gap-4">
         <div class="card w-full rounded-none border-2 border-success shadow-xl">
@@ -34,15 +46,26 @@
         </div>
         <div class="card w-full rounded-none border-2 border-success shadow-xl">
             <div class="card-body">
-                <form @submit.prevent="save">
-                    <div class="form-control w-ful">
-                        <label class="label">
-                            <span class="label-text">Tanggal Pinjaman</span>
-                        </label>
-                        <input :readonly="form.processing" v-model="form.date" type="date" placeholder="Tanggal Pinjaman" class="input input-success input-bordered w-full" />
-                        <label class="label" v-if="form.errors.date">
-                            <span class="label-text-alt text-error">{{ form.errors.date }}</span>
-                        </label>
+                <form @submit.prevent="modal = true">
+                    <div class="grid grid-cols-2 gap-4">
+                        <div class="form-control w-ful">
+                            <label class="label">
+                                <span class="label-text">Tanggal Pinjaman</span>
+                            </label>
+                            <input :readonly="form.processing" v-model="form.date" type="date" placeholder="Tanggal Pinjaman" class="input input-success input-bordered w-full" />
+                            <label class="label" v-if="form.errors.date">
+                                <span class="label-text-alt text-error">{{ form.errors.date }}</span>
+                            </label>
+                        </div>
+                        <div class="form-control w-ful">
+                            <label class="label">
+                                <span class="label-text">Invoice Number</span>
+                            </label>
+                            <input disabled v-model="form.invoice_number" type="text" class="input input-success input-bordered w-full" />
+                            <label class="label" v-if="form.errors.invoice_number">
+                                <span class="label-text-alt text-error">{{ form.errors.invoice_number }}</span>
+                            </label>
+                        </div>
                     </div>
 
                     <div class="form-control w-ful">
@@ -77,18 +100,26 @@
 <script setup>
 import Breadcrumb from "@/Shared/Breadcrumb.vue"
 import PageTitle from "@/Components/PageTitle.vue"
+import BaseIcon from "@/Components/BaseIcon.vue"
 
-import {Head, Link, useForm} from "@inertiajs/inertia-vue3"
+import {mdiContentSave, mdiCancel, mdiPrinter} from "@mdi/js"
+import {Head, useForm} from "@inertiajs/inertia-vue3"
 import VueNumberFormat from 'vue-number-format'
+import {ref} from "vue";
 
 const props = defineProps({
     driver: Object
 })
 
+const modal = ref(false)
+const btnProses = ref()
+
 const form = useForm({
+    print: false,
     type: 'driver',
     id: props.driver.id,
     date: '',
+    invoice_number: 'OTOMATIS',
     amount: '',
     description: ''
 })
@@ -115,11 +146,18 @@ const save = () => {
     });
 }
 
+const save_print = () => {
+    form.print = true
+    save()
+}
+
 const set_default_form = () => {
     form.clearErrors();
     form.reset()
 
     form.defaults({
+        invoice_number: 'OTOMATIS',
+        print: false,
         date: null,
         amount: null,
         description: null
