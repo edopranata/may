@@ -5,9 +5,9 @@
     <label for="modal-create" class="modal cursor-pointer">
 
         <label class="modal-box relative" for="">
-            <h3 class="font-bold text-lg">Tambah data petani</h3>
+            <h3 class="font-bold text-lg">Tambah Data Mandor</h3>
             <form @submit.prevent="save">
-                <div class="form-control w-full my-4">
+                <div class="form-control w-full">
                     <label class="label">Nama Mandor</label>
                     <input :readonly="form_save.processing" v-model="form_save.name" type="text" placeholder="Nama Mandor" class="input input-bordered w-full" />
                     <label class="label" v-if="form_save.errors.name">
@@ -15,14 +15,14 @@
                     </label>
                 </div>
                 <div class="grid md:grid-cols-2 gap-4">
-                    <div class="form-control w-full my-4">
+                    <div class="form-control w-full">
                         <label class="label">Gaji (Bulan)</label>
                         <VueNumberFormat :readonly="form_save.processing" :options="{ precision: 0, prefix: 'Rp ', isInteger: true }" v-model:value="form_save.price" placeholder="Gaji (Bulan)" class="input input-bordered w-full" />
                         <label class="label" v-if="form_save.errors.price">
                             <span class="label-text-alt text-error">{{ form_save.errors.price }}</span>
                         </label>
                     </div>
-                    <div class="form-control w-full my-4">
+                    <div class="form-control w-full">
                         <label class="label">No Telepon</label>
                         <input :readonly="form_save.processing" v-model="form_save.phone" type="text" placeholder="No Telepon" class="input input-bordered w-full" />
                         <label class="label" v-if="form_save.errors.phone">
@@ -30,14 +30,21 @@
                         </label>
                     </div>
                 </div>
-                <div class="form-control w-full my-4">
+                <div class="form-control w-full">
                     <label class="label">Alamat</label>
                     <textarea :readonly="form_save.processing" v-model="form_save.address" type="text" placeholder="Alamat" class="textarea textarea-bordered w-full"></textarea>
                     <label class="label" v-if="form_save.errors.address">
                         <span class="label-text-alt text-error">{{ form_save.errors.address }}</span>
                     </label>
                 </div>
-                <div class="flex justify-between">
+                <div class="form-control w-full">
+                    <label class="label">Pinjaman Awal <span class="text-xs">Kosongkan bila tidak ada</span> </label>
+                    <VueNumberFormat :options="{ precision: 0, prefix: 'Rp ', isInteger: true }" :readonly="form_save.processing" v-model:value="form_save.loan" class="input input-bordered w-full" />
+                    <label class="label" v-if="form_save.errors.loan">
+                        <span class="labelP-alt text-error">{{ form_save.errors.loan }}</span>
+                    </label>
+                </div>
+                <div class="flex justify-between mt-10">
                     <button :disabled="form_save.processing" type="submit" class="btn btn-primary" :class="form_save.processing ? 'loading' : ''">Save</button>
                 </div>
             </form>
@@ -50,7 +57,7 @@
         <label class="modal-box relative" for="">
             <h3 class="font-bold text-lg">Ubah Data Mandor {{ form_edit.name }}</h3>
             <form @submit.prevent="update">
-                <div class="form-control w-full my-4">
+                <div class="form-control w-full">
                     <label class="label">Nama Mandor</label>
                     <input :readonly="form_edit.processing" v-model="form_edit.name" type="text" placeholder="Nama Mandor" class="input input-bordered w-full" />
                     <label class="label" v-if="form_edit.errors.name">
@@ -58,14 +65,14 @@
                     </label>
                 </div>
                 <div class="grid md:grid-cols-2 gap-4">
-                    <div class="form-control w-full my-4">
+                    <div class="form-control w-full">
                         <label class="label">Gaji (Bulan)</label>
                         <VueNumberFormat :readonly="form_edit.processing" :options="{ precision: 0, prefix: 'Rp ', isInteger: true }" v-model:value="form_edit.price" placeholder="Gaji (Bulan)" class="input input-bordered w-full" />
                         <label class="label" v-if="form_edit.errors.price">
                             <span class="label-text-alt text-error">{{ form_edit.errors.price }}</span>
                         </label>
                     </div>
-                    <div class="form-control w-full my-4">
+                    <div class="form-control w-full">
                         <label class="label">No Telepon</label>
                         <input :readonly="form_edit.processing" v-model="form_edit.phone" type="text" placeholder="No Telepon" class="input input-bordered w-full" />
                         <label class="label" v-if="form_edit.errors.phone">
@@ -73,14 +80,14 @@
                         </label>
                     </div>
                 </div>
-                <div class="form-control w-full my-4">
+                <div class="form-control w-full">
                     <label class="label">Alamat</label>
                     <textarea :readonly="form_edit.processing" v-model="form_edit.address" type="text" placeholder="Alamat" class="textarea textarea-bordered w-full"></textarea>
                     <label class="label" v-if="form_edit.errors.address">
                         <span class="label-text-alt text-error">{{ form_edit.errors.address }}</span>
                     </label>
                 </div>
-                <div class="flex justify-between">
+                <div class="flex justify-between mt-10">
                     <button :disabled="form_edit.processing" type="submit" class="btn btn-primary" :class="form_edit.processing ? 'loading' : ''">Save</button>
                     <button :disabled="form_edit.processing" @click.prevent="destroy" type="button" class="btn btn-error" :class="form_edit.processing ? 'loading' : ''">Delete</button>
                 </div>
@@ -172,6 +179,7 @@ const props = defineProps({
 })
 const form_save = useForm({
     name: '',
+    loan: 0,
     price: props.price,
     phone: '',
     address: '',
@@ -249,6 +257,7 @@ const set_default_form = () => {
 
     form_save.defaults({
         name:null,
+        loan: 0,
         address:null,
         phone:null,
     })

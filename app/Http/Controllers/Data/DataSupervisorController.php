@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Data;
 
 use App\Http\Controllers\Controller;
+use App\Models\LoanDetail;
 use App\Models\Supervisor;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
@@ -41,6 +42,18 @@ class DataSupervisorController extends Controller
 
             $supervisor->loan()->create();
 
+            if($request->loan > 0){
+                LoanDetail::withoutEvents(function () use ($request, $supervisor){
+                    $supervisor->loan->details()->create([
+                        'description'       => 'Migrasi Aplikasi (Pinjaman Awal)',
+                        'opening_balance'   => $supervisor->loan->balance,
+                        'amount'            => $request->loan,
+                        'status'            => 'PINJAMAM AWAL'
+                    ]);
+                });
+                $supervisor->loan()->increment('balance', $request->loan);
+
+            }
             DB::commit();
             return redirect()->back()->with('alert', [
                 'type'    => 'success',

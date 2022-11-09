@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Data;
 use App\Http\Controllers\Controller;
 use App\Models\Configuration;
 use App\Models\Driver;
+use App\Models\LoanDetail;
 use Illuminate\Contracts\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -42,6 +43,18 @@ class DataDriverController extends Controller
 
             $driver->loan()->create();
 
+            if($request->loan > 0){
+                LoanDetail::withoutEvents(function () use ($request, $driver){
+                    $driver->loan->details()->create([
+                        'description'       => 'Migrasi Aplikasi (Pinjaman Awal)',
+                        'opening_balance'   => $driver->loan->balance,
+                        'amount'            => $request->loan,
+                        'status'            => 'PINJAMAM AWAL'
+                    ]);
+                });
+                $driver->loan()->increment('balance', $request->loan);
+
+            }
             DB::commit();
             return redirect()->back()->with('alert', [
                 'type'    => 'success',

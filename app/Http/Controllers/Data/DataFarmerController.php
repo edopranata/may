@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Data;
 
 use App\Http\Controllers\Controller;
 use App\Models\Farmer;
+use App\Models\LoanDetail;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
@@ -30,6 +31,19 @@ class DataFarmerController extends Controller
                 ->create($request->only(['name', 'address', 'phone', 'distance']));
 
             $farmer->loan()->create();
+
+            if($request->loan > 0){
+                LoanDetail::withoutEvents(function () use ($request, $farmer){
+                    $farmer->loan->details()->create([
+                        'description'       => 'Migrasi Aplikasi (Pinjaman Awal)',
+                        'opening_balance'   => $farmer->loan->balance,
+                        'amount'            => $request->loan,
+                        'status'            => 'PINJAMAM AWAL'
+                    ]);
+                });
+                $farmer->loan()->increment('balance', $request->loan);
+
+            }
             DB::commit();
             return redirect()->back()->with('alert', [
                 'type'    => 'success',

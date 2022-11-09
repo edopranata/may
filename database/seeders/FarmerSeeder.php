@@ -30,16 +30,16 @@ class FarmerSeeder extends Seeder
             $sequence       = $index + 1;
             $invoice_number = 'MM-P' . now()->format('Y') . sprintf('%06d', $sequence);
 
-            $farmer->loan->details()->create([
-                'invoice_date'      => now()->toDateString(),
-                'sequence'          => $sequence,
-                'invoice_number'    => $invoice_number,
-                'description'       => 'Pinjaman ' . now()->format('d F Y'),
-                'opening_balance'   => $farmer->loan->balance,
-                'amount'            => $balance,
-                'status'            => 'PINJAM'
-            ]);
-            $farmer->loan()->increment('balance', $balance);
+//            $farmer->loan->details()->create([
+//                'invoice_date'      => now()->toDateString(),
+//                'sequence'          => $sequence,
+//                'invoice_number'    => $invoice_number,
+//                'description'       => 'Pinjaman ' . now()->format('d F Y'),
+//                'opening_balance'   => $farmer->loan->balance,
+//                'amount'            => $balance,
+//                'status'            => 'PINJAM'
+//            ]);
+//            $farmer->loan()->increment('balance', $balance);
         });
     }
 
