@@ -17,7 +17,9 @@ return new class extends Migration
             $table->id();
             $table->foreignIdFor(\App\Models\Car::class)->nullable()->constrained()->cascadeOnUpdate()->nullOnDelete();
 
-            $table->dateTime('trade_date');
+            $table->dateTime('invoice_date');
+            $table->integer('sequence')->nullable();
+            $table->string('invoice_number')->nullable();
             $table->string('name');
             $table->string('description')->nullable();
             $table->double('amount');

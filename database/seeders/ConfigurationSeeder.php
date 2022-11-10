@@ -32,10 +32,24 @@ class ConfigurationSeeder extends Seeder
                 'name'      => 'title',
                 'text'      => "RiauCoder's"
             ]
-
         ];
+        $costs = [
+            [
+                'name'  => 'cost',
+                'text'  => 'MINYAK MOBIL'
+            ],
+            [
+                'name'  => 'cost',
+                'text'  => 'SERVICE MOBIL'
+            ],
+        ];
+
         foreach ($configs as $config) {
             Configuration::query()->create($config);
+        }
+        foreach ($costs as $cost) {
+            Configuration::query()->create($cost);
+
         }
     }
 }
