@@ -23,8 +23,8 @@ class DatabaseSeeder extends Seeder
             DriverSeeder::class,
             SupervisorSeeder::class,
             ConfigurationSeeder::class,
-            TradeSeeder::class,
-            UpdateTradeSeeder::class,
+//            TradeSeeder::class,
+//            UpdateTradeSeeder::class,
         ]);
     }
 }
