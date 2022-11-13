@@ -47,6 +47,7 @@ Route::middleware(['auth'])->group(function (){
                 Route::resource('supervisor', \App\Http\Controllers\Transaction\Loan\TransactionLoanSupervisorController::class)->only(['index', 'store', 'show', 'edit', 'update']);
             });
 
+            Route::resource('cost', \App\Http\Controllers\Transaction\Cost\Car\TransactionCostCarController::class)->only(['index', 'store', 'show', 'edit', 'update']);
             Route::resource('trade', \App\Http\Controllers\Transaction\Trade\TransactionTradeController::class)->only(['index', 'store', 'edit', 'update', 'destroy']);
             Route::resource('factory', \App\Http\Controllers\Transaction\Trade\TransactionTradeFactoryController::class)->only(['index', 'show', 'update', 'destroy']);
 
