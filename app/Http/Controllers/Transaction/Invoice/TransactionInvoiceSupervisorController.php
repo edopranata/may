@@ -100,7 +100,7 @@ class TransactionInvoiceSupervisorController extends Controller
             $invoice = $supervisor->invoices()->create([
                 'sequence' => $sequence,
                 'invoice_number' => $invoice_number,
-                'invoice_date' => $request->invoice_date,
+                'invoice_date' => $date,
                 'loan' => $loan,
                 'loan_installment' => $request->installment,
                 'total_buy' => $total,

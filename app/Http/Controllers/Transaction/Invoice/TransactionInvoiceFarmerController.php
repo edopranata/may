@@ -100,7 +100,7 @@ class TransactionInvoiceFarmerController extends Controller
             // update farmer_status from trade_details table
             foreach ($invoice->trade_details as $trade_detail) {
                 $trade_detail->update([
-                    'farmer_status' => now()->toDateTimeString()
+                    'farmer_status' => $date
                 ]);
             }
 

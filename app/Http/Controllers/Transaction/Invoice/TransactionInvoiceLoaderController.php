@@ -94,7 +94,7 @@ class TransactionInvoiceLoaderController extends Controller
             $invoice->trades()->attach($trades);
 
             $invoice->trades()->update([
-                'loader_status' => $request->invoice_date,
+                'loader_status' => $date,
                 'loader_fee'    => $request->loader_fee ?? $loader->price->value
             ]);
 

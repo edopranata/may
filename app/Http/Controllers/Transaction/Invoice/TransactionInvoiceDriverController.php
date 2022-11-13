@@ -84,7 +84,7 @@ class TransactionInvoiceDriverController extends Controller
             $invoice->trades()->attach($trades);
 
             $invoice->trades()->update([
-                'driver_status' => now()->toDateTimeString(),
+                'driver_status' => $date,
                 'driver_fee' => $request->driver_fee ?? $driver->price->value
             ]);
 

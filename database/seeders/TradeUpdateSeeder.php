@@ -6,7 +6,7 @@ use App\Models\Trade;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 
-class UpdateTradeSeeder extends Seeder
+class TradeUpdateSeeder extends Seeder
 {
     /**
      * Run the database seeds.
@@ -16,8 +16,6 @@ class UpdateTradeSeeder extends Seeder
     public function run()
     {
         $trades = Trade::query()
-            ->inRandomOrder()
-            ->take(rand(30,50))
             ->get();
 
         foreach ($trades as $trade) {

@@ -78,7 +78,7 @@ class TransactionInvoiceCarController extends Controller
             $invoice->trades()->attach($trades);
 
             $invoice->trades()->update([
-                'car_status' => $request->invoice_date,
+                'car_status' => $date,
                 'car_fee'    => $request->car_fee ?? $car->price->value
             ]);
 
