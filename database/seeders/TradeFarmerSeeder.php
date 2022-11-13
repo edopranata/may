@@ -17,7 +17,7 @@ class TradeFarmerSeeder extends Seeder
      */
     public function run()
     {
-        $farmers = Farmer::query()->whereHas('trades')->with(['trades'])->chunk(1, function ($farmers){
+        Farmer::query()->whereHas('trades')->with(['trades'])->chunk(1, function ($farmers){
             foreach ($farmers as $farmer) {
                 $trades         = collect($farmer->trades)->pluck('id');
                 $total_buy      = collect($farmer->trades)->sum('total');
@@ -45,8 +45,6 @@ class TradeFarmerSeeder extends Seeder
                 }
             }
         });
-
-
     }
 
     private function getLastSequence($invoice_date) {

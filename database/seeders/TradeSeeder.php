@@ -16,7 +16,6 @@ class TradeSeeder extends Seeder
     {
         $this->call([
             TradeCreateSeeder::class,
-            TradeUpdateSeeder::class,
         ]);
     }
 }

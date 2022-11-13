@@ -72,6 +72,7 @@ class ReportInvoiceController extends Controller
                     'modelable', [Farmer::class, Car::class, Driver::class, Loader::class, Supervisor::class], function (Builder $builder) use ($request){
                     $builder->filter($request->search);
                 })
+                ->orderByDesc('created_at')
                 ->paginate()
                 ->withQueryString()
                 ->through( function ($invoice) {
