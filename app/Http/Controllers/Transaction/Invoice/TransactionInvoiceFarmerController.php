@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Transaction\Invoice;
 use App\Http\Controllers\Controller;
 use App\Models\Farmer;
 use App\Models\Invoice;
+use Carbon\Carbon;
 use Illuminate\Contracts\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -77,8 +78,9 @@ class TransactionInvoiceFarmerController extends Controller
 
         DB::beginTransaction();
         try {
-            $sequence       = $this->getLastSequence();
-            $invoice_number = 'MM' . now()->format('Y') . sprintf('%08d', $sequence);
+            $date           = Carbon::parse($request->invoice_date);
+            $sequence       = $this->getLastSequence($request->invoice_date);
+            $invoice_number = 'MM' . $date->format('Y') . sprintf('%08d', $sequence);
 
             // Insert into invoices table
             $invoice = $farmer->invoices()->create([
@@ -146,8 +148,9 @@ class TransactionInvoiceFarmerController extends Controller
         }
     }
 
-    private function getLastSequence() {
-        $invoice = Invoice::query()->whereYear('invoice_date', now()->format('Y'))->latest()->first();
+    private function getLastSequence($invoice_date) {
+        $date = Carbon::parse($invoice_date);
+        $invoice = Invoice::query()->whereYear('invoice_date', $date->format('Y'))->latest()->first();
         return $invoice ? ($invoice->sequence + 1) : 1;
 
     }

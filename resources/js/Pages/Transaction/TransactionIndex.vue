@@ -13,6 +13,11 @@
         <PageMenu class="bg-success text-success-content hover:shadow-xl hover:bg-success/80" title="Buat Invoice" :link="route('transaction.invoice.index')">Buat Invoice Pembayaran</PageMenu>
         <PageMenu class="bg-primary text-primary-content hover:shadow-xl hover:bg-primary/90" title="Pinjaman" :link="route('transaction.loan.index')">Pinjam atau Bayar Pinjaman</PageMenu>
     </section>
+
+    <PageTitle :classes="'bg-base-content'" class="">Biaya Operasional</PageTitle>
+    <section class="px-4 grid xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 gap-4">
+        <PageMenu class="bg-error text-error-content hover:shadow-xl hover:bg-error/80" title="Biaya Operasional" :link="route('transaction.cost.index')">Biaya Ops. Mobil</PageMenu>
+    </section>
 </template>
 
 <script setup>
