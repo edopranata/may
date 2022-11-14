@@ -42,7 +42,7 @@ class TransactionLoanFarmerController extends Controller
 
                 $date               = Carbon::parse($request->date);
                 $sequence           = $this->getLastSequence($date->format('Y'));
-                $invoice_number     = 'MM-P' . now()->format('Y') . sprintf('%06d', $sequence);
+                $invoice_number     = 'MM-P' . $date->format('Y') . sprintf('%06d', $sequence);
 
                 $customer_loan = Farmer::query()->where('id', $request->id)
                     ->with('loan')->first();
@@ -51,7 +51,7 @@ class TransactionLoanFarmerController extends Controller
                     'sequence'          => $sequence,
                     'invoice_number'    => $invoice_number,
                     'invoice_date'      => $date->toDateString(),
-                    'description'       => $request->description ?? 'Pinjaman ' . now()->format('d F Y'),
+                    'description'       => $request->description ?? 'Pinjaman ' . $date->toDateString(),
                     'opening_balance'   => $customer_loan->loan->balance,
                     'amount'            => $request->amount,
                     'status'            => 'PINJAM'
@@ -109,7 +109,7 @@ class TransactionLoanFarmerController extends Controller
         try {
             $date               = Carbon::parse($request->date);
             $sequence           = $this->getLastSequence($date->format('Y'));
-            $invoice_number     = 'MM-B' . now()->format('Y') . sprintf('%06d', $sequence);
+            $invoice_number     = 'MM-B' . $date->format('Y') . sprintf('%06d', $sequence);
 
             $details = $customer_loan->loan->details()->create([
                 'sequence'          => $sequence,

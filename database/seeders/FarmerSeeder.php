@@ -21,12 +21,12 @@ class FarmerSeeder extends Seeder
     {
         Farmer::factory()->times(200)->create([
             'user_id'   => User::query()->first()->id
-        ]);
-//            ->each( function ($farmer, $index){
+        ])
+            ->each( function ($farmer, $index){
 //            $one = [100000, 200000, 300000];
 //            $two = [5,10,15];
 //            $balance = $one[array_rand($one)] * ($two[array_rand($two)] + 5) + $one[array_rand($one)];
-//            $farmer->loan()->create();
+            $farmer->loan()->create();
 //
 //            $sequence       = $index + 1;
 //            $invoice_number = 'MM-P' . now()->format('Y') . sprintf('%06d', $sequence);
@@ -41,7 +41,7 @@ class FarmerSeeder extends Seeder
 //                'status'            => 'PINJAM'
 //            ]);
 //            $farmer->loan()->increment('balance', $balance);
-//        });
+        });
     }
 
 }

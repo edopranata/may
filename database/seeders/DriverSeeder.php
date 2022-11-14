@@ -23,6 +23,6 @@ class DriverSeeder extends Seeder
             $driver->price()->create([
                 'value' => random_int(90, 120)
             ]);
-        });;
+        });
     }
 }

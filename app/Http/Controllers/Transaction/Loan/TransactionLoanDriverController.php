@@ -40,7 +40,7 @@ class TransactionLoanDriverController extends Controller
 
                 $date               = Carbon::parse($request->date);
                 $sequence           = $this->getLastSequence($date->format('Y'));
-                $invoice_number     = 'MM-P' . now()->format('Y') . sprintf('%06d', $sequence);
+                $invoice_number     = 'MM-P' . $date->format('Y') . sprintf('%06d', $sequence);
 
                 $customer_loan = Driver::query()->where('id', $request->id)
                     ->with('loan')->first();
@@ -49,7 +49,7 @@ class TransactionLoanDriverController extends Controller
                     'sequence'          => $sequence,
                     'invoice_number'    => $invoice_number,
                     'invoice_date'      => $date->toDateString(),
-                    'description'       => $request->description ?? 'Pinjaman ' . now()->format('d F Y'),
+                    'description'       => $request->description ?? 'Pinjaman ' . $date->format('d F Y'),
                     'opening_balance'   => $customer_loan->loan->balance,
                     'amount'            => $request->amount,
                     'status'            => 'PINJAM'
@@ -107,7 +107,7 @@ class TransactionLoanDriverController extends Controller
         try {
             $date               = Carbon::parse($request->date);
             $sequence           = $this->getLastSequence($date->format('Y'));
-            $invoice_number     = 'MM-B' . now()->format('Y') . sprintf('%06d', $sequence);
+            $invoice_number     = 'MM-B' . $date->format('Y') . sprintf('%06d', $sequence);
 
             $details = $customer_loan->loan->details()->create([
                 'sequence'          => $sequence,
@@ -148,7 +148,7 @@ class TransactionLoanDriverController extends Controller
     }
 
     private function getLastSequence($year = null) {
-        $invoice = LoanDetail::query()->whereYear('invoice_date', $year ?? now()->format('Y'))->latest()->first();
+        $invoice = LoanDetail::query()->whereYear('invoice_date', $year ?? $date->format('Y'))->latest()->first();
         return $invoice ? ($invoice->sequence + 1) : 1;
 
     }

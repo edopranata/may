@@ -25,6 +25,13 @@ Route::middleware(['auth'])->group(function (){
     Route::middleware(['verified'])->group(function (){
         Route::group(['prefix' => 'dashboard', 'as' => 'dashboard.'], function (){
             Route::get('/', [\App\Http\Controllers\DashboardController::class, 'index'])->name('index');
+            Route::group(['prefix'=> 'trade', 'as' => 'trade.'], function (){
+                Route::post('/create', [\App\Http\Controllers\DashboardController::class, 'trade_create'])->name('create');
+                Route::post('/factory', [\App\Http\Controllers\DashboardController::class, 'trade_factory'])->name('factory');
+                Route::post('/update', [\App\Http\Controllers\DashboardController::class, 'trade_update'])->name('update');
+                Route::post('/reset', [\App\Http\Controllers\DashboardController::class, 'trade_reset'])->name('reset');
+
+            });
         });
 
 
@@ -70,6 +77,8 @@ Route::middleware(['auth'])->group(function (){
         Route::resource('report', \App\Http\Controllers\Report\ReportController::class)->only(['index']);
         Route::group(['prefix' => 'report', 'as' => 'report.'], function (){
             Route::resource('invoice', \App\Http\Controllers\Report\Invoice\ReportInvoiceController::class)->only(['index']);
+            Route::resource('loan', \App\Http\Controllers\Report\Invoice\ReportInvoiceLoanController::class)->only(['index']);
+
         });
 
         Route::resource('print', \App\Http\Controllers\Prints\PrintController::class)->only(['index']);

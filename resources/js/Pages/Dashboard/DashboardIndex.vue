@@ -3,7 +3,17 @@
 
     <Breadcrumb :links="breadcrumbs"/>
 
+    <PageTitle :classes="'bg-base-content'" class="">Insert Dummy</PageTitle>
+    <section class="px-4 grid sm:grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-4">
+        <Link :disabled="progress" :href="route('dashboard.trade.reset')" method="post" as="button" type="button" class="btn col-span-3 btn-error">Reset</Link>
+
+        <Link :disabled="progress" :href="route('dashboard.trade.create')" method="post" as="button" type="button" class="btn">Create Trades</Link>
+        <Link :disabled="progress" :href="route('dashboard.trade.factory')" method="post" as="button" type="button" class="btn">Trade Factories</Link>
+        <Link :disabled="progress" :href="route('dashboard.trade.update')" method="post" as="button" type="button" class="btn">Trades Update</Link>
+    </section>
+
     <PageTitle :classes="'bg-base-content'" class="">Laba / Rugi</PageTitle>
+
     <section class="px-4 grid sm:grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-4">
         <div class="stats shadow w-full border border-success overflow-hidden">
             <div class="stat">
@@ -62,7 +72,9 @@
 </template>
 
 <script setup>
-import { Head } from '@inertiajs/inertia-vue3';
+import { Head, Link } from '@inertiajs/inertia-vue3';
+import { Inertia } from "@inertiajs/inertia";
+import {ref} from 'vue'
 
 import PageTitle from  "@/Components/PageTitle.vue"
 import Breadcrumb from "@/Shared/Breadcrumb.vue";
@@ -73,11 +85,15 @@ const breadcrumbs = [
         "label": "Dashboard"
     }
 ]
-
+const progress = ref(false)
 const props = defineProps({
     loan: Number,
     loans: Object,
     income: Number,
     expense: Number,
 })
+
+Inertia.on('start', () => { progress.value = true })
+Inertia.on('finish', () => { progress.value = false })
+
 </script>
