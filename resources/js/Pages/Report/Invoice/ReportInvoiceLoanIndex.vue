@@ -20,32 +20,32 @@
                 <tr>
                     <td class="group-hover:bg-base-300 px-2 align-top" rowspan="4">
                         <div>
-                            <div class="font-bold">{{ invoices.data[invoice_index].invoice_number }}</div>
-                            <div class="text-sm opacity-50">{{invoices.data[invoice_index].invoice_date }}</div>
+                            <div class="font-bold">{{ invoices.data.length ? invoices.data[invoice_index].invoice_number : '' }}</div>
+                            <div class="text-sm opacity-50">{{invoices.data.length ? invoices.data[invoice_index].invoice_date : '' }}</div>
                         </div>
                     </td>
                     <td class="group-hover:bg-base-300 px-2 align-top" rowspan="4">
                         <div>
-                            <div class="font-bold">{{ invoices.data[invoice_index].loan.modelable.name }}</div>
-                            <div class="text-sm opacity-50">{{ invoices.data[invoice_index].loan.modelable.phone }}</div>
+                            <div class="font-bold">{{ invoices.data.length ? invoices.data[invoice_index].loan.modelable.name : '' }}</div>
+                            <div class="text-sm opacity-50">{{ invoices.data.length ? invoices.data[invoice_index].loan.modelable.phone : '' }}</div>
                         </div>
                     </td>
                     <td class="group-hover:bg-base-300 px-2 text-right font-bold capitalize">Pinjaman Awal</td>
-                    <td class="group-hover:bg-base-300 px-2 text-right font-bold">{{ Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR', minimumFractionDigits: 0  }).format(invoices.data[invoice_index].opening_balance)}}</td>
+                    <td class="group-hover:bg-base-300 px-2 text-right font-bold">{{ Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR', minimumFractionDigits: 0  }).format(invoices.data.length ? invoices.data[invoice_index].opening_balance : 0)}}</td>
                 </tr>
                 <tr>
-                    <td class="group-hover:bg-base-300 px-2 text-right font-bold capitalize">{{ invoices.data[invoice_index].status }}</td>
-                    <td class="group-hover:bg-base-300 px-2 text-right font-bold">{{ Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR', minimumFractionDigits: 0  }).format(invoices.data[invoice_index].amount)}}</td>
+                    <td class="group-hover:bg-base-300 px-2 text-right font-bold capitalize">{{ invoices.data.length ? invoices.data[invoice_index].status : '' }}</td>
+                    <td class="group-hover:bg-base-300 px-2 text-right font-bold">{{ Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR', minimumFractionDigits: 0  }).format(invoices.data.length ? invoices.data[invoice_index].amount : 0)}}</td>
                 </tr>
                 <tr>
                     <td class="group-hover:bg-base-300 px-2 text-right font-bold capitalize">Pinjaman Akhir</td>
-                    <td class="group-hover:bg-base-300 px-2 text-right font-bold">{{ Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR', minimumFractionDigits: 0  }).format(invoices.data[invoice_index].opening_balance + invoices.data[invoice_index].amount)}}</td>
+                    <td class="group-hover:bg-base-300 px-2 text-right font-bold">{{ Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR', minimumFractionDigits: 0  }).format(invoices.data.length ? invoices.data[invoice_index].opening_balance + invoices.data[invoice_index].amount : 0)}}</td>
                 </tr>
                 </tbody>
             </table>
             <div class="modal-action flex justify-between space-x-4">
                 <div class="flex space-x-4">
-                    <Link as="button" :href="invoices.data[invoice_index].type ? invoices.data[invoice_index].type.url_print : ''" class="btn btn-success">Print Invoice</Link>
+                    <Link as="button" :href="invoices.data.length ? invoices.data[invoice_index].type.url_print : ''" class="btn btn-success">Print Invoice</Link>
                 </div>
                 <button class="btn btn-error" @click="modal = false">Batalkan</button>
             </div>

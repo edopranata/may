@@ -19,4 +19,5 @@ class IncomeDetail extends Model
     {
         return $this->belongsTo(Income::class);
     }
+
 }

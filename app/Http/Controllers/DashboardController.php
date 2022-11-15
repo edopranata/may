@@ -71,7 +71,7 @@ class DashboardController extends Controller
     }
     public function trade_create()
     {
-        $periods = CarbonPeriod::create('2022-11-01', now()->format('Y-m-d'));
+        $periods = CarbonPeriod::create('2022-10-01', now()->format('Y-m-d'));
         foreach ($periods as $period) {
             Trade::factory()->times(rand(2,5))->create([
                 'trade_date' => $period
@@ -109,8 +109,8 @@ class DashboardController extends Controller
         Trade::query()
             ->chunk(1, function ($trades){
                 foreach ($trades as $trade) {
-                    $weight = $trade->gross_weight - rand(123,512);
-                    $price = round($trade->gross_price, 0) + 350;
+                    $weight = $trade->gross_weight - rand(100,200);
+                    $price = round($trade->gross_price, 0) + 370;
                     $trade->update([
                         'net_weight'    => $weight,
                         'net_price'     => $price,
