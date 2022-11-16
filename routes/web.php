@@ -79,7 +79,11 @@ Route::middleware(['auth'])->group(function (){
             Route::resource('invoice', \App\Http\Controllers\Report\Invoice\ReportInvoiceController::class)->only(['index']);
             Route::resource('loan', \App\Http\Controllers\Report\Invoice\ReportInvoiceLoanController::class)->only(['index']);
             Route::group(['prefix' => 'income', 'as' => 'income.'], function (){
-                Route::get('/', [\App\Http\Controllers\Report\Income\ReportIncomeController::class, 'index'])->name('index');
+                Route::match(['get', 'post'],'/', [\App\Http\Controllers\Report\Income\ReportIncomeController::class, 'index'])->name('index');
+            });
+
+            Route::group(['prefix' => 'expense', 'as' => 'expense.'], function (){
+                Route::match(['get', 'post'],'/', [\App\Http\Controllers\Report\Expense\ReportExpenseController::class, 'index'])->name('index');
             });
         });
 

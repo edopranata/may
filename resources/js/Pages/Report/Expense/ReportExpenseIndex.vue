@@ -32,43 +32,40 @@
                         <label class="label">
                             <span class="label-text">&nbsp;</span>
                         </label>
-                        <button type="button" class="btn" @click="form.post(route('report.income.index'), { onSuccess: () => {getTotal()}})">Filter </button>
+                        <button type="button" class="btn" @click="form.post(route('report.expense.index'), { onSuccess: () => {getTotal()}})">Filter </button>
                     </div>
                 </div>
             </div>
         </div>
         <div class="hidden badge-primary badge-secondary badge badge-accent badge-ghost badge-info badge-error"></div>
         <div class="card w-full rounded-none border-2 border-info shadow-xl">
-            <div class="card-body grid md:grid-cols-3 gap-4">
-                <table class="w-full text-left text-base md:col-span-2">
+            <div class="card-body grid gap-4">
+                <table class="w-full text-left text-base">
                     <thead class="text-sm uppercase bg-primary/20">
                     <tr>
                         <th class="py-3 px-6">#</th>
                         <th class="py-3 px-6">Tanggal</th>
-                        <th class="py-3 px-6">Pemasukan</th>
-                        <th class="py-3 px-6">Pengeluaran</th>
-                        <th class="py-3 px-6">Laba / Rugi</th>
+                        <th v-for="(item, index) in props.types" class="py-3 px-6 text-right">{{ item.type }}</th>
+                        <th class="py-3 px-6 text-right">Total Pengeluaran</th>
                     </tr>
                     </thead>
                     <tbody>
-                    <tr v-if="props.incomes.length > 0" class="hover:cursor-pointer group border-b" v-for="(item, index) in props.incomes">
+                    <tr v-if="props.expenses.length > 0" class="hover:cursor-pointer group border-b" v-for="(item, index) in props.expenses">
                         <th class="group-hover:bg-base-300 py-4 px-6">{{ index + 1  }}</th>
-                        <th class="group-hover:bg-base-300 py-4 px-6">{{ item.date  }}</th>
-                        <td class="group-hover:bg-base-300 py-4 px-6 text-right">{{ Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR', minimumFractionDigits: 0  }).format(item.income)}}</td>
-                        <td class="group-hover:bg-base-300 py-4 px-6 text-right">{{ Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR', minimumFractionDigits: 0  }).format(item.expense)}}</td>
-                        <td class="group-hover:bg-base-300 py-4 px-6 text-right">{{ Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR', minimumFractionDigits: 0  }).format(item.net_income)}}</td>
+                        <td class="group-hover:bg-base-300 py-4 px-6">{{ item.date  }}</td>
+                        <td v-for="(value, index) in props.types" class="group-hover:bg-base-300 py-4 px-6 text-right">{{ Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR', minimumFractionDigits: 0  }).format(filter_type(item.expense, value.type) ?? 0)}}  </td>
+                        <td class="group-hover:bg-base-300 py-4 px-6 text-right">{{ Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR', minimumFractionDigits: 0  }).format(item.expense ? item.expense.balance : 0)}}</td>
                     </tr>
                     <tr v-else>
                         <td colspan="4" class="text-center border-b-2">No Data</td>
                     </tr>
                     </tbody>
                     <tfoot class="bg-primary/20">
-                    <tr v-if="props.incomes.length > 0">
+                    <tr v-if="props.expenses.length > 0">
                         <th class="py-4 px-6"></th>
                         <th class="py-4 px-6">Total</th>
-                        <th class="py-4 px-6 text-right">{{ Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR', minimumFractionDigits: 0  }).format(balance.income)}}</th>
+                        <th v-for="(value, index) in props.types" class="py-4 px-4"></th>
                         <th class="py-4 px-6 text-right">{{ Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR', minimumFractionDigits: 0  }).format(balance.expense)}}</th>
-                        <th class="py-4 px-6 text-right">{{ Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR', minimumFractionDigits: 0  }).format(balance.income - balance.expense)}}</th>
                     </tr>
                     </tfoot>
                 </table>
@@ -96,13 +93,12 @@ const form = useForm({
 })
 
 const props = defineProps({
-    incomes: Array,
+    expenses: Array,
     types: Array,
     year: Number,
     month: Number,
 })
 const balance = reactive({
-    income: Number,
     expense: Number
 })
 onMounted( () =>{
@@ -110,17 +106,8 @@ onMounted( () =>{
 })
 
 const getTotal = () => {
-    let income = props.incomes.reduce((arr, trade) => {
-        arr.push(trade.income)
-        return (arr)
-    }, []);
-    console.info(income)
-    balance.income = income.reduce((arr, n) => {
-        return arr += n
-    }, 0)
-
-    let expense = props.incomes.reduce((arr, trade) => {
-        arr.push(trade.expense)
+    let expense = props.expenses.reduce((arr, trade) => {
+        arr.push(trade.expense ? trade.expense.balance : 0)
         return (arr)
     }, []);
 
@@ -128,5 +115,20 @@ const getTotal = () => {
         return arr += n
     }, 0)
 
+
+}
+
+const filter_type = (data, type) => {
+    let amount = 0
+    if(data && data.hasOwnProperty('details')){
+        if(data.details.length > 0){
+            amount = data.details.filter(function (e) {
+                return e.type === type;
+            })[0];
+        }else{
+            amount = 0
+        }
+    }
+    return (amount || amount !== undefined) ? amount.amount : amount
 }
 </script>

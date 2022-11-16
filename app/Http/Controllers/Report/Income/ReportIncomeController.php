@@ -18,7 +18,7 @@ class ReportIncomeController extends Controller
     {
         $request->validate([
             'month' => ['nullable', 'numeric','min:1'],
-            'year'  => ['nullable', 'numeric','min:2022']
+            'year'  => ['nullable', 'numeric','min:2022', 'max:' . now()->format('Y')]
         ]);
 
         $date = ($request->year && $request->month) ? Carbon::parse($request->year . '-' . $request->month . '-01') : null;
@@ -50,6 +50,7 @@ class ReportIncomeController extends Controller
             ->whereMonth('date', $periods->first()->format('m'))
             ->whereYear('date', $periods->first()->format('Y'))
             ->get());
+
         if($income_collections->count() || $expense_collections->count()){
             foreach ($periods as $period) {
                 $income_balance = $income_collections->where('day', $period->format('d'))->where('month', $period->format('m'))->where('year', $period->format('Y'))->sum('balance');
@@ -63,10 +64,9 @@ class ReportIncomeController extends Controller
                     );
                 }
             }
-            return collect($incomes);
-        }else {
-            return collect($incomes);
         }
+
+        return collect($incomes);
 
 
     }

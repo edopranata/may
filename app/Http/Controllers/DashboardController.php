@@ -14,6 +14,7 @@ use App\Models\Loan;
 use App\Models\Trade;
 use Carbon\Carbon;
 use Carbon\CarbonPeriod;
+use Illuminate\Contracts\Database\Eloquent\Builder;
 use Illuminate\Support\Facades\Artisan;
 
 class DashboardController extends Controller
