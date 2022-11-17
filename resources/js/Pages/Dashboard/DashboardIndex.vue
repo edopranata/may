@@ -3,8 +3,8 @@
 
     <Breadcrumb :links="breadcrumbs"/>
 
-    <PageTitle :classes="'bg-base-content'" class="">Insert Dummy</PageTitle>
-    <section class="px-4 grid sm:grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-4">
+    <PageTitle :classes="'bg-base-content'" class="hidden">Insert Dummy</PageTitle>
+    <section class="px-4 grid sm:grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-4 hidden">
         <Link :disabled="progress" :href="route('dashboard.trade.reset')" method="post" as="button" type="button" class="btn col-span-3 btn-error">Reset</Link>
 
         <Link :disabled="progress" :href="route('dashboard.trade.create')" method="post" as="button" type="button" class="btn">Create Trades</Link>
@@ -20,7 +20,7 @@
                 <div class="stat-title">Pendapatan</div>
                 <div class="stat-value text-success">{{ Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR', minimumFractionDigits: 0  }).format(props.income) }}</div>
                 <div class="stat-desc mt-1">Total pemasukan bulan ini</div>
-                <div class="stat-actions flex justify-end">
+                <div class="stat-actions flex justify-end hidden">
                     <button class="btn btn-sm btn-success">Detail</button>
                 </div>
             </div>
@@ -30,7 +30,7 @@
                 <div class="stat-title">Pengeluaran</div>
                 <div class="stat-value">{{ Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR', minimumFractionDigits: 0  }).format(props.expense) }}</div>
                 <div class="stat-desc mt-1">Total pengeluaran bulan ini</div>
-                <div class="stat-actions flex justify-end">
+                <div class="stat-actions flex justify-end hidden">
                     <button class="btn btn-sm btn-error flex justify-end">Detail</button>
                 </div>
             </div>
@@ -40,7 +40,7 @@
                 <div class="stat-title">Laba / Rugi</div>
                 <div class="stat-value" :class="(props.income - props.expense) < 0 ? 'text-error' : 'text-success'">{{ Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR', minimumFractionDigits: 0  }).format(props.income - props.expense) }}</div>
                 <div class="stat-desc mt-1">Laba / Rugi bulan ini</div>
-                <div class="stat-actions flex justify-end">
+                <div class="stat-actions flex justify-end hidden">
                     <button class="btn btn-sm flex justify-end" :class="(props.income - props.expense) < 0 ? 'btn-error ' : 'btn-success'">Detail</button>
                 </div>
             </div>
@@ -53,7 +53,7 @@
             <div class="stat">
                 <div class="stat-title">Pinjaman</div>
                 <div class="stat-value md:text-xl lg:text-3xl">{{ Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR', minimumFractionDigits: 0  }).format(props.loan ?? 0) }}</div>
-                <div class="stat-actions flex justify-end">
+                <div class="stat-actions flex justify-end hidden">
                     <button class="btn btn-sm btn-error flex justify-end">Detail</button>
                 </div>
             </div>
@@ -62,7 +62,7 @@
             <div v-for="(item, index) in props.loans" class="stat">
                 <div class="stat-title">Pinjaman {{ item.name }}</div>
                 <div class="stat-value md:text-xl lg:text-3xl">{{ Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR', minimumFractionDigits: 0  }).format(item.balance ?? 0) }}</div>
-                <div class="stat-actions flex justify-end">
+                <div class="stat-actions flex justify-end hidden">
                     <button class="btn btn-sm btn-error flex justify-end hidden">Detail</button>
                 </div>
             </div>

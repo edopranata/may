@@ -34,7 +34,7 @@
                         </label>
                         <div class="flex space-x-4">
                             <button type="button" class="btn" @click="form.post(route('report.expense.index'), { onSuccess: () => {getTotal()}})">Filter </button>
-                            <Link :disabled="props.expenses.length < 1" as="button" class="btn" :href="route('print.expense.index')" :data="{ month: form.month, year: form.year }">Filter </Link>
+                            <Link :disabled="props.expenses.length < 1" as="button" class="btn" :href="route('print.expense.index')" :data="{ month: form.month, year: form.year }"><BaseIcon :path="mdiPrinter"/> Print </Link>
 
                         </div>
                     </div>
@@ -81,7 +81,9 @@
 
 <script setup>
 import Breadcrumb from "@/Shared/Breadcrumb.vue"
+import BaseIcon from "@/Components/BaseIcon.vue";
 
+import { mdiPrinter } from "@mdi/js";
 import {Head, useForm, Link} from '@inertiajs/inertia-vue3'
 import {onMounted, reactive} from "vue";
 

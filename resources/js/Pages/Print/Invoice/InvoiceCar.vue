@@ -14,7 +14,7 @@
                 <div class="flex justify-between">
                     <div class="font-bold "></div>
                     <div class="text-left w-[35%] mb-5">
-                        <div class="border-gray-800 border-b pb-1">Kepada</div>
+                        <div class="border-gray-800 border-b pb-1">Amprah Mobil</div>
                         <div class="border-gray-800 border-b pb-1">{{ invoice.modelable.no_pol.toUpperCase() }} ({{ invoice.modelable.name.toUpperCase() }})</div>
                     </div>
                 </div>

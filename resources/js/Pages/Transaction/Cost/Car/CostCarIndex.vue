@@ -10,7 +10,7 @@
             <h3 class="font-bold text-lg">Lanjutkan proses</h3>
             <p class="py-4">Klik simpan untuk simpan biaya operasional</p>
             <div class="modal-action flex justify-between">
-                <button type="button" @click="save" class="btn btn-primary"><BaseIcon :path="mdiContentSave"/> Lihat Perhitungan Gaji</button>
+                <button type="button" @click="save" class="btn btn-primary"><BaseIcon :path="mdiContentSave"/> Simpan Transaksi</button>
                 <button type="button" @click="modal=false" class="btn btn-warning"><BaseIcon :path="mdiCancel"/> Batal</button>
             </div>
         </div>

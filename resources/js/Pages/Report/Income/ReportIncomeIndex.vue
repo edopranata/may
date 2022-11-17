@@ -32,7 +32,10 @@
                         <label class="label">
                             <span class="label-text">&nbsp;</span>
                         </label>
-                        <button type="button" class="btn" @click="form.post(route('report.income.index'), { onSuccess: () => {getTotal()}})">Filter </button>
+                        <div class="flex space-x-4">
+                            <button type="button" class="btn" @click="form.post(route('report.income.index'), { onSuccess: () => {getTotal()}})">Filter </button>
+                            <Link :disabled="props.incomes.length < 1" as="button" class="btn" :href="route('print.income.index')" :data="{ month: form.month, year: form.year }"><BaseIcon :path="mdiPrinter"/> Print </Link>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -59,7 +62,7 @@
                         <td class="group-hover:bg-base-300 py-4 px-6 text-right">{{ Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR', minimumFractionDigits: 0  }).format(item.net_income)}}</td>
                     </tr>
                     <tr v-else>
-                        <td colspan="4" class="text-center border-b-2">No Data</td>
+                        <td colspan="5" class="text-center border-b-2">No Data</td>
                     </tr>
                     </tbody>
                     <tfoot class="bg-primary/20">
@@ -80,8 +83,10 @@
 
 <script setup>
 import Breadcrumb from "@/Shared/Breadcrumb.vue"
+import BaseIcon from "@/Components/BaseIcon.vue";
 
-import {Head, useForm} from '@inertiajs/inertia-vue3'
+import { mdiPrinter } from "@mdi/js";
+import {Head, useForm, Link} from '@inertiajs/inertia-vue3'
 import {onMounted, reactive} from "vue";
 const breadcrumbs = [
     {

@@ -103,6 +103,10 @@ Route::middleware(['auth'])->group(function (){
             Route::group(['prefix' => 'expense', 'as' => 'expense.'], function () {
                 Route::get('/', [\App\Http\Controllers\Prints\Expense\PrintExpenseController::class, 'index'])->name('index');
             });
+            Route::group(['prefix' => 'income', 'as' => 'income.'], function () {
+                Route::get('/', [\App\Http\Controllers\Prints\Income\PrintIncomeController::class, 'index'])->name('index');
+            });
+
         });
 
     });
