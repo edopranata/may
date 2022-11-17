@@ -32,7 +32,11 @@
                         <label class="label">
                             <span class="label-text">&nbsp;</span>
                         </label>
-                        <button type="button" class="btn" @click="form.post(route('report.expense.index'), { onSuccess: () => {getTotal()}})">Filter </button>
+                        <div class="flex space-x-4">
+                            <button type="button" class="btn" @click="form.post(route('report.expense.index'), { onSuccess: () => {getTotal()}})">Filter </button>
+                            <Link :disabled="props.expenses.length < 1" as="button" class="btn" :href="route('print.expense.index')" :data="{ month: form.month, year: form.year }">Filter </Link>
+
+                        </div>
                     </div>
                 </div>
             </div>
@@ -64,7 +68,7 @@
                     <tr v-if="props.expenses.length > 0">
                         <th class="py-4 px-6"></th>
                         <th class="py-4 px-6">Total</th>
-                        <th v-for="(value, index) in props.types" class="py-4 px-4"></th>
+                        <th v-for="(value, index) in props.types" class="py-4 px-4 text-right">{{ Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR', minimumFractionDigits: 0  }).format( value.balance ) }}</th>
                         <th class="py-4 px-6 text-right">{{ Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR', minimumFractionDigits: 0  }).format(balance.expense)}}</th>
                     </tr>
                     </tfoot>
@@ -78,8 +82,9 @@
 <script setup>
 import Breadcrumb from "@/Shared/Breadcrumb.vue"
 
-import {Head, useForm} from '@inertiajs/inertia-vue3'
+import {Head, useForm, Link} from '@inertiajs/inertia-vue3'
 import {onMounted, reactive} from "vue";
+
 const breadcrumbs = [
     {
         "url": null,
@@ -98,9 +103,12 @@ const props = defineProps({
     year: Number,
     month: Number,
 })
+
 const balance = reactive({
-    expense: Number
+    expense: Number,
+    total: Array
 })
+
 onMounted( () =>{
     getTotal()
 })
@@ -114,8 +122,6 @@ const getTotal = () => {
     balance.expense = expense.reduce((arr, n) => {
         return arr += n
     }, 0)
-
-
 }
 
 const filter_type = (data, type) => {
@@ -131,4 +137,5 @@ const filter_type = (data, type) => {
     }
     return (amount || amount !== undefined) ? amount.amount : amount
 }
+
 </script>

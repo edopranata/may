@@ -45,9 +45,9 @@
                     <tr>
                         <th class="py-3 px-6">#</th>
                         <th class="py-3 px-6">Tanggal</th>
-                        <th class="py-3 px-6">Pemasukan</th>
-                        <th class="py-3 px-6">Pengeluaran</th>
-                        <th class="py-3 px-6">Laba / Rugi</th>
+                        <th class="py-3 px-6 text-right">Pemasukan</th>
+                        <th class="py-3 px-6 text-right">Pengeluaran</th>
+                        <th class="py-3 px-6 text-right">Laba / Rugi</th>
                     </tr>
                     </thead>
                     <tbody>

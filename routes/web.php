@@ -100,6 +100,9 @@ Route::middleware(['auth'])->group(function (){
 
                 Route::resource('loan', \App\Http\Controllers\Prints\Invoice\Loan\PrintInvoiceLoanController::class)->only(['show']);
             });
+            Route::group(['prefix' => 'expense', 'as' => 'expense.'], function () {
+                Route::get('/', [\App\Http\Controllers\Prints\Expense\PrintExpenseController::class, 'index'])->name('index');
+            });
         });
 
     });

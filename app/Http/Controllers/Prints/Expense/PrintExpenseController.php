@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\Report\Expense;
+namespace App\Http\Controllers\Prints\Expense;
 
 use App\Http\Controllers\Controller;
 use App\Models\Expense;
@@ -8,38 +8,30 @@ use App\Models\ExpenseDetail;
 use Carbon\Carbon;
 use Carbon\CarbonPeriod;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
 
-class ReportExpenseController extends Controller
+class PrintExpenseController extends Controller
 {
-
     public function index(Request $request)
     {
         $request->validate([
-            'month' => ['nullable', 'numeric','min:1'],
-            'year'  => ['nullable', 'numeric','min:2022', 'max:' . now()->format('Y')]
+            'month' => ['required', 'numeric','min:1'],
+            'year'  => ['required', 'numeric','min:2022', 'max:' . now()->format('Y')]
         ]);
         $date = ($request->year && $request->month) ? Carbon::parse($request->year . '-' . $request->month . '-01') : null;
-
-//        $types = $date ? ExpenseDetail::query()->select('type')
-//            ->whereMonth('date', $date->format('m'))
-//            ->whereYear('date', $date->format('Y'))
-//            ->distinct('type')->get() : [];
 
         $types = $date ? ExpenseDetail::query()->selectRaw("sum(amount) balance, type")
             ->whereMonth('date', $date->format('m'))
             ->whereYear('date', $date->format('Y'))
             ->groupby('type')
             ->get() : [];
-//        dd($types);
-        return inertia('Report/Expense/ReportExpenseIndex', [
+
+        return inertia('Print/Expense/ExpenseDetails', [
             'types'     => $types,
             'year'      => $request->year,
             'month'     => $request->month,
             'expenses'  => $date ? $this->get_expense($date) : [],
         ]);
     }
-
 
     private function get_all_days($report_date)
     {
@@ -51,7 +43,6 @@ class ReportExpenseController extends Controller
 
     private function get_expense($date)
     {
-
         $periods = $this->get_all_days($date);
         $incomes = [];
         $expense_collections = collect(Expense::query()->with(['details'])
@@ -87,9 +78,7 @@ class ReportExpenseController extends Controller
             }
         }
 
+//        dd($incomes);
         return collect($incomes);
-
-
     }
-
 }
