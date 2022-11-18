@@ -13,6 +13,9 @@
             </div>
 
             <div class="grid text-sm grid-cols-1 w-full">
+                <div class="flex space-x-4 mb-4">
+                    <Logo/>
+                </div>
                 <div class="flex justify-between border-b-2 border-gray-800 mb-4">
                     <div>Laporan Pinjaman</div>
                     <div>Posisi : {{ props.date }}</div>
@@ -56,6 +59,7 @@ import {onMounted, reactive} from "vue"
 import {mdiPrinterPos, mdiArrowLeft} from "@mdi/js"
 
 import BaseIcon from "@/Components/BaseIcon.vue"
+import Logo from "@/Components/Logo.vue";
 
 const props = defineProps({
     loans: Array,

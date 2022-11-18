@@ -80,8 +80,11 @@ Route::middleware(['auth'])->group(function (){
 
         Route::resource('report', \App\Http\Controllers\Report\ReportController::class)->only(['index']);
         Route::group(['prefix' => 'report', 'as' => 'report.'], function (){
+
             Route::resource('invoice', \App\Http\Controllers\Report\Invoice\ReportInvoiceController::class)->only(['index']);
-            Route::resource('loan', \App\Http\Controllers\Report\Loan\ReportLoanController::class)->only(['index']);
+            Route::group(['prefix' => 'invoice', 'as' => 'invoice.'], function () {
+                Route::resource('loan', \App\Http\Controllers\Report\Invoice\ReportInvoiceLoanController::class)->only(['index']);
+            });
             Route::group(['prefix' => 'income', 'as' => 'income.'], function (){
                 Route::match(['get', 'post'],'/', [\App\Http\Controllers\Report\Income\ReportIncomeController::class, 'index'])->name('index');
             });
@@ -92,6 +95,10 @@ Route::middleware(['auth'])->group(function (){
 
             Route::group(['prefix' => 'trade', 'as' => 'trade.'], function (){
                 Route::match(['get', 'post'],'/', [\App\Http\Controllers\Report\Trade\ReportTradeController::class, 'index'])->name('index');
+            });
+            Route::group(['prefix' => 'loan', 'as' => 'loan.'], function (){
+                Route::get('/', [\App\Http\Controllers\Report\Loan\ReportLoanController::class, 'index'])->name('index');
+                Route::get('details', [\App\Http\Controllers\Report\Loan\ReportLoanController::class, 'details'])->name('details');
             });
         });
 
@@ -116,6 +123,7 @@ Route::middleware(['auth'])->group(function (){
 
             Route::group(['prefix' => 'loan', 'as' => 'loan.'], function () {
                 Route::get('/', [\App\Http\Controllers\Prints\Loan\PrintLoanController::class, 'index'])->name('index');
+                Route::get('details', [\App\Http\Controllers\Report\Loan\ReportLoanController::class, 'details'])->name('details');
             });
 
         });

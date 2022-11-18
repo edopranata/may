@@ -12,13 +12,15 @@
                     <button class="btn btn-success btn-sm mb-5" onclick="window.print()"><BaseIcon :path="mdiPrinterPos"/> Print</button>
                 </div>
                 <div class="flex justify-between">
-                    <div class="font-bold "></div>
+                    <div class="flex space-x-4">
+                        <Logo/>
+                    </div>
                     <div class="text-left w-[35%] mb-5">
                         <div class="border-gray-800 border-b pb-1">Kepada</div>
                         <div class="border-gray-800 border-b pb-1">{{ invoice.modelable.name.toUpperCase() }}</div>
                     </div>
                 </div>
-                <div class="flex justify-between mb-2">
+                <div class="flex justify-between mb-2 mt-4">
                     <div class="font-bold">No Nota : {{ invoice.invoice_number }}</div>
                     <div class="font-bold text-right">{{ invoice.invoice_date }}</div>
                 </div>
@@ -112,6 +114,7 @@
 </template>
 
 <script setup>
+import Logo from '@/Components/Logo.vue'
 import {Head, Link} from '@inertiajs/inertia-vue3'
 import {onMounted, reactive, ref} from "vue"
 import {mdiPrinterPos, mdiArrowLeft} from "@mdi/js"

@@ -11,7 +11,9 @@
                     <button class="btn btn-success btn-sm mb-5" onclick="window.print()"><BaseIcon :path="mdiPrinterPos"/> Print</button>
                 </div>
                 <div class="flex justify-between">
-                    <div class="font-bold "></div>
+                    <div class="flex space-x-4">
+                        <Logo/>
+                    </div>
                     <div class="text-left w-[35%] mb-5">
                         <div class="border-gray-800 border-b pb-1">Kepada</div>
                         <div class="border-gray-800 border-b pb-1">{{ invoice.loan.modelable.name.toUpperCase() }}</div>
@@ -91,6 +93,7 @@ import {onMounted, reactive, ref} from "vue"
 import {mdiPrinterPos, mdiArrowLeft} from "@mdi/js"
 
 import BaseIcon from "@/Components/BaseIcon.vue"
+import Logo from "@/Components/Logo.vue";
 
 const trade = reactive({
     total: Number,
