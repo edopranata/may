@@ -71,7 +71,7 @@ class ReportInvoiceLoanController extends Controller
             case "Supervisor":
                 return [
                     'name'          => 'supervisor',
-                    'title'         => 'Pinjaman Mandor',
+                    'title'         => 'Pinjaman Karyawan',
                     'badge'         => 'badge-info',
                     'url_print'     => route('print.invoice.loan.show', $id)
                 ];

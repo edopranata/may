@@ -51,7 +51,7 @@ class ReportInvoiceController extends Controller
             case "Supervisor":
                 return [
                     'name'          => 'supervisor',
-                    'title'         => 'Gaji Mandor',
+                    'title'         => 'Gaji Karyawan',
                     'badge'         => 'badge-info',
                     'url_print'     => route('print.invoice.supervisor.show', $id)
                 ];

@@ -2,6 +2,7 @@
 
 namespace App\Observers;
 
+use App\Models\Expense;
 use App\Models\Income;
 use App\Models\Trade;
 
@@ -14,6 +15,26 @@ class TradeObserver
     {
         $trade->user_id  = auth()->id();
         $trade->saveQuietly();
+
+        if($trade->trade_cost > 0){
+            $expense = Expense::query()->firstOrCreate([
+                'day'   => $trade->trade_date->format('d'),
+                'month' => $trade->trade_date->format('m'),
+                'year'  => $trade->trade_date->format('Y'),
+            ], [
+                'date'  => $trade->trade_date
+            ]);
+
+            $expense->details()->create([
+                'trade_id'      => $trade->id,
+                'type'          => 'UANG JALAN',
+                'date'          => $trade->trade_date,
+                'amount'        => $trade->trade_cost
+            ]);
+
+            $expense->increment('balance', $trade->trade_cost);
+
+        }
     }
 
     public function updated(Trade $trade)

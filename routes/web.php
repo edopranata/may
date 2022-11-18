@@ -34,6 +34,10 @@ Route::middleware(['auth'])->group(function (){
             });
         });
 
+        Route::resource('profile', \App\Http\Controllers\Profile\ProfileController::class)->only('index', 'update');
+        Route::group(['prefix' => 'profile', 'as' => 'profile.'], function (){
+            Route::patch('{user}/password', [\App\Http\Controllers\Profile\ProfileController::class, 'password'])->name('password');
+        });
 
         Route::resource('data', \App\Http\Controllers\Data\DataController::class)->only(['index']);
         Route::group(['prefix' => 'data', 'as' => 'data.'], function (){
@@ -85,8 +89,11 @@ Route::middleware(['auth'])->group(function (){
             Route::group(['prefix' => 'expense', 'as' => 'expense.'], function (){
                 Route::match(['get', 'post'],'/', [\App\Http\Controllers\Report\Expense\ReportExpenseController::class, 'index'])->name('index');
             });
-        });
 
+            Route::group(['prefix' => 'trade', 'as' => 'trade.'], function (){
+                Route::match(['get', 'post'],'/', [\App\Http\Controllers\Report\Trade\ReportTradeController::class, 'index'])->name('index');
+            });
+        });
 
         Route::resource('print', \App\Http\Controllers\Prints\PrintController::class)->only(['index']);
         Route::group(['prefix' => 'print', 'as' => 'print.'], function (){

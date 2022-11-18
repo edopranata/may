@@ -19,7 +19,7 @@
     <section class="px-4 grid gap-4">
         <div class="card w-full rounded-none border-2 border-info shadow-xl">
             <form>
-                <div class="card-body grid md:grid-cols-3 gap-4">
+                <div class="card-body grid md:grid-cols-4 gap-4">
                     <div class="form-control w-full">
                         <label class="label">
                             <span class="label-text">Tanggal Transaksi</span>
@@ -51,6 +51,15 @@
                         </select>
                         <label class="label" v-if="form.errors.driver_id">
                             <span class="label-text-alt text-error">{{ form.errors.driver_id }}</span>
+                        </label>
+                    </div>
+                    <div class="form-control w-full">
+                        <label class="label">
+                            <span class="label-text">Uang Jalan</span>
+                        </label>
+                        <VueNumberFormat :options="{ precision: 0, prefix: 'Rp ', isInteger: true }" :readonly="form.processing" v-model:value="form.trade_cost" class="input input-info input-bordered w-full" />
+                        <label class="label" v-if="form.errors.trade_cost">
+                            <span class="label-text-alt text-error">{{ form.errors.trade_cost }}</span>
                         </label>
                     </div>
                 </div>
@@ -112,6 +121,7 @@ import PageTitle from "@/Components/PageTitle.vue"
 import BaseIcon from "@/Components/BaseIcon.vue"
 import Pagination from "@/Components/Pagination.vue"
 
+import VueNumberFormat from "vue-number-format";
 import { mdiArrowRight } from "@mdi/js"
 import {Head, useForm, Link} from '@inertiajs/inertia-vue3'
 import {ref, watch} from "vue";
@@ -148,6 +158,7 @@ const form = useForm({
     date: null,
     car_id: 0,
     driver_id: 0,
+    trade_cost: 0
 })
 
 const save = () => {

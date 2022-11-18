@@ -1,8 +1,8 @@
 <template>
-    <Head title="Gaji Mandor" />
+    <Head title="Gaji Karyawan" />
 
     <Breadcrumb :links="breadcrumbs"/>
-    <PageTitle :classes="'bg-base-content'">Gaji Mandor</PageTitle>
+    <PageTitle :classes="'bg-base-content'">Gaji Karyawan</PageTitle>
 
     <input type="checkbox" id="modal-option" v-model="modal" class="modal-toggle" />
     <div class="modal modal-bottom sm:modal-middle">
@@ -22,7 +22,7 @@
             <div class="card-body grid md:grid-cols-4 gap-4">
                 <div class="form-control w-full">
                     <label class="label">
-                        <span class="label-text">Mandor</span>
+                        <span class="label-text">Karyawan</span>
                     </label>
                     <Multiselect class="select select-bordered rounded"
                                  :searchable="true"
@@ -33,9 +33,9 @@
                 </div>
                 <div class="form-control w-full">
                     <label class="label">
-                        <span class="label-text">Sampai Tanggal</span>
+                        <span class="label-text">Tanggal</span>
                     </label>
-                    <input v-model="form.end_date" type="date" placeholder="Sampai Tanggal" class="input input-bordered w-full" />
+                    <input v-model="form.date" type="date" placeholder="Sampai Tanggal" class="input input-bordered w-full" />
                 </div>
                 <div class="grid grid-cols-2 gap-4 py-1">
                     <button :disabled="form.processing" @click="setFilter" class="btn mt-8">Filter</button>
@@ -117,7 +117,7 @@ const breadcrumbs = [
     },
     {
         "url": null,
-        "label": "Gaji Mandor"
+        "label": "Gaji Karyawan"
     }
 ]
 

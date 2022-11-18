@@ -111,7 +111,7 @@ class DashboardController extends Controller
         Trade::query()
             ->chunk(1, function ($trades){
                 foreach ($trades as $trade) {
-                    $weight = $trade->gross_weight - rand(100,200);
+                    $weight = $trade->gross_weight + rand(100,300);
                     $price = round($trade->gross_price, 0) + 370;
                     $trade->update([
                         'net_weight'    => $weight,

@@ -1,8 +1,8 @@
 <template>
-    <Head title="Gaji mandor" />
+    <Head title="Gaji Karyawan" />
 
     <Breadcrumb :links="breadcrumbs"/>
-    <PageTitle :classes="'bg-base-content'" class="">Gaji mandor </PageTitle>
+    <PageTitle :classes="'bg-base-content'" class="">Gaji Karyawan </PageTitle>
 
     <input type="checkbox" id="modal-option" v-model="modal_save" class="modal-toggle" />
     <label for="modal-option" class="modal cursor-pointer modal-lg">
@@ -36,7 +36,7 @@
                             </label>
                         </div>
                         <div class="form-control w-full">
-                            <label class="label">Gaji mandor</label>
+                            <label class="label">Gaji Karyawan</label>
                             <VueNumberFormat :options="{ precision: 0, prefix: 'Rp ', isInteger: true }" :readonly="form.processing" v-model:value="form.supervisor_fee" class="input input-bordered w-full" />
                             <label class="label" v-if="form.errors.supervisor_fee">
                                 <span class="label-text-alt text-error">{{ form.errors.supervisor_fee }}</span>
@@ -190,7 +190,7 @@ const breadcrumbs = [
     },
     {
         "url": route('transaction.invoice.supervisor.index'),
-        "label": "Gaji mandor"
+        "label": "Gaji Karyawan"
     },
     {
         "url": null,

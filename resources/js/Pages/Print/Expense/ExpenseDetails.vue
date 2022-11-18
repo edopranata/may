@@ -22,16 +22,16 @@
                 <table class="table-auto w-full text-xs">
                     <thead>
                     <tr class="border-y border-gray-800">
-                        <th class="px-2 border-l border-gray-800">#</th>
-                        <th class="px-2 border-r border-gray-800">Tanggal</th>
+                        <th class="px-2 border-l border-gray-800" v-text="balance.show_date ? '#' : 'Tgl'"></th>
+                        <th class="px-2 border-r border-gray-800" v-show="balance.show_date">Tanggal</th>
                         <th class="px-2 border-x border-gray-800 text-right" v-for="(item, index) in props.types">{{ item.type }}</th>
                         <th class="px-2 border-r border-gray-800 text-right">Total Pengeluaran</th>
                     </tr>
                     </thead>
                     <tbody>
                     <tr v-if="props.expenses.length > 0" v-for="(item, index) in props.expenses">
-                        <th class="px-2 border-l border-gray-800 ">{{ index + 1  }}</th>
-                        <td class="px-2 border-r border-gray-800 ">{{ item.date  }}</td>
+                        <th class="px-2 border-l border-gray-800">{{ index + 1  }}</th>
+                        <td class="px-2 border-r border-gray-800" v-show="balance.show_date">{{ item.date  }}</td>
                         <td class="px-2 border-x border-gray-800 text-right" v-for="(value, index) in props.types">{{ filter_type(item.expense, value.type) ?  Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR', minimumFractionDigits: 0  }).format(filter_type(item.expense, value.type) ?? 0) : '-'}}  </td>
                         <td class="px-2 border-r border-gray-800 text-right">{{ (item.expense ? item.expense.balance : 0) > 0 ? Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR', minimumFractionDigits: 0  }).format(item.expense ? item.expense.balance : 0) : '-'}}</td>
                     </tr>
@@ -41,8 +41,8 @@
                     </tbody>
                     <tfoot>
                     <tr class="border-y border-gray-800" v-if="props.expenses.length > 0">
-                        <th class="px-2 border-l border-gray-800"></th>
-                        <th class="px-2 border-r border-gray-800 text-right">Total</th>
+                        <th class="px-2 border-l border-gray-800" v-show="props.types.length < 4"></th>
+                        <th class="px-2 border-gray-800 text-right" :class="balance.show_date ? 'border-r' : 'border-l'">Total</th>
                         <th class="px-2 border-x border-gray-800 text-right" v-for="(value, index) in props.types">{{ value.balance > 0 ?  Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR', minimumFractionDigits: 0  }).format( value.balance ) : ''}}</th>
                         <th class="px-2 border-r border-gray-800 text-right">{{ Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR', minimumFractionDigits: 0  }).format(balance.expense)}}</th>
                     </tr>
@@ -69,7 +69,8 @@ const props = defineProps({
 
 const balance = reactive({
     expense: Number,
-    total: Array
+    total: Array,
+    show_date: props.types.length < 4
 })
 
 onMounted( () =>{
@@ -86,6 +87,7 @@ const getTotal = () => {
         return arr += n
     }, 0)
 }
+
 
 const filter_type = (data, type) => {
     let amount = 0

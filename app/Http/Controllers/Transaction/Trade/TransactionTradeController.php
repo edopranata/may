@@ -40,6 +40,7 @@ class TransactionTradeController extends Controller
             'date'          => ['required', 'date'],
             'car_id'        => ['required', 'exists:cars,id'],
             'driver_id'     => ['required', 'exists:drivers,id'],
+            'trade_cost'    => ['required', 'numeric', 'min:1'],
         ]);
 
         DB::beginTransaction();
@@ -49,6 +50,7 @@ class TransactionTradeController extends Controller
                     'driver_id'     => $request->driver_id,
                     'car_id'        => $request->car_id,
                     'trade_date'    => $request->date,
+                    'trade_cost'    => $request->trade_cost
                 ]);
             DB::commit();
             return redirect()->route('transaction.trade.edit', $trade->id)->with('alert', [
