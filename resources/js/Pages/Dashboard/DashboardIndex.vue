@@ -3,8 +3,8 @@
 
     <Breadcrumb :links="breadcrumbs"/>
 
-    <PageTitle :classes="'bg-base-content'" class="hidden">Insert Dummy</PageTitle>
-    <section class="px-4 grid sm:grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-4 hidden">
+    <PageTitle :classes="'bg-base-content'" class="">Insert Dummy</PageTitle>
+    <section class="px-4 grid sm:grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-4 ">
         <Link :disabled="progress" :href="route('dashboard.trade.reset')" method="post" as="button" type="button" class="btn col-span-3 btn-error">Reset</Link>
 
         <Link :disabled="progress" :href="route('dashboard.trade.create')" method="post" as="button" type="button" class="btn">Create Trades</Link>

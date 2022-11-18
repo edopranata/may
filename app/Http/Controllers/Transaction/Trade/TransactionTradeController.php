@@ -84,11 +84,7 @@ class TransactionTradeController extends Controller
     {
         $request->validate([
             'date'      => ['required', 'date'],
-            'farmer_id' => ['required', 'exists:farmers,id',
-                Rule::unique('trade_details')->where(function ($query) use ($trade) {
-                        return $query->where('trade_id', $trade->id);
-                }),
-            ],
+            'farmer_id' => ['required', 'exists:farmers,id'],
             'weight'    => ['required', 'integer', 'min:1'],
             'price'     => ['required', 'integer', 'min:1'],
         ]);

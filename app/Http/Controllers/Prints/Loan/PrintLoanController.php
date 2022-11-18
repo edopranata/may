@@ -1,14 +1,13 @@
 <?php
 
-namespace App\Http\Controllers\Report\Loan;
+namespace App\Http\Controllers\Prints\Loan;
 
 use App\Http\Controllers\Controller;
 use App\Models\Loan;
 use Illuminate\Http\Request;
 
-class ReportLoanController extends Controller
+class PrintLoanController extends Controller
 {
-
     private function getType($modelable_type, $id)
     {
         $model = collect(explode('\\', $modelable_type))->last();
@@ -24,12 +23,12 @@ class ReportLoanController extends Controller
                     'name'          => 'driver',
                     'title'         => 'Pinjaman Supir',
                 ];
-            case "Car":
+            case "Supervisor":
                 return [
                     'name'          => 'supervisor',
                     'title'         => 'Pinjaman Mandor',
                 ];
-            break;
+                break;
             default:
                 return $model;
         }

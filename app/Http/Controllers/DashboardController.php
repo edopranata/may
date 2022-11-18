@@ -70,6 +70,7 @@ class DashboardController extends Controller
             'message' => "Refresh Database Sukses"
         ]);
     }
+
     public function trade_create()
     {
         $periods = CarbonPeriod::create('2022-10-01', now()->format('Y-m-d'));

@@ -45,7 +45,7 @@
                     <span class="px-4 pb-4 border-gray-800 border-l col-span-2"></span>
                     <span class="px-4 pb-4 border-gray-800 border-l"></span>
                     <span class="px-4 pb-4 border-gray-800 border-l"></span>
-                    <span class="px-4 pb-4 border-gray-800 border-x text-right font-bold">{{ Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR', minimumFractionDigits: 0 }).format(invoice.total) }}</span>
+                    <span class="px-4 pb-4 border-gray-800 border-x text-right font-bold">{{ Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR', minimumFractionDigits: 0 }).format(invoice.total_buy) }}</span>
                 </div>
 
                 <div class="grid grid-cols-5" v-for="n in createLine.value">
