@@ -1,0 +1,1 @@
+import{o,c as n,r as s}from"./app.f33b5c0d.js";const r=["type"],p={__name:"Button",props:{type:{type:String,default:"button"}},setup(t){return(e,a)=>(o(),n("button",{type:t.type,class:"btn tracking-widest"},[s(e.$slots,"default")],8,r))}};export{p as _};

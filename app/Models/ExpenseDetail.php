@@ -15,4 +15,9 @@ class ExpenseDetail extends Model
         'created_at' => 'datetime:Y-md',
         'updated_at' => 'datetime:Y-m-d',
     ];
+
+    public function expense()
+    {
+        return $this->belongsTo(Expense::class);
+    }
 }

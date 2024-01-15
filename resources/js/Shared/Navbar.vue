@@ -9,11 +9,9 @@
         <div class="flex-none">
             <div class="dropdown dropdown-end">
                 <label tabindex="0" class="btn btn-ghost btn-circle avatar">
-                    <div class="w-11 rounded-full">
-                        <img src="https://placeimg.com/80/80/people" />
-                    </div>
+                    <BaseIcon :size="28" :path="mdiAccount"/>
                 </label>
-                <ul tabindex="0" class="menu menu-compact dropdown-content mt-3 p-2 shadow bg-base-100 rounded-b-xl w-52 border-t-2 border-primary">
+                <ul tabindex="0" class="menu menu-compact dropdown-content mt-3 p-2 shadow bg-base-100 rounded-b-xl w-52 border-t-0 border-primary">
                     <li><Link :href="route('profile.index')" class="justify-between">{{ $page.props.auth.user.name}}</Link></li>
                     <li><Link :href="route('logout')" as="button" method="post">Logout</Link></li>
                 </ul>
@@ -25,5 +23,7 @@
 
 <script setup>
 import { Link, usePage } from "@inertiajs/inertia-vue3";
+import BaseIcon from "@/Components/BaseIcon.vue";
+import {mdiAccount} from "@mdi/js";
 </script>
 

@@ -20,10 +20,16 @@
     <div class="modal modal-bottom sm:modal-middle">
         <div class="modal-box">
             <h3 class="font-bold text-lg" v-if="form_delete.status">Tidak dapat dihapus, karena invoice telah terbit</h3>
-            <h3 class="font-bold text-lg" v-else>Apakah data ini akan di hapus?</h3>
-            <div class="modal-action">
-                <button :disabled="form.processing || form_delete.status" ref="btn_delete" type="button" class="btn btn-error" @click="destroy">Hapus</button>
-                <label for="modal-delete" class="btn btn-warning">Batal</label>
+            <h3 class="font-bold text-lg" v-else>Cetak invoice atau hapus data ini?</h3>
+            <div class="modal-action flex justify-between">
+                <div>
+                    <Link as="button" :href="form_delete.status ? route('print.invoice.farmer.show', form_delete.invoice.invoice_id) : route('transaction.invoice.farmer.show', form_delete.farmer_id)" class="btn btn-info">{{ form_delete.status ? 'Print Invoice' : 'Buat Invoice' }}</Link>
+                </div>
+                <div class="flex justify-between space-x-2">
+                    <Link v-if="form_delete.trade_detail_id" as="button" :href="route('transaction.trade.farmer', form_delete.trade_detail_id)" class="btn btn-accent">Ubah</Link>
+                    <button :disabled="form.processing || form_delete.status" ref="btn_delete" type="button" class="btn btn-error" @click="destroy">Hapus</button>
+                    <label for="modal-delete" class="btn btn-warning">Batal</label>
+                </div>
             </div>
         </div>
     </div>
@@ -58,7 +64,7 @@
                         <label class="label">
                             <span class="label-text">Nama Petani</span>
                         </label>
-                        <Multiselect class="select  select-bordered rounded"
+                        <Multiselect ref="opt_farmer" class="select  select-bordered rounded"
                                      :searchable="true"
                                      v-model="form.farmer_id"
                                      :options="props.farmers"
@@ -148,7 +154,7 @@ import BaseIcon from "@/Components/BaseIcon.vue"
 import Multiselect from '@vueform/multiselect'
 import {mdiArrowRight} from '@mdi/js'
 import VueNumberFormat from 'vue-number-format'
-import {Head, useForm} from '@inertiajs/inertia-vue3'
+import {Head, Link, useForm} from '@inertiajs/inertia-vue3'
 import {ref, watch} from "vue";
 import _ from "lodash";
 
@@ -204,15 +210,19 @@ const form = useForm({
 })
 
 const form_delete = useForm({
+    trade_detail_id: null,
     id: 0,
     farmer_id: 0,
     status: false,
+    invoice: null
 })
 
 const openModal = (index) => {
     let data = props.trade.details[index]
+    form_delete.trade_detail_id = data.id
     form_delete.id = data.id
     form_delete.farmer_id = data.farmer_id
+    form_delete.invoice = data.invoice_trade
     form_delete.status = data.farmer_status ? true : false
     modal_delete.value = true
 }

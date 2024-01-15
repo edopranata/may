@@ -36,7 +36,7 @@
                             </label>
                         </div>
                         <div class="form-control w-full">
-                            <label class="label">Upah Supir (Rp  / Kg)</label>
+                            <label class="label">Amprah Mobil (Rp  / Kg)</label>
                             <VueNumberFormat :options="{ precision: 0, prefix: 'Rp ', isInteger: true }" :readonly="form.processing" v-model:value="form.car_fee" class="input input-bordered w-full" />
                             <label class="label" v-if="form.errors.car_fee">
                                 <span class="label-text-alt text-error">{{ form.errors.car_fee }}</span>

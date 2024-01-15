@@ -14,15 +14,9 @@ class ReportTradeController extends Controller
         if($request->isMethod('post')) {
             $request->validate([
                 'start_date' => ['required', 'date', 'min:1'],
-                'end_date' => ['required', 'date', 'after_or_equal:start_date', 'max:' . now()->toDateString()]
+                'end_date' => ['required', 'date', 'after_or_equal:start_date']
             ]);
         }
-
-//        $trade = Trade::query()->when($request->start_date, function (Builder $builder, $start_date){
-//            $builder->where('trade_date', '>=', $start_date);
-//        })->when($request->end_date, function (Builder $builder, $end_date){
-//            $builder->where('trade_date', '<=', $end_date);
-//        })->with(['details'])->get();
 
         return inertia('Report/Trade/ReportTradeIndex', [
             'start_date'    => $request->start_date,

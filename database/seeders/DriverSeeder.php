@@ -21,7 +21,7 @@ class DriverSeeder extends Seeder
         ])->each(function ($driver){
             $driver->loan()->create();
             $driver->price()->create([
-                'value' => random_int(90, 120)
+                'value' => 120
             ]);
         });
     }

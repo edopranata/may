@@ -24,7 +24,7 @@ class Invoice extends Model
 
     public function modelable()
     {
-        return $this->morphTo();
+        return $this->morphTo()->withTrashed();
     }
 
     public function trade_details()
@@ -35,5 +35,11 @@ class Invoice extends Model
     public function trades()
     {
         return $this->belongsToMany(Trade::class, 'invoice_trade');
+    }
+
+
+    public function expense()
+    {
+        return $this->hasOne(ExpenseDetail::class, 'invoice_id', 'id');
     }
 }

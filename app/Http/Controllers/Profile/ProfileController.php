@@ -20,25 +20,25 @@ class ProfileController extends Controller
         ]);
     }
 
-    public function update(User $user, Request $request)
+    public function update(User $profile, Request $request)
     {
         $request->validate([
             'name'      => ['required', 'string', 'min:3'],
-            'username'  => ['required', 'string', 'min:3'],
-            'email'     => ['required', 'email', Rule::unique('users')->whereNotIn('id', [$user->id])],
+            'username'  => ['required', 'string', 'min:3', Rule::unique('users')->whereNotIn('id', [$profile->id])],
+            'email'     => ['required', 'email', Rule::unique('users')->whereNotIn('id', [$profile->id])],
         ]);
 
         DB::beginTransaction();
         try {
 
-            $user->update([
+            $profile->update([
                 'name'      => $request->name,
                 'username'  => $request->username,
                 'email'     => $request->email,
             ]);
 
             DB::commit();
-            return redirect()->back()->with('alert', [
+            return redirect()->route('profile.index')->with('alert', [
                 'type'    => 'success',
                 'title'   => 'Success',
                 'message' => "Data pengguna berhasil di ubah"

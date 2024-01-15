@@ -8,12 +8,12 @@
     <label for="modal-car" class="modal cursor-pointer">
 
         <label class="modal-box relative" for="">
-            <h3 class="font-bold text-lg">Biaya mobil (Rp / Kg)</h3>
+            <h3 class="font-bold text-lg">Amprah mobil (Rp / Kg)</h3>
             <form @submit.prevent="updateCar">
                 <div class="grid gap-4">
                     <div class="form-control w-full my-4">
-                        <label class="label">Biaya Mobil</label>
-                        <input :readonly="form_car.processing" v-model="form_car.value" type="number" placeholder="Biaya mobil (Rp / Kg)" class="input input-bordered w-full" />
+                        <label class="label">Amprah Mobil</label>
+                        <input :readonly="form_car.processing" v-model="form_car.value" type="number" placeholder="Amprah mobil (Rp / Kg)" class="input input-bordered w-full" />
                         <label class="label" v-if="form_car.errors.value">
                             <span class="label-text-alt text-error">{{ form_car.errors.value }}</span>
                         </label>
@@ -78,7 +78,7 @@
         <div class="stats shadow">
             <div class="stat flex justify-between">
                 <div>
-                    <div class="stat-title">Biaya Mobil</div>
+                    <div class="stat-title">Amprah Mobil</div>
                     <div class="stat-value">Rp. {{ props.car }}</div>
                     <div class="stat-desc">Biaya / Kg</div>
                 </div>

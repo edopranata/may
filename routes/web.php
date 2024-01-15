@@ -25,6 +25,7 @@ Route::middleware(['auth'])->group(function (){
     Route::middleware(['verified'])->group(function (){
         Route::group(['prefix' => 'dashboard', 'as' => 'dashboard.'], function (){
             Route::get('/', [\App\Http\Controllers\DashboardController::class, 'index'])->name('index');
+            Route::get('/test', [\App\Http\Controllers\HomeController::class, 'test']);
             Route::group(['prefix'=> 'trade', 'as' => 'trade.'], function (){
                 Route::post('/create', [\App\Http\Controllers\DashboardController::class, 'trade_create'])->name('create');
                 Route::post('/factory', [\App\Http\Controllers\DashboardController::class, 'trade_factory'])->name('factory');
@@ -60,6 +61,11 @@ Route::middleware(['auth'])->group(function (){
 
             Route::resource('cost', \App\Http\Controllers\Transaction\Cost\Car\TransactionCostCarController::class)->only(['index', 'store', 'show', 'edit', 'update']);
             Route::resource('trade', \App\Http\Controllers\Transaction\Trade\TransactionTradeController::class)->only(['index', 'store', 'edit', 'update', 'destroy']);
+            Route::group(['prefix' => 'trade', 'as' => 'trade.'], function (){
+                Route::delete('{trade}/delete', [\App\Http\Controllers\Transaction\Trade\TransactionTradeController::class, 'deleted'])->name('delete');
+                Route::get('{trade}/farmer', [\App\Http\Controllers\Transaction\Trade\TransactionTradeController::class, 'trade_edit'])->name('farmer');
+                Route::patch('{trade}/farmer', [\App\Http\Controllers\Transaction\Trade\TransactionTradeController::class, 'trade_update']);
+            });
             Route::resource('factory', \App\Http\Controllers\Transaction\Trade\TransactionTradeFactoryController::class)->only(['index', 'show', 'update', 'destroy']);
 
             Route::resource('invoice', \App\Http\Controllers\Transaction\Invoice\TransactionInvoiceController::class)->only(['index']);

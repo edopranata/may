@@ -13,7 +13,7 @@ class Loan extends Model
 
     public function modelable()
     {
-        return $this->morphTo();
+        return $this->morphTo()->withTrashed();
     }
 
     public function details()
